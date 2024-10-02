@@ -26,7 +26,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
   return (
     <aside
       className={cn(
-        `relative hidden h-screen flex-none border-r transition-[width] duration-500 md:block`,
+        `relative hidden h-screen flex-none border-r transition-[width] duration-100 md:block`,
         !isMinimized ? "w-72" : "w-[70px]"
       )}
     >
