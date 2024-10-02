@@ -51,8 +51,8 @@ export default function Login() {
 
   return (
     <>
-      <main className="flex items-center justify-center w-[100vw] h-screen overflow-hidden bg-slate-100/80">
-        <div className="flex flex-col w-full max-w-2xl px-4 mx-auto sm:px-6">
+      <main className="flex items-center justify-center w-[100vw] h-screen overflow-hidden ">
+        <div className="flex flex-col w-full max-w-2xl px-4 mx-auto sm:px-6 ">
           <div className="flex items-center justify-center space-x-2">
             <img
               src="https://mbos-landing.vercel.app/_next/image?url=%2Fimages%2Fmbos.png&w=96&q=75"
@@ -64,11 +64,11 @@ export default function Login() {
             </div>
           </div>
           <div className="relative mt-12 sm:mt-16 z-[1]">
-            <h1 className="text-2xl font-medium tracking-tight text-center text-slate-900">
+            <h1 className="text-2xl font-medium tracking-tight text-center text-slate-900 dark:text-white">
               Kirish
             </h1>
           </div>
-          <div className="mx-2 z-[2] mt-10 flex-auto bg-white px-10 py-5 shadow-2xl shadow-slate-900/10 dark:shadow-slate-500/10 sm:mx-0 sm:flex-none sm:rounded-5xl sm:p-24 rounded-3xl w-full">
+          <div className="mx-2 z-[2] mt-10 flex-auto px-10 py-5 shadow-2xl shadow-slate-900/10 dark:shadow-slate-500/10 sm:mx-0 sm:flex-none sm:rounded-5xl sm:p-24 rounded-3xl w-full">
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
@@ -127,7 +127,7 @@ export default function Login() {
                 <Button
                 variant={"default"}
                   type="submit"
-                  className="h-10"
+                  className="h-10 dark:text-white"
                 >
                   Kirish
                 </Button>
