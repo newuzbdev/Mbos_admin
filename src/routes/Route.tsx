@@ -1,6 +1,7 @@
 import { Layout } from "@/components/layout/Layout";
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
+import Notfound from "@/pages/Notfound";
 import Services from "@/pages/Services";
 import Users from "@/pages/Users";
 import { createBrowserRouter } from "react-router-dom";
@@ -20,6 +21,8 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
+    errorElement: <Notfound />,
+
     children: [
       {
         index: true,
