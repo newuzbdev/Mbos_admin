@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ChartColumn, ClipboardList, Users2, ChevronLeft } from "lucide-react";
+import { ChartColumn, ClipboardList, Users2, ChevronLeft, Menu } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 type SidebarProps = {
   className?: string;
@@ -23,13 +24,8 @@ const Sidebar: React.FC<SidebarProps> = () => {
         : "text-primary text-lg"
     }`;
 
-  return (
-    <aside
-      className={cn(
-        `relative hidden h-screen flex-none border-r transition-[width] duration-100 md:block`,
-        !isMinimized ? "w-72" : "w-[70px]"
-      )}
-    >
+  const SidebarContent = () => (
+    <>
       <div className="hidden p-5 pt-10 lg:block">
         <Link to={"/"}>
           <img
@@ -40,7 +36,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
       </div>
       <ChevronLeft
         className={cn(
-          "absolute -right-3 top-10 z-50 cursor-pointer rounded-full border bg-background text-3xl text-foreground",
+          "absolute -right-3 top-10 z-50 cursor-pointer rounded-full border bg-background text-3xl text-foreground hidden lg:block",
           isMinimized && "rotate-180"
         )}
         onClick={handleToggle}
@@ -70,7 +66,28 @@ const Sidebar: React.FC<SidebarProps> = () => {
           </li>
         </ul>
       </div>
-    </aside>
+    </>
+  );
+
+  return (
+    <>
+      <aside
+        className={cn(
+          `relative hidden h-screen flex-none border-r transition-[width] duration-100 md:block`,
+          !isMinimized ? "w-72" : "w-[70px]"
+        )}
+      >
+        <SidebarContent />
+      </aside>
+      <Sheet>
+        <SheetTrigger asChild>
+          <Menu className="fixed cursor-pointer md:hidden top-4 left-4" />
+        </SheetTrigger>
+        <SheetContent side="left" className="w-[300px] sm:w-[400px]">
+          <SidebarContent />
+        </SheetContent>
+      </Sheet>
+    </>
   );
 };
 
