@@ -1,17 +1,17 @@
 import { Outlet } from "react-router-dom";
-import Navbar from "@/components/Navbar.tsx";
-import Sidebar from "../Sidebar";
+import Navbar from "@/components/Navbar";
+import Sidebar from "@/components/Sidebar";
 
 export const Layout = () => {
   return (
-    <>
-      <div className="flex min-h-screen">
-        <Sidebar />
+    <div className="flex min-h-screen">
+      <Sidebar />
+      <div className="flex flex-col flex-grow">
         <Navbar />
-        <div className="min-h-screen bg-slate-100/80">
+        <div className="flex-grow p-4">
           <Outlet />
         </div>
       </div>
-    </>
+    </div>
   );
 };

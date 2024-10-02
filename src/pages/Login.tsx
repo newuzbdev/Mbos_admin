@@ -64,20 +64,6 @@ export default function Login() {
             </div>
           </div>
           <div className="relative mt-12 sm:mt-16 z-[1]">
-            {/* <svg
-              viewBox="0 0 1090 1090"
-              aria-hidden="true"
-              fill="none"
-              preserveAspectRatio="none"
-              width="1090"
-              height="1090"
-              className="absolute -top-7 left-1/2 -z-10 h-[788px] -translate-x-1/2 stroke-slate-300/30 dark:stroke-slate-600/30 [mask-image:linear-gradient(to_bottom,white_20%,transparent_75%)] sm:-top-9 sm:h-auto"
-            >
-              <circle cx="545" cy="545" r="544.5"></circle>
-              <circle cx="545" cy="545" r="480.5"></circle>
-              <circle cx="545" cy="545" r="416.5"></circle>
-              <circle cx="545" cy="545" r="352.5"></circle>
-            </svg> */}
             <h1 className="text-2xl font-medium tracking-tight text-center text-slate-900">
               Kirish
             </h1>
