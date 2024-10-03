@@ -56,18 +56,18 @@ const Sidebar: React.FC<SidebarProps> = () => {
               {!isMinimized && <span className="text-lg">Asosiy</span>}
             </Link>
           </li>
-          <li>
-            <Link to="/services" className={getLinkClassName("/services")}>
+          
+            <li>
+              <Link to="/clients" className={getLinkClassName("/clients")}>
+                <Users2 className="w-10 h-5" />
+                {!isMinimized && <span className="text-lg">Mijozlar</span>}
+              </Link>
+            </li>
+            <Link to="/contract" className={getLinkClassName("/contract")}>
               <ClipboardList className="w-10 h-5" />
-              {!isMinimized && <span className="text-lg">Xizmatlar</span>}
+              {!isMinimized && <span className="text-lg">Shartnomalar</span>}
             </Link>
-          </li>
-          <li>
-            <Link to="/clients" className={getLinkClassName("/clients")}>
-              <Users2 className="w-10 h-5" />
-              {!isMinimized && <span className="text-lg">Mijozlar</span>}
-            </Link>
-          </li>
+         
         </ul>
       </div>
     </>

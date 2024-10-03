@@ -2,7 +2,7 @@ import { Layout } from "@/components/layout/Layout";
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
 import Notfound from "@/pages/Notfound";
-import Services from "@/pages/Services";
+import Contract from "@/pages/Contract";
 import Clients from "@/pages/Clients";
 import { createBrowserRouter } from "react-router-dom";
 // function authLoader({ request }: LoaderFunctionArgs) {
@@ -29,8 +29,8 @@ export const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/services",
-        element: <Services />,
+        path: "/contract",
+        element: <Contract />,
       },
       {
         path: "/clients",

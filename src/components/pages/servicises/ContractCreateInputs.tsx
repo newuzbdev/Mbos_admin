@@ -67,7 +67,7 @@ const ServicesCreateInputs = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-lg font-semibold text-slate-700">
-                  Xizmat nomi
+                  Shartnoma nomi
                 </FormLabel>
                 <FormControl>
                   <Select
@@ -75,12 +75,12 @@ const ServicesCreateInputs = () => {
                     defaultValue={field.value}
                   >
                     <SelectTrigger className="w-[280px]">
-                      <SelectValue placeholder="Xizmatlar ro'yhati" />
+                      <SelectValue placeholder="Shartnomalar ro'yhati" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="GPS">GPS</SelectItem>
                       <SelectItem value="CRM">SRM</SelectItem>
-                      <SelectItem value="Landing pages">
+                      <SelectItem value="Landingpages">
                         Landing pages
                       </SelectItem>
                     </SelectContent>

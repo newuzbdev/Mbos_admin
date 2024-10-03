@@ -1,5 +1,5 @@
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import ServicesCreateInputs from "@/components/pages/servicises/ServicesCreateInputs";
+import ContractCreateInputs from "@/components/pages/servicises/ContractCreateInputs";
 import { useState } from "react";
 
 const ServicesCreate = () => {
@@ -12,11 +12,11 @@ const ServicesCreate = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger className="p-2 text-white border rounded-md bg-primary">
-        Xizmatlar yaratish
+        Shartnoma yaratish
       </DialogTrigger>
       <DialogContent className="max-w-3xl">
         {/* <ServicesCreateInputs closeDialog={closeDialog} /> */}
-        <ServicesCreateInputs />
+        <ContractCreateInputs />
       </DialogContent>
     </Dialog>
   );

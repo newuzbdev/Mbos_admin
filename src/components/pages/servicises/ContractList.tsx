@@ -27,7 +27,7 @@ const ServicesList = () => {
   return (
     <div className="w-full">
       <div className="border rounded-md">
-        <h1 className="px-4 pt-4 font-bold">Xizmatlar royhati</h1>
+        <h1 className="px-4 pt-4 font-bold">Shartnomalar ro'yhati</h1>
         <DataTable columns={makeColumns()} data={[]} />
       </div>
     </div>
