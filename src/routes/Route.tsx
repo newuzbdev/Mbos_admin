@@ -3,7 +3,7 @@ import Home from "@/pages/Home";
 import Login from "@/pages/Login";
 import Notfound from "@/pages/Notfound";
 import Services from "@/pages/Services";
-import Users from "@/pages/Users";
+import Clients from "@/pages/Clients";
 import { createBrowserRouter } from "react-router-dom";
 // function authLoader({ request }: LoaderFunctionArgs) {
 //   if (!isLoggedIn()) {
@@ -33,8 +33,8 @@ export const router = createBrowserRouter([
         element: <Services />,
       },
       {
-        path: "/users",
-        element: <Users />,
+        path: "/clients",
+        element: <Clients />,
       },
     ],
   },

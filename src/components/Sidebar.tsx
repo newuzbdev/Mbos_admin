@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ChartColumn, ClipboardList, Users2, ChevronLeft, Menu } from "lucide-react";
+import {
+  ChartColumn,
+  ClipboardList,
+  Users2,
+  ChevronLeft,
+  Menu,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
@@ -57,11 +63,9 @@ const Sidebar: React.FC<SidebarProps> = () => {
             </Link>
           </li>
           <li>
-            <Link to="/users" className={getLinkClassName("/users")}>
+            <Link to="/clients" className={getLinkClassName("/clients")}>
               <Users2 className="w-10 h-5" />
-              {!isMinimized && (
-                <span className="text-lg">Foydanaluvchilar</span>
-              )}
+              {!isMinimized && <span className="text-lg">Mijozlar</span>}
             </Link>
           </li>
         </ul>
