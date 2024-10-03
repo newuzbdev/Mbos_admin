@@ -52,7 +52,7 @@ import {
     return (
       <>
         <div className="flex flex-col w-full h-full my-4 space-y-2">
-          <div className="flex justify-between px-4 pt-6">
+          <div className="flex justify-between pt-6">
             <div className="w-80">
               <Input
                 placeholder="Izlash..."
@@ -62,7 +62,7 @@ import {
             </div>
             <ColumnFilter table={table} />
           </div>
-          <div className="mx-4 border rounded-lg">
+          <div className=" border rounded-lg">
             <Table>
               <TableHeader>
                 {table.getHeaderGroups().map((headerGroup) => (
