@@ -58,11 +58,11 @@ const ServicesCreateInputs = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="h-auto my-10 mt-4 space-y-5 "
+        className="h-auto my-10 mt-4 space-y-5"
       >
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <FormField
-            control={form.control}
+            control={form.control}  
             name="name"
             render={({ field }) => (
               <FormItem>
