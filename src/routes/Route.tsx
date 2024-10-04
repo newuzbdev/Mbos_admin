@@ -4,15 +4,31 @@ import Login from "@/pages/Login";
 import Notfound from "@/pages/Notfound";
 import Contract from "@/pages/Contract";
 import Clients from "@/pages/Clients";
-import { createBrowserRouter } from "react-router-dom";
-// function authLoader({ request }: LoaderFunctionArgs) {
-//   if (!isLoggedIn()) {
-//     const params = new URLSearchParams();
-//     params.set("to", new URL(request.url).pathname);
-//     return redirect("/login?" + params.toString());
-//   }
-//   return null;
-// }
+import { createBrowserRouter, LoaderFunctionArgs, redirect } from "react-router-dom";
+import { isLoggedIn, login, logout } from "@/services/auth";
+import { useMutation } from "@tanstack/react-query";
+import { LoginData } from "@/types/auth";
+export function useLogin() {
+  return useMutation({
+    mutationFn: (data: LoginData) => login(data),
+  });
+}
+
+export function useLogout() {
+  return useMutation({
+    mutationFn: () => logout(),
+  });
+}
+
+function authLoader({ request }: LoaderFunctionArgs) {
+  if (!isLoggedIn()) {
+    const params = new URLSearchParams();
+    params.set("to", new URL(request.url).pathname);
+    return redirect("/login?" + params.toString());
+  }
+  return null;
+}
+
 export const router = createBrowserRouter([
   {
     path: "/login",
@@ -21,6 +37,7 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
+    loader: authLoader,
     errorElement: <Notfound />,
 
     children: [

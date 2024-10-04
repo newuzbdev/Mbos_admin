@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-// import { NavLink, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,42 +12,54 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-// import { useLogin } from "@/hooks/useAuth";
-// import { useToast } from "@/components/ui/use-toast";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
-import { useState } from "react";
-// import { PhoneInput } from "@/components/common/PhoneInput.tsx";
+import { useEffect, useState } from "react";
+import { useLogin } from "@/hooks/useAuth";
+// import { useToast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
-  phone: z.string().regex(/\+998 \(\d{2}\) \d{3}-\d{2}-\d{2}/),
-  password: z.string(),
+  user_name: z.string().min(1, "Telefon raqami kiritilishi shart"),
+  password: z
+    .string()
+    .min(4, "Parol kamida 4 ta belgidan iborat bo'lishi kerak"),
 });
 
 export default function Login() {
-  // const { data, mutate: login, isSuccess, isError } = useLogin();
-  // const { toast } = useToast();
-  // const navigate = useNavigate();
-  // const [searchParams] = useSearchParams();
+  const { data, mutate: login, isSuccess, isError } = useLogin();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      user_name: "",
+      password: "",
+    },
   });
+  // const { toast } = useToast();
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-
-    // login({ ...values, phone: values.phone.replace(/([() -])/g, "") });
+    login(values);
   }
 
-  // useEffect(() => {
-  //   if (isSuccess) {
-  //     localStorage.setItem("access_token", data.data.value);
-  //     const to = searchParams.get("to");
-  //     navigate(to ?? "/");
-  //   } else if (isError) {
-  //     toast({ title: "Incorrect login details", variant: "destructive" });
-  //   } else return;
-  // }, [ isSuccess, isError, data?.data.value, toast, navigate, searchParams]);
+  useEffect(() => {
+    if (isSuccess && data) {
+      console.log("Login Success: ", data);
+      localStorage.setItem("accessToken", data.data.accessToken);
+      localStorage.setItem("refreshToken", data.data.refreshToken);
+
+      const to = searchParams.get("to");
+      navigate(to ?? "/");
+    } else if (isError) {
+      console.error("Login Failed");
+      // Uncomment when the toast is set up
+      // toast({
+      //   title: "Xato",
+      //   description: "Noto'g'ri login ma'lumotlari",
+      //   variant: "destructive",
+      // });
+    }
+  }, [isSuccess, isError, data, navigate, searchParams]);
 
   return (
     <>
@@ -76,15 +88,13 @@ export default function Login() {
               >
                 <FormField
                   control={form.control}
-                  name="phone"
+                  name="user_name"
                   render={({ field }) => (
                     <FormItem className="w-full">
-                      <FormLabel className="text-base">
-                        Telefon raqami
-                      </FormLabel>
+                      <FormLabel className="text-base">Username</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Telefon raqamingizni kiriting"
+                          placeholder="Username kiriting"
                           {...field}
                           className="w-full h-10"
                         />
@@ -119,13 +129,12 @@ export default function Login() {
                           </div>
                         </div>
                       </FormControl>
-
                       <FormMessage />
                     </FormItem>
                   )}
                 />
                 <Button
-                variant={"default"}
+                  variant={"default"}
                   type="submit"
                   className="h-10 dark:text-white"
                 >
