@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useAddClients, useGetClients } from "@/hooks/useClients";
 import { toast } from "@/hooks/use-toast";
+import { Clients } from "@/types/clients";
 
 const FormSchema = z.object({
   F_I_O: z.string().min(2, {
@@ -26,13 +27,6 @@ const FormSchema = z.object({
   }),
 });
 
-type ClientsInput = {
-  id: string;
-  F_I_O: string;
-  phone: number;
-  adress: string;
-};
-
 interface ClientsCreateInputProps {
   closeDialog?: () => void;
 }
@@ -43,7 +37,7 @@ const ClientsCreateInput = ({ closeDialog }: ClientsCreateInputProps) => {
     resolver: zodResolver(FormSchema),
     defaultValues: {
       F_I_O: "",
-
+      phone: 0,
       adress: "",
     },
   });
@@ -51,14 +45,13 @@ const ClientsCreateInput = ({ closeDialog }: ClientsCreateInputProps) => {
   const { refetch: refetchClients } = useGetClients();
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    const clientsData: ClientsInput = {
+    const clientsData: Omit<Clients, 'id'> = {
       F_I_O: data.F_I_O,
       phone: data.phone,
       adress: data.adress,
-      id: ""
     };
 
-    addClient(clientsData, {
+    addClient(clientsData as Clients, {
       onSuccess: () => {
         refetchClients();
         form.reset();
