@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLogin } from "@/hooks/useAuth";
-// import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
   user_name: z.string().min(1, "Telefon raqami kiritilishi shart"),
@@ -36,7 +36,7 @@ export default function Login() {
       password: "",
     },
   });
-  // const { toast } = useToast();
+  const { toast } = useToast();
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     login(values);
@@ -47,19 +47,22 @@ export default function Login() {
       console.log("Login Success: ", data);
       localStorage.setItem("accessToken", data.data.accessToken);
       localStorage.setItem("refreshToken", data.data.refreshToken);
-
       const to = searchParams.get("to");
+      toast({
+        title: "Muvaffaqiyatli",
+        description: "Muvaffaqiyatli qoshildi",
+        variant: "success",
+      });
       navigate(to ?? "/");
     } else if (isError) {
       console.error("Login Failed");
-      // Uncomment when the toast is set up
-      // toast({
-      //   title: "Xato",
-      //   description: "Noto'g'ri login ma'lumotlari",
-      //   variant: "destructive",
-      // });
+      toast({
+        title: "Xato",
+        description: "Noto'g'ri login ma'lumotlari",
+        variant: "destructive",
+      });
     }
-  }, [isSuccess, isError, data, navigate, searchParams]);
+  }, [isSuccess, isError, data, navigate, searchParams, toast]);
 
   return (
     <>

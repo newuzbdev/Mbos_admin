@@ -15,8 +15,25 @@ import {
 } from "@/components/ui/alert-dialog";
 
 import { LogOut } from "lucide-react";
+import { useLogout } from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { toast } from "@/hooks/use-toast";
 
 const Navbar = () => {
+  const { mutate: logout, isSuccess, isError } = useLogout();
+  const navigate = useNavigate();
+  const handleLogOut = () => {
+    logout();
+  };
+  useEffect(() => {
+    if (isSuccess) {
+      navigate("/login");
+      toast({ title: "Muvaffaqiyatli chiqish", variant: "success" });
+    } else if (isError) {
+      toast({ title: "Chiqishda  xatolik", variant: "destructive" });
+    } else return;
+  }, [isSuccess, isError, navigate]);
   return (
     <div className="flex items-start justify-end w-full gap-3 px-5 py-3 border-b shadow">
       <ModeToggle />
@@ -32,7 +49,10 @@ const Navbar = () => {
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction className="bg-red-500 hover:bg-red-600">
+                <AlertDialogAction
+                  className="bg-red-500 hover:bg-red-600"
+                  onClick={() => handleLogOut()}
+                >
                   Continue
                 </AlertDialogAction>
               </AlertDialogFooter>

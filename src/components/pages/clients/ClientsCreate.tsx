@@ -4,6 +4,10 @@ import ClientsCreateInput from "@/components/pages/clients/ClientsCreateInput.ts
 
 const ClientsCreate = () => {
   const [open, setOpen] = useState(false)
+  const closeDialog = () => {
+    setOpen(false);
+  };
+
   return (
     <div>
       <Dialog open={open} onOpenChange={setOpen}>
@@ -11,8 +15,7 @@ const ClientsCreate = () => {
           Mijoz yaratish
         </DialogTrigger>
         <DialogContent className="max-w-3xl">
-          {/* <ServicesCreateInputs closeDialog={closeDialog} /> */}
-          <ClientsCreateInput />
+          <ClientsCreateInput  closeDialog={closeDialog}/>
         </DialogContent>
       </Dialog>
     </div>

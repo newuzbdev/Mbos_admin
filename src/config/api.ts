@@ -77,7 +77,7 @@ axiosPrivate.interceptors.response.use(
 
             return axios
                 .post(`${baseURL}/admin/refresh`, {
-                    token: localStorage.getItem("token"),
+                    token: localStorage.getItem("refreshToken"),
                 })
                 .then((res) => {
                     console.log("Response from refresh token:", res.data);
@@ -86,7 +86,7 @@ axiosPrivate.interceptors.response.use(
                     if (res.data && res.data.data) {
                         // Set new access token and refresh token
                         localStorage.setItem("accessToken", res.data.data.accessToken);
-                        localStorage.setItem("token", res.data.data.refreshToken); // Update if you use refresh token
+                        localStorage.setItem("refreshToken", res.data.data.refreshToken); // Update if you use refresh token
 
                         console.log("New access token stored:", res.data.data.accessToken);
                     } else {

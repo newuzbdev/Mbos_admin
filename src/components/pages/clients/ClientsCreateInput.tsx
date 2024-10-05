@@ -11,59 +11,93 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
+import { useAddClients, useGetClients } from "@/hooks/useClients";
+import { toast } from "@/hooks/use-toast";
 
 const FormSchema = z.object({
-  name: z.string().min(2, {
-    message: "Uzunliki 4 ta belgidan kam bo'lmasin.",
+  F_I_O: z.string().min(2, {
+    message: "F.I.O must be at least 2 characters.",  
   }),
-  price: z.string().min(1, {
-    message: "Telefon raqami 5 ta raqamdan kam bo'lmasin",
+  phone: z.number().min(1, {
+    message: "Phone number must be at least 1 character.",
+  }),
+  adress: z.string().min(2, {
+    message: "Address must be at least 2 characters.",
   }),
 });
-// type ServicesInput = {
-//   name: string;
-//   price: number;
-// };
-const ClientsCreateInput = () => {
+
+type ClientsInput = {
+  id: string;
+  F_I_O: string;
+  phone: number;
+  adress: string;
+};
+
+interface ClientsCreateInputProps {
+  closeDialog?: () => void;
+}
+
+const ClientsCreateInput = ({ closeDialog }: ClientsCreateInputProps) => {
+  const { mutate: addClient } = useAddClients();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      name: "",
-      price: "",
+      F_I_O: "",
+
+      adress: "",
     },
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data);
+  const { refetch: refetchClients } = useGetClients();
 
-    // const ServicesData: ServicesInput = {
-    //   name: data.name,
-    //   price: Number(data.price),
-    // };
+  function onSubmit(data: z.infer<typeof FormSchema>) {
+    const clientsData: ClientsInput = {
+      F_I_O: data.F_I_O,
+      phone: data.phone,
+      adress: data.adress,
+      id: ""
+    };
+
+    addClient(clientsData, {
+      onSuccess: () => {
+        refetchClients();
+        form.reset();
+        toast({
+          title: "Client added successfully.",
+          variant: "success",
+        });
+        closeDialog?.();
+      },
+      onError: (error) => {
+        toast({
+          title: "Error adding client.",
+          variant: "destructive",
+          description: error.message,
+        });
+      },
+    });
   }
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="h-auto my-10 mt-4 space-y-5 "
+        className="h-auto my-10 mt-4 space-y-5"
       >
-        <div className="grid grid-cols-1 gap-6  md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <FormField
             control={form.control}
-            name="name"
+            name="F_I_O"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-lg font-semibold text-slate-700 dark:text-white">
-                  Mijoz nomi
+                <FormLabel className="text-lg font-semibold text-slate-700">
+                  F.I.O
                 </FormLabel>
                 <FormControl>
                   <Input
-                    type="text"
-                    placeholder="Mijoz Ismi"
+                    placeholder="Enter full name"
                     {...field}
-                    className="px-4 py-2 transition duration-200 border-2 rounded-md border-slate-300 focus:border-primary focus:ring focus:ring-blue-200"
+                    className="px-4 py-2 transition duration-200 border-2 rounded-md border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
                   />
                 </FormControl>
                 <FormMessage className="text-sm text-red-500" />
@@ -72,58 +106,19 @@ const ClientsCreateInput = () => {
           />
           <FormField
             control={form.control}
-            name="name"
+            name="phone"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-lg font-semibold text-slate-700 dark:text-white">
-                  Companya nomi
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    type="text"
-                    placeholder="Comanya nomi"
-                    {...field}
-                    className="px-4 py-2 transition duration-200 border-2 rounded-md border-slate-300 focus:border-primary focus:ring focus:ring-blue-200"
-                  />
-                </FormControl>
-                <FormMessage className="text-sm text-red-500" />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="price"
-            render={({ field }) => (
-                <FormItem>
-                <FormLabel className="text-lg font-semibold text-slate-700 dark:text-white">
-                  Telefon Nomeri
+                <FormLabel className="text-lg font-semibold text-slate-700">
+                  Telefon raqami
                 </FormLabel>
                 <FormControl>
                   <Input
                     type="number"
-                    placeholder="Telefon nomer"
+                    placeholder="Telefon raqamini kiriting"
                     {...field}
-                    className="px-4 py-2 transition duration-200 border-2 rounded-md border-slate-300 focus:border-primary focus:ring focus:ring-blue-200"
-                  />
-                </FormControl>
-                <FormMessage className="text-sm text-red-500" />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-lg font-semibold text-slate-700 dark:text-white">
-                  Email Manzili
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    type="email"
-                    placeholder="Email Manzili"
-                    {...field}
-                    className="px-4 py-2 transition duration-200 border-2 rounded-md border-slate-300 focus:border-primary focus:ring focus:ring-blue-200"
+                    onChange={(e) => field.onChange(Number(e.target.value))}
+                    className="px-4 py-2 transition duration-200 border-2 rounded-md border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
                   />
                 </FormControl>
                 <FormMessage className="text-sm text-red-500" />
@@ -131,14 +126,35 @@ const ClientsCreateInput = () => {
             )}
           />
         </div>
+
+        <FormField
+          control={form.control}
+          name="adress"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-lg font-semibold text-slate-700">
+                Address
+              </FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Addressni kiriting"
+                  {...field}
+                  className="px-4 py-2 transition duration-200 border-2 rounded-md border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
+                />
+              </FormControl>
+              <FormMessage className="text-sm text-red-500" />
+            </FormItem>
+          )}
+        />
         <Button
           type="submit"
-          className="py-2 text-white transition duration-200 rounded-md x-6 bg-primary hover:bg-green-700"
+          className="px-6 py-2 text-white transition duration-200 rounded-md bg-primary"
         >
-          Submit
+          Qo'shish
         </Button>
       </form>
     </Form>
   );
 };
+
 export default ClientsCreateInput;
