@@ -5,7 +5,7 @@ import {
   ClipboardList,
   Users2,
   ChevronLeft,
-  Menu,
+  Menu, CreditCard,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -67,7 +67,10 @@ const Sidebar: React.FC<SidebarProps> = () => {
               <ClipboardList className="w-10 h-5" />
               {!isMinimized && <span className="text-lg">Shartnomalar</span>}
             </Link>
-         
+          <Link to="/income" className={getLinkClassName("/income")}>
+            <CreditCard className="w-10 h-5" />
+            {!isMinimized && <span className="text-lg">Daromat</span>}
+          </Link>
         </ul>
       </div>
     </>

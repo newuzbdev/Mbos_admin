@@ -8,6 +8,7 @@ import { createBrowserRouter, LoaderFunctionArgs, redirect } from "react-router-
 import { isLoggedIn, login, logout } from "@/services/auth";
 import { useMutation } from "@tanstack/react-query";
 import { LoginData } from "@/types/auth";
+import Income from "@/pages/Income.tsx";
 export function useLogin() {
   return useMutation({
     mutationFn: (data: LoginData) => login(data),
@@ -53,6 +54,10 @@ export const router = createBrowserRouter([
         path: "/clients",
         element: <Clients />,
       },
+      {
+        path:'/income',
+        element:<Income/>
+      }
     ],
   },
 ]);

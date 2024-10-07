@@ -12,7 +12,6 @@ const Client = () => {
           <ClientsCreate/>
         </div>
         <ClientsList/>
-
       </div>
     </div>
   </div>;
