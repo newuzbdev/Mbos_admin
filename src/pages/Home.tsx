@@ -1,7 +1,7 @@
 import { RecentSales } from "@/components/recent-sales";
 import {
   Card,
-  CardContent,
+  CardContent,  
   CardDescription,
   CardHeader,
   CardTitle,

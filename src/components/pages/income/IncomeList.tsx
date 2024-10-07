@@ -1,14 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { ColumnDef } from "@tanstack/react-table";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 import {
   Dialog,
   DialogContent,
@@ -17,321 +7,242 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { PencilIcon, Trash2Icon } from "lucide-react";
-import {
-  useGetIncome,
-  useIncomeDelete,
-  useIncomeUpdate,
-} from "@/hooks/useIncome.ts";
+import { useGetIncome, useIncomeUpdate } from "@/hooks/useIncome";
 import { toast } from "@/hooks/use-toast";
-import DataTable from "@/components/data-table";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {Income} from "@/types/income.ts";
+import { Income } from "@/types/income";
+import { Plus, Edit } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-const makeColumns = (
-  setProductToEdit: (p: Income) => void,
-  setProductToDelete: (p: Income) => void
-): ColumnDef<Income>[] => [
-  {
-    header: "№",
-    cell: (c) => <div className="cursor-pointer">{c.row.index + 1}</div>,
-  },
-  {
-    accessorKey: "translation_benefit",
-    header: "Foyda",
-    cell: ({ row }) => (
-      <div className="cursor-pointer">{row.original.translation_benefit}</div>
-    ),
-  },
-  {
-    accessorKey: "cash_benefit",
-    header: "Naqt pul",
-    cell: ({ row }) => (
-      <div className="cursor-pointer">{row.original.cash_benefit}</div>
-    ),
-  },
-  {
-    accessorKey: "online_benefit",
-    header: "Online pul",
-    cell: ({ row }) => (
-      <div className="cursor-pointer">{row.original.online_benefit}</div>
-    ),
-  },
-  {
-    accessorKey: "benefit",
-    header: "Umumiy foyda",
-    cell: ({ row }) => (
-      <div className="cursor-pointer">{row.original.benefit}</div>
-    ),
-  },
-  {
-    accessorKey: "workers_harm",
-    header: "Ishchilarga yetkazilgan zarar",
-    cell: ({ row }) => (
-      <div className="cursor-pointer">{row.original.workers_harm}</div>
-    ),
-  },
-  {
-    accessorKey: "harm",
-    header: "Umumiy zarar",
-    cell: ({ row }) => (
-      <div className="cursor-pointer">{row.original.harm}</div>
-    ),
-  },
-  {
-    id: "actions",
-    header: "Actions",
-    cell: ({ row }) => (
-      <div className="space-x-2">
-        <Button
-          aria-label="Edit product"
-          variant="ghost"
-          size="icon"
-          onClick={() => setProductToEdit(row.original)}
-        >
-          <PencilIcon size={20} className="text-primary" />
-        </Button>
-        <Button
-          aria-label="Delete product"
-          variant="destructive"
-          size="icon"
-          onClick={() => setProductToDelete(row.original)}
-        >
-          <Trash2Icon size={20} />
-        </Button>
-      </div>
-    ),
-  },
-];
+const IncomeCard = ({
+  title,
+  value,
+  onEditClick,
+}: {
+  title: string;
+  value: number;
+  onEditClick: () => void;
+}) => (
+  <Card className="cursor-pointer" onClick={onEditClick}>
+    <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+      <CardTitle className="text-sm font-medium">{title}</CardTitle>
+      <Plus size={17} className="text-white rounded-md bg-primary" />
+    </CardHeader>
+    <CardContent>
+      <div className="text-2xl font-bold">{value.toLocaleString()}</div>
+    </CardContent>
+  </Card>
+);
 
 const IncomeList = () => {
-  const [incomeToDelete, setIncomeToDelete] = useState<Income | undefined>();
-  const [incomeToEdit, setIncomeToEdit] = useState<Income | undefined>();
-  const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
+  const [fieldToEdit, setFieldToEdit] = useState<{
+    field: keyof Income;
+    income: Income;
+  } | null>(null);
+  const [newValue, setNewValue] = useState<number>(0);
   const [editDialogVisible, setEditDialogVisible] = useState(false);
-  const {
-    data: products = { data: { data: [] } },
-    refetch,
-    isLoading,
-  } = useGetIncome();
-  const {
-    mutate: deleteProduct,
-    isSuccess: isDeleteSuccess,
-    isError: isDeleteError,
-  } = useIncomeDelete();
-  const {
-    mutate: updateProduct,
-    isSuccess: isUpdateSuccess,
-    isError: isUpdateError,
-  } = useIncomeUpdate();
+  const [updateAllDialogVisible, setUpdateAllDialogVisible] = useState(false);
+  const [currentValues, setCurrentValues] = useState<Partial<Income>>({});
 
-  useEffect(() => {
-    if (isDeleteSuccess) {
-      toast({
-        variant: "success",
-        title: "Product successfully deleted",
-      });
-      refetch();
-      setDeleteDialogVisible(false);
-    } else if (isDeleteError) {
-      toast({
-        variant: "destructive",
-        title: "Error deleting product",
-      });
-    }
-  }, [isDeleteSuccess, isDeleteError, refetch]);
+  const { data: incomes = { data: { data: [] } }, refetch, isLoading } = useGetIncome();
+  const { mutate: updateIncome, isSuccess: isUpdateSuccess, isError: isUpdateError } = useIncomeUpdate();
 
   useEffect(() => {
     if (isUpdateSuccess) {
-      toast({
-        variant: "success",
-        title: "Product successfully updated",
-      });
+      toast({ variant: "success", title: "Income successfully updated" });
       refetch();
       setEditDialogVisible(false);
+      setUpdateAllDialogVisible(false);
     } else if (isUpdateError) {
-      toast({
-        variant: "destructive",
-        title: "Error updating product",
-      });
+      toast({ variant: "destructive", title: "Error updating income" });
     }
   }, [isUpdateSuccess, isUpdateError, refetch]);
-  useEffect(() => {
-    if (incomeToDelete) setDeleteDialogVisible(true);
-  }, [incomeToDelete]);
-  useEffect(() => {
-    if (incomeToEdit) setEditDialogVisible(true);
-  }, [incomeToEdit]);
+
   const handleEditSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (incomeToEdit) {
-      updateProduct({
-        id:incomeToEdit.id,
-        translation_benefit: incomeToEdit.translation_benefit,
-        cash_benefit:incomeToEdit.cash_benefit,
-        online_benefit:incomeToEdit.online_benefit,
-        benefit:incomeToEdit.benefit,
-        workers_harm:incomeToEdit.workers_harm,
-        harm:incomeToEdit.harm
+    if (fieldToEdit) {
+      const currentValue = fieldToEdit.income[fieldToEdit.field];
+      const updatedValue = typeof currentValue === 'number' ? currentValue + newValue : newValue;
+      updateIncome({ id: fieldToEdit.income.id, [fieldToEdit.field]: updatedValue });
+    }
+  };
+
+  const handleUpdateAllSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (incomes.data?.data) {
+      incomes.data.data.forEach((income: Income) => {
+        const updatedIncome: Income = {
+          id: income.id,
+          translation_benefit: currentValues.translation_benefit ?? income.translation_benefit,
+          cash_benefit: currentValues.cash_benefit ?? income.cash_benefit,
+          online_benefit: currentValues.online_benefit ?? income.online_benefit,
+          benefit: currentValues.benefit ?? income.benefit,
+          workers_harm: currentValues.workers_harm ?? income.workers_harm,
+          harm: currentValues.harm ?? income.harm,
+        };
+        updateIncome(updatedIncome);
       });
     }
+  };
+
+  const openEditDialog = (field: keyof Income, income: Income) => {
+    setFieldToEdit({ field, income });
+    setNewValue(0);
+    setEditDialogVisible(true);
+  };
+  const openUpdateAllDialog = () => {
+    if (incomes.data?.data) {
+      const values = incomes.data.data.reduce((_acc: Partial<Income>, income: Income) => {
+        return {
+          translation_benefit: income.translation_benefit,
+          cash_benefit: income.cash_benefit,
+          online_benefit: income.online_benefit,
+          benefit: income.benefit,
+          workers_harm: income.workers_harm,
+          harm: income.harm,
+        };
+      }, {} as Partial<Income>);
+      setCurrentValues(values);
+    }
+    setUpdateAllDialogVisible(true);
   };
 
   if (isLoading) return <div>Loading...</div>;
 
   return (
-    <div className="w-full">
-      <div className="p-4 border rounded-md">
-        <h1 className="px-4 pt-4 font-bold">Mijozlar ro'yhati</h1>
-        <DataTable
-          columns={makeColumns(setIncomeToEdit, setIncomeToDelete)}
-          data={products.data?.data || []}
-        />
+    <div className="w-full space-y-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {incomes.data?.data.map((income: Income) => (
+          <React.Fragment key={income.id}>
+            <IncomeCard
+              title="O'tkazmalardan tushim"
+              value={income.translation_benefit}
+              onEditClick={() => openEditDialog("translation_benefit", income)}
+            />
+            <IncomeCard
+              title="Naqt pul"
+              value={income.cash_benefit}
+              onEditClick={() => openEditDialog("cash_benefit", income)}
+            />
+            <IncomeCard
+              title="Online pul"
+              value={income.online_benefit}
+              onEditClick={() => openEditDialog("online_benefit", income)}
+            />
+            <IncomeCard
+              title="Qo'shimcha foyda"
+              value={income.benefit}
+              onEditClick={() => openEditDialog("benefit", income)}
+            />
+            <IncomeCard
+              title="Ishchilarga maosh"
+              value={income.workers_harm}
+              onEditClick={() => openEditDialog("workers_harm", income)}
+            />
+            <IncomeCard
+              title="Qo'shimcha chiqim"
+              value={income.harm}
+              onEditClick={() => openEditDialog("harm", income)}
+            />
+          </React.Fragment>
+        ))}
       </div>
 
-      {incomeToDelete && (
-        <AlertDialog
-          open={deleteDialogVisible}
-          onOpenChange={setDeleteDialogVisible}
-        >
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel onClick={() => setDeleteDialogVisible(false)}>
+      <Button onClick={openUpdateAllDialog} className="mt-4" variant="outline">
+        <Edit size={16} className="mr-2" /> Update All
+      </Button>
+
+      {/* Edit Individual Income Dialog */}
+      <Dialog open={editDialogVisible} onOpenChange={setEditDialogVisible}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Income</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleEditSubmit}>
+            <Label htmlFor="newValue">New Value</Label>
+            <Input
+              id="newValue"
+              value={newValue.toLocaleString()}
+              onChange={(e) => setNewValue(Number(e.target.value.replace(/\D/g, '')))}
+              type="text"
+              required
+            />
+            <DialogFooter className="p-4">
+              <Button type="submit" className="text-white">Save</Button>
+              <Button variant="secondary" onClick={() => setEditDialogVisible(false)}>
                 Cancel
-              </AlertDialogCancel>
-              <AlertDialogAction
-                className="text-white bg-red-500 hover:bg-red"
-                onClick={() => deleteProduct(incomeToDelete.id.toString())}
-              >
-                Continue
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-      )}
-      {incomeToEdit && (
-        <Dialog open={editDialogVisible} onOpenChange={setEditDialogVisible}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Edit Product</DialogTitle>
-            </DialogHeader>
-            <form onSubmit={handleEditSubmit}>
-              <div className="grid gap-4 py-4">
-                <div className="grid items-center grid-cols-4 gap-4">
-                  <Label htmlFor="name" className="text-right">
-                    Foyda
-                  </Label>
-                  <Input
-                    id="translation_benefit"
-                    type="number"
-                    value={incomeToEdit.translation_benefit}
-                    onChange={(e) => {
-                      setIncomeToEdit({
-                        ...incomeToEdit,
-                        translation_benefit: parseFloat(e.target.value),
-                      });
-                    }
-                    }
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid items-center grid-cols-4 gap-4">
-                  <Label htmlFor="price" className="text-right">
-                    Naqt pul
-                  </Label>
-                  <Input
-                    id="cash_benefit"
-                    type="number"
-                    value={incomeToEdit.cash_benefit}
-                    onChange={(e) =>
-                      setIncomeToEdit({
-                        ...incomeToEdit,
-                        cash_benefit: parseFloat(e.target.value),
-                      })
-                    }
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid items-center grid-cols-4 gap-4">
-                  <Label htmlFor="text" className="text-right">
-                    Online pul
-                  </Label>
-                  <Input
-                    id="online_benefit"
-                    type="number"
-                    value={incomeToEdit.online_benefit}
-                    onChange={(e) =>
-                      setIncomeToEdit({
-                        ...incomeToEdit,
-                        online_benefit: parseFloat(e.target.value),
-                      })
-                    }
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid items-center grid-cols-4 gap-4">
-                  <Label htmlFor="text" className="text-right">
-                    Umumiy foyda
-                  </Label>
-                  <Input
-                    id="benifit"
-                    type="number"
-                    value={incomeToEdit.benefit}
-                    onChange={(e) =>
-                      setIncomeToEdit({
-                        ...incomeToEdit,
-                        benefit: parseFloat(e.target.value),
-                      })
-                    }
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid items-center grid-cols-4 gap-4">
-                  <Label htmlFor="text" className="text-right">
-                    Ishchilarga yetkazilgan zarar
-                  </Label>
-                  <Input
-                    id="workers_harm"
-                    type="number"
-                    value={incomeToEdit.workers_harm}
-                    onChange={(e) =>
-                      setIncomeToEdit({
-                        ...incomeToEdit,
-                        workers_harm: parseFloat(e.target.value),
-                      })
-                    }
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid items-center grid-cols-4 gap-4">
-                  <Label htmlFor="text" className="text-right">
-                    Umumiy zarar
-                  </Label>
-                  <Input
-                    id="harm"
-                    type="number"
-                    value={incomeToEdit.harm}
-                    onChange={(e) =>
-                      setIncomeToEdit({
-                        ...incomeToEdit,
-                        harm: parseFloat(e.target.value),
-                      })
-                    }
-                    className="col-span-3"
-                  />
-                </div>
-              </div>
-              <DialogFooter>
-                <Button type="submit">Save changes</Button>
-              </DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
-      )}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={updateAllDialogVisible} onOpenChange={setUpdateAllDialogVisible}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Update All Income</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleUpdateAllSubmit}>
+            <div className="space-y-4">
+              <Label htmlFor="translation_benefit">Translation Benefit</Label>
+              <Input
+                id="translation_benefit"
+                value={currentValues.translation_benefit?.toLocaleString() ?? ""}
+                onChange={(e) => setCurrentValues({ ...currentValues, translation_benefit: Number(e.target.value.replace(/\D/g, '')) })}
+                type="text"
+                required
+              />
+              <Label htmlFor="cash_benefit">Cash Benefit</Label>
+              <Input
+                id="cash_benefit"
+                value={currentValues.cash_benefit?.toLocaleString() ?? ""}
+                onChange={(e) => setCurrentValues({ ...currentValues, cash_benefit: Number(e.target.value.replace(/\D/g, '')) })}
+                type="text"
+                required
+              />
+              <Label htmlFor="online_benefit">Online Benefit</Label>
+              <Input
+                id="online_benefit"
+                value={currentValues.online_benefit?.toLocaleString() ?? ""}
+                onChange={(e) => setCurrentValues({ ...currentValues, online_benefit: Number(e.target.value.replace(/\D/g, '')) })}
+                type="text"
+                required
+              />
+              <Label htmlFor="benefit">Additional Benefit</Label>
+              <Input
+                id="benefit"
+                value={currentValues.benefit?.toLocaleString() ?? ""}
+                onChange={(e) => setCurrentValues({ ...currentValues, benefit: Number(e.target.value.replace(/\D/g, '')) })}
+                type="text"
+                required
+              />
+              <Label htmlFor="workers_harm">Workers Harm</Label>
+              <Input
+                id="workers_harm"
+                value={currentValues.workers_harm?.toLocaleString() ?? ""}
+                onChange={(e) => setCurrentValues({ ...currentValues, workers_harm: Number(e.target.value.replace(/\D/g, '')) })}
+                type="text"
+                required
+              />
+              <Label htmlFor="harm">Additional Harm</Label>
+              <Input
+                id="harm"
+                value={currentValues.harm?.toLocaleString() ?? ""}
+                onChange={(e) => setCurrentValues({ ...currentValues, harm: Number(e.target.value.replace(/\D/g, '')) })}
+                type="text"
+                required
+              />
+            </div>
+            <DialogFooter className="p-4">
+              <Button type="submit" className="text-white">Update All</Button>
+              <Button variant="secondary" onClick={() => setUpdateAllDialogVisible(false)}>
+                Cancel
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

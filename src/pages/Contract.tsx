@@ -1,5 +1,5 @@
-import ProductsAdd from "@/components/pages/servicises/ContractCreate";
-import ProductsList from "@/components/pages/servicises/ContractList";
+import ContractCreate from "@/components/pages/contracts/ContractCreate";
+import ContractList from "@/components/pages/contracts/ContractList";
 
 const Services = () => {
   return (
@@ -9,9 +9,9 @@ const Services = () => {
           <p className="text-xl font-semibold text-slate-400">
             Shartnomalar ro'yhati
           </p>
-          <ProductsAdd />
+          <ContractCreate />
         </div>
-        <ProductsList />
+        <ContractList />
       </div>
     </div>
   );
