@@ -38,22 +38,24 @@ const makeColumns = (
     cell: (c) => <div className="cursor-pointer">{c.row.index + 1}</div>,
   },
   {
-    accessorKey: "F_I_O",
-    header: "Full name",
-    cell: ({ row }) => <div className="cursor-pointer">{row.original.id}</div>,
+    accessorKey: "price",
+    header: "narx",
+    cell: ({ row }) => (
+      <div className="cursor-pointer">{row.original.price}</div>
+    ),
   },
   {
-    accessorKey: "phone",
-    header: "Phone number",
+    accessorKey: "count",
+    header: "miktor",
     cell: ({ row }) => (
       <div className="cursor-pointer">{row.original.count}</div>
     ),
   },
   {
-    accessorKey: "adress",
-    header: "Address",
+    accessorKey: "service",
+    header: "xizmat",
     cell: ({ row }) => (
-      <div className="cursor-pointer">{row.original.izoh}</div>
+      <div className="cursor-pointer">{row.original.service}</div>
     ),
   },
   {

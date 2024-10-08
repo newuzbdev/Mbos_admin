@@ -24,4 +24,5 @@ export type Contract = {
   tolash_sana: string | null;
   total_price: string;
   updated_at: string;
+  user_id: number;
 };

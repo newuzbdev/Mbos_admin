@@ -61,8 +61,12 @@ body {
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
- 
+
   * {
     @apply border-border;
   }
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(50%) sepia(100%) hue-rotate(180deg) saturate(200%);
 }
