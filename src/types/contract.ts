@@ -19,7 +19,7 @@ export type Contract = {
   service: string;
   shartnoma_id: string;
   shartnoma_muddati: string;
-  shartnoma_turi: EnumShartnoma;
+  shartnoma_turi: string;
   texnik_muddati: string;
   tolash_sana: string | null;
   total_price: string;

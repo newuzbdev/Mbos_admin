@@ -30,18 +30,54 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 
 const makeColumns = (
-  setProductToEdit: (p: Contract) => void,
-  setProductToDelete: (p: Contract) => void
+  setContractToEdit: (p: Contract) => void,
+  setContractToDelete: (p: Contract) => void
 ): ColumnDef<Contract>[] => [
   {
     header: "№",
     cell: (c) => <div className="cursor-pointer">{c.row.index + 1}</div>,
   },
   {
+    accessorKey: "sana",
+    header: "Sana",
+    cell: ({ row }) => (
+      <div className="cursor-pointer">{row.original.sana}</div>
+    ),
+  },
+  {
+    accessorKey: "shartnoma_muddati",
+    header: "shartnoma_muddati",
+    cell: ({ row }) => (
+      <div className="cursor-pointer">{row.original.shartnoma_muddati}</div>
+    ),
+  },
+  {
+    accessorKey: "texnik_muddati",
+    header: "texnik_muddati",
+    cell: ({ row }) => (
+      <div className="cursor-pointer">{row.original.texnik_muddati}</div>
+    ),
+  },
+  
+  {
+    accessorKey: "shartnoma_turi",
+    header: "shartnoma_turi",
+    cell: ({ row }) => (
+      <div className="cursor-pointer">{row.original.shartnoma_turi}</div>
+    ),
+  },
+  {
     accessorKey: "price",
     header: "narx",
     cell: ({ row }) => (
       <div className="cursor-pointer">{row.original.price}</div>
+    ),
+  },
+  {
+    accessorKey: "id",
+    header: "User",
+    cell: ({ row }) => (
+      <div className="cursor-pointer">{row.original.id}</div>
     ),
   },
   {
@@ -67,7 +103,7 @@ const makeColumns = (
           aria-label="Edit product"
           variant="ghost"
           size="icon"
-          onClick={() => setProductToEdit(row.original)}
+          onClick={() => setContractToEdit(row.original)}
         >
           <PencilIcon size={20} className="text-primary" />
         </Button>
@@ -75,7 +111,7 @@ const makeColumns = (
           aria-label="Delete product"
           variant="destructive"
           size="icon"
-          onClick={() => setProductToDelete(row.original)}
+          onClick={() => setContractToDelete(row.original)}
         >
           <Trash2Icon size={20} />
         </Button>
@@ -85,10 +121,10 @@ const makeColumns = (
 ];
 
 const ContractList = () => {
-  const [clientsToDelete, setClientsToDelete] = useState<
+  const [contractToDelete, setContractToDelete] = useState<
     Contract | undefined
   >();
-  const [clientsToEdit, setClientsToEdit] = useState<Contract | undefined>();
+  const [contractToEdit, setContractToEdit] = useState<Contract | undefined>();
   const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
   const [editDialogVisible, setEditDialogVisible] = useState(false);
   const { data: products, refetch, isLoading } = useGetContract();
@@ -98,7 +134,7 @@ const ContractList = () => {
     isError: isDeleteError,
   } = useContractDelete();
   const {
-    mutate: updateProduct,
+    mutate: updateContract,
     isSuccess: isUpdateSuccess,
     isError: isUpdateError,
   } = useContractUpdate();
@@ -117,7 +153,7 @@ const ContractList = () => {
         title: "Error deleting product",
       });
     }
-  }, [isDeleteSuccess, isDeleteError]);
+  }, [isDeleteSuccess, isDeleteError,refetch]);
 
   useEffect(() => {
     if (isUpdateSuccess) {
@@ -135,16 +171,26 @@ const ContractList = () => {
     }
   }, [isUpdateSuccess, isUpdateError, refetch]);
   useEffect(() => {
-    if (clientsToDelete) setDeleteDialogVisible(true);
-  }, [clientsToDelete]);
+    if (contractToDelete) setDeleteDialogVisible(true);
+  }, [contractToDelete]);
   useEffect(() => {
-    if (clientsToEdit) setEditDialogVisible(true);
-  }, [clientsToEdit]);
+    if (contractToEdit) setEditDialogVisible(true);
+  }, [contractToEdit]);
 
   const handleEditSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (clientsToEdit) {
-      // updateProduct();
+    if (contractToEdit) {
+      updateContract({
+        id: contractToEdit.id,
+        sana: contractToEdit.sana,
+        shartnoma_muddati: contractToEdit.shartnoma_muddati,
+        texnik_muddati: contractToEdit.texnik_muddati,
+        shartnoma_turi: contractToEdit.shartnoma_turi,
+        price: contractToEdit.price,
+        count: contractToEdit.count,
+        service: contractToEdit.service,
+        izoh: contractToEdit.izoh,
+      });
     }
   };
 
@@ -155,12 +201,12 @@ const ContractList = () => {
       <div className="p-4 border rounded-md">
         <h1 className="px-4 pt-4 font-bold">Mijozlar ro'yhati</h1>
         <DataTable
-          columns={makeColumns(setClientsToEdit, setClientsToDelete)}
+          columns={makeColumns(setContractToEdit, setContractToDelete)}
           data={products?.data.data || []}
         />
       </div>
 
-      {clientsToDelete && (
+      {contractToDelete && (
         <AlertDialog
           open={deleteDialogVisible}
           onOpenChange={setDeleteDialogVisible}
@@ -175,7 +221,7 @@ const ContractList = () => {
               </AlertDialogCancel>
               <AlertDialogAction
                 className="text-white bg-red-500 hover:bg-red"
-                onClick={() => deleteProduct(clientsToDelete.id.toString())}
+                onClick={() => deleteProduct(contractToDelete.id.toString())}
               >
                 Continue
               </AlertDialogAction>
@@ -183,7 +229,7 @@ const ContractList = () => {
           </AlertDialogContent>
         </AlertDialog>
       )}
-      {clientsToEdit && (
+      {contractToEdit && (
         <Dialog open={editDialogVisible} onOpenChange={setEditDialogVisible}>
           <DialogContent>
             <DialogHeader>
@@ -192,21 +238,121 @@ const ContractList = () => {
             <form onSubmit={handleEditSubmit}>
               <div className="grid gap-4 py-4">
                 <div className="grid items-center grid-cols-4 gap-4">
-                  <Label htmlFor="name" className="text-right">
-                    Full name
+                  <Label htmlFor="sana" className="text-right">
+                    Sana
                   </Label>
                   <Input
-                    id="F_I_O"
-                    value={clientsToEdit.count}
+                    id="sana"
+                    value={contractToEdit.sana}
                     onChange={(e) =>
-                      setClientsToEdit({
-                        ...clientsToEdit,
+                      setContractToEdit({
+                        ...contractToEdit,
+                        sana: e.target.value,
+                      })
+                    }
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid items-center grid-cols-4 gap-4">
+                  <Label htmlFor="shartnoma_muddati" className="text-right">
+                    Shartnoma muddati
+                  </Label>
+                  <Input
+                    id="shartnoma_muddati"
+                    value={contractToEdit.shartnoma_muddati}
+                    onChange={(e) =>
+                      setContractToEdit({
+                        ...contractToEdit,
+                        shartnoma_muddati: e.target.value,
+                      })
+                    }
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid items-center grid-cols-4 gap-4">
+                  <Label htmlFor="texnik_muddati" className="text-right">
+                    Texnik muddati
+                  </Label>
+                  <Input
+                    id="texnik_muddati"
+                    value={contractToEdit.texnik_muddati}
+                    onChange={(e) =>
+                      setContractToEdit({
+                        ...contractToEdit,
+                        texnik_muddati: e.target.value,
+                      })
+                    }
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid items-center grid-cols-4 gap-4">
+                  <Label htmlFor="shartnoma_turi" className="text-right">
+                    Shartnoma turi
+                  </Label>
+                  <Input
+                    id="shartnoma_turi"
+                    value={contractToEdit.shartnoma_turi}
+                    onChange={(e) =>
+                      setContractToEdit({
+                        ...contractToEdit,
+
+                        shartnoma_turi: e.target.value as EnumShartnoma,
+                      })
+                    }
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid items-center grid-cols-4 gap-4">
+                  <Label htmlFor="price" className="text-right">
+                    Narx
+                  </Label>
+                  <Input
+                    id="price"
+                    type="number"
+                    value={contractToEdit.price}
+                    onChange={(e) =>
+                      setContractToEdit({
+                        ...contractToEdit,
+                        price: e.target.value,
+                      })
+                    }
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid items-center grid-cols-4 gap-4">
+                  <Label htmlFor="count" className="text-right">
+                    Miqdor
+                  </Label>
+                  <Input
+                    id="count"
+                    type="number"
+                    value={contractToEdit.count}
+                    onChange={(e) =>
+                      setContractToEdit({
+                        ...contractToEdit,
                         count: +e.target.value,
                       })
                     }
                     className="col-span-3"
                   />
                 </div>
+                <div className="grid items-center grid-cols-4 gap-4">
+                  <Label htmlFor="service" className="text-right">
+                    Xizmat
+                  </Label>
+                  <Input
+                    id="service"
+                    value={contractToEdit.service}
+                    onChange={(e) =>
+                      setContractToEdit({
+                        ...contractToEdit,
+                        service: e.target.value,
+                      })
+                    }
+                    className="col-span-3"
+                  />
+                </div>
+            
               </div>
 
               <DialogFooter>

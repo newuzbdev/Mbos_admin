@@ -36,7 +36,6 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
     resolver: zodResolver(FormSchema),
   });
   const { data: user } = useGetClients();
-
   const { refetch: refetchContract } = useGetContract();
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
@@ -46,7 +45,7 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
       {
         ...contractsData,
         count: +contractsData.count,
-        user_id: +contractsData.user_id,
+        user_id: contractsData.user_id,
       } as Contract,
       {
         onSuccess: () => {
@@ -85,18 +84,26 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-lg font-semibold text-slate-700">
-                  "foydalanuvchi"
+                  Foydalanuvchi
                 </FormLabel>
-                <Select onValueChange={field.onChange}>
+                <Select onValueChange={field.onChange} value={field.value?.toString()}>
                   <FormControl>
                     <SelectTrigger className="px-4 py-2 transition duration-200 border-2 rounded-md border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
-                      <SelectValue placeholder="Select a fruit" />
+                      <SelectValue placeholder="Select a Client">
+                        {field.value
+                          ? user?.data.data.find(
+                              (client:Clients) => client.id === field.value
+                            )?.F_I_O
+                          : "Select a Client"}
+                      </SelectValue>
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
                     <SelectGroup>
                       {user?.data.data?.map((el: Clients) => (
-                        <SelectItem value={el.id}>{el.F_I_O}</SelectItem>
+                        <SelectItem key={el.id} value={el.id.toString()}>
+                          {el.F_I_O}
+                        </SelectItem>
                       ))}
                     </SelectGroup>
                   </SelectContent>
@@ -133,7 +140,6 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
             name="texnik_muddati"
           />
         </div>
-
         <Button
           type="submit"
           className="px-6 py-2 text-white transition duration-200 rounded-md bg-primary"

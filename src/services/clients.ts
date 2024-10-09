@@ -14,3 +14,4 @@ export const deleteClients = async (id: string) => {
 export async function updateClients({ id, ...data }: Clients) {
   return await axiosPrivate.patch(`/user/${id}`, data);
 }
+        
