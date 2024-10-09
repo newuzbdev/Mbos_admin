@@ -58,7 +58,7 @@ const makeColumns = (
       <div className="cursor-pointer">{row.original.texnik_muddati}</div>
     ),
   },
-  
+
   {
     accessorKey: "shartnoma_turi",
     header: "shartnoma_turi",
@@ -74,10 +74,10 @@ const makeColumns = (
     ),
   },
   {
-    accessorKey: "id",
+    accessorKey: "user",
     header: "User",
     cell: ({ row }) => (
-      <div className="cursor-pointer">{row.original.id}</div>
+      <div className="cursor-pointer">{row.original.user.F_I_O}</div>
     ),
   },
   {
@@ -153,7 +153,7 @@ const ContractList = () => {
         title: "Error deleting product",
       });
     }
-  }, [isDeleteSuccess, isDeleteError,refetch]);
+  }, [isDeleteSuccess, isDeleteError, refetch]);
 
   useEffect(() => {
     if (isUpdateSuccess) {
@@ -352,7 +352,6 @@ const ContractList = () => {
                     className="col-span-3"
                   />
                 </div>
-            
               </div>
 
               <DialogFooter>
