@@ -6,7 +6,7 @@ export const addClients = async (data: Clients) => {
 };
 
 export const getClients = async () => {
-  return await axiosPrivate.get("/user");
+  return await axiosPrivate.get("/user?limit=10&page=1");
 };
 export const deleteClients = async (id: string) => {
   return await axiosPrivate.delete(`/user/${id}`);

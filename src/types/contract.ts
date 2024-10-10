@@ -7,14 +7,22 @@ export enum EnumShartnomaPaid {
   paid = "paid",
   no_paid = "no_paid",
 }
+export type Clients = {
+  id: string;
+  F_I_O: string;
+  phone: number;
+  adress: string;
+};
 
 export type Contract = {
-  user: string;
+  user: Clients;
   count: number;
   created_at: string;
   id: number;
   izoh: string;
-  price: string;
+  price: number;
+  advancePayment: number;
+  remainingPayment: number;
   purchase_status: EnumShartnomaPaid;
   sana: string;
   service: string;
@@ -27,8 +35,8 @@ export type Contract = {
   updated_at: string;
   user_id: number;
 };
-export type RecentSale ={
-  user:string
+export type RecentSale = {
+  user: string
   amount: string;
-  name:string
+  name: string
 }

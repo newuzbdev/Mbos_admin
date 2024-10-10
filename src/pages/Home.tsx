@@ -11,7 +11,12 @@ import { useGetStatistic } from "@/hooks/dashboard";
 import {  TrendingDown, TrendingUp, Users } from "lucide-react";
 
 const Home = () => {
-  const { data: homeStats } = useGetStatistic();
+  const { data: homeStats } = useGetStatistic()
+
+  // const formatNumber = (num: { toString: () => string; }) => {
+  //   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  // }
+
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between space-y-2">
@@ -46,7 +51,7 @@ const Home = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  {homeStats?.data.data.incomeCount}
+                  {homeStats?.data.data.income}
                   <span className="pl-2 text-base text-muted-foreground">Daromadlar</span>
 
                 </div>
@@ -61,7 +66,7 @@ const Home = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  {homeStats?.data.data.expendCount}
+                  {homeStats?.data.data.expend}
                   <span className="pl-2 text-base text-muted-foreground">Chiqimlar</span>
                 </div>
               </CardContent>

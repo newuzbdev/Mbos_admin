@@ -1,7 +1,3 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -10,6 +6,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { ItemForm } from "@/components/Input-create";
 import { FormSchema } from "./validate";
@@ -39,33 +40,32 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
   const { refetch: refetchContract } = useGetContract();
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    const contractsData = FormSchema.parse(data);
+    const contractsData = {
+      ...data,
+      count: Number(data.count), // Ensure count is a number
+      price: Number(data.price), // Ensure price is a number
+      advancePayment: Number(data.advancePayment), // Ensure advancePayment is a number
+      user_id: Number(data.user_id), // Convert user_id if necessary
+    };
 
-    addContract(
-      {
-        ...contractsData,
-        count: +contractsData.count,
-        user_id: contractsData.user_id,
-      } as Contract,
-      {
-        onSuccess: () => {
-          refetchContract();
-          form.reset();
-          toast({
-            title: "Contract added successfully.",
-            variant: "success",
-          });
-          closeDialog?.();
-        },
-        onError: (error) => {
-          toast({
-            title: "Error adding Contract.",
-            variant: "destructive",
-            description: error.message,
-          });
-        },
-      }
-    );
+    addContract(contractsData as Contract, {
+      onSuccess: () => {
+        refetchContract();
+        form.reset();
+        toast({
+          title: "Contract added successfully.",
+          variant: "success",
+        });
+        closeDialog?.();
+      },
+      onError: (error) => {
+        toast({
+          title: "Error adding Contract.",
+          variant: "destructive",
+          description: error.message,
+        });
+      },
+    });
   }
 
   return (
@@ -75,26 +75,44 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
         className="h-auto my-10 mt-4 space-y-5"
       >
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <ItemForm title="miktori" form={form} name="count" type="number" />
-          <ItemForm title="narx" form={form} name="price" type="number" />
-          <ItemForm title="xizmat" form={form} name="service" />
+          <ItemForm title="Miktori" form={form} name="count" type="number" />
+          <ItemForm title="Narx" form={form} name="price" type="number" />
+
+          <ItemForm
+            title="Oldindan To'lov"
+            form={form}
+            name="advancePayment"
+            type="number"
+          />
+          {/* <ItemForm
+            title="Qoldiq"
+            form={form}
+            name="remainingPayment"
+            type="number"
+          /> */}
+
+          <ItemForm title="Xizmat" form={form} name="service" />
+
           <FormField
             control={form.control}
             name={"user_id"}
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-lg font-semibold text-slate-700">
-                  Foydalanuvchi
+                  Mijozlar
                 </FormLabel>
-                <Select onValueChange={field.onChange} value={field.value?.toString()}>
+                <Select
+                  onValueChange={(value) => field.onChange(+value)} // Casting value to number
+                  value={field.value?.toString()}
+                >
                   <FormControl>
                     <SelectTrigger className="px-4 py-2 transition duration-200 border-2 rounded-md border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
-                      <SelectValue placeholder="Select a Client">
+                      <SelectValue placeholder="Mijozni tanlang">
                         {field.value
                           ? user?.data.data.find(
-                              (client:Clients) => client.id === field.value
+                              (client: Clients) => client.id === field.value
                             )?.F_I_O
-                          : "Select a Client"}
+                          : "Mijozni tanlang"}
                       </SelectValue>
                     </SelectTrigger>
                   </FormControl>
@@ -112,6 +130,7 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
               </FormItem>
             )}
           />
+
           <ItemForm
             enums={["paid", "no_paid"]}
             title="xarid holati"
@@ -138,6 +157,12 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
             type="date"
             form={form}
             name="texnik_muddati"
+          />
+          <ItemForm
+            title="To'lash sanasi"
+            type="date"
+            form={form}
+            name="tolash_sana"
           />
         </div>
         <Button

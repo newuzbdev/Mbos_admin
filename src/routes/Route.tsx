@@ -9,6 +9,7 @@ import { isLoggedIn, login, logout } from "@/services/auth";
 import { useMutation } from "@tanstack/react-query";
 import { LoginData } from "@/types/auth";
 import Income from "@/pages/Income.tsx";
+import ContractDetails from "@/components/pages/contracts/ContractDetails";
 export function useLogin() {
   return useMutation({
     mutationFn: (data: LoginData) => login(data),
@@ -57,6 +58,10 @@ export const router = createBrowserRouter([
       {
         path:'/income',
         element:<Income/>
+      },
+      {
+        path:'/contract/details',
+        element:<ContractDetails/>
       }
     ],
   },
