@@ -28,6 +28,7 @@ import { toast } from "@/hooks/use-toast";
 import DataTable from "@/components/data-table";
 import { Income } from "@/types/income.ts";
 import { ItemUpdate } from "@/components/input-update";
+import IncomeDashboard from "./incomedashboard";
 
 const payment_methods = [
   { name: "cash", value: "naqd pul" },
@@ -191,12 +192,12 @@ const IncomeList = () => {
     <div className="w-full">
       <div className="p-4 border rounded-md">
         <h1 className="px-4 pt-4 font-bold">daromad ro'yxati</h1>
+        <IncomeDashboard />
         <DataTable
           columns={makeColumns(setIncomeToEdit, setIncomeToDelete)}
           data={income.data?.data || []}
         />
       </div>
-
       {incomeToDelete && (
         <AlertDialog
           open={deleteDialogVisible}
@@ -224,7 +225,7 @@ const IncomeList = () => {
       )}
       {incomeToEdit && (
         <Dialog open={editDialogVisible} onOpenChange={setEditDialogVisible}>
-          <DialogContent>
+          <DialogContent className="absolute">
             <DialogHeader>
               <DialogTitle>daromadni tahrirlash</DialogTitle>
             </DialogHeader>
@@ -246,18 +247,20 @@ const IncomeList = () => {
                   title="izoh"
                   data={incomeToEdit}
                 />
-                <ItemUpdate
-                  setUpdate={setIncomeToEdit}
-                  type="enum"
-                  value={incomeToEdit.is_paid}
-                  name="is_paid"
-                  title="tushum yoki chikim"
-                  data={incomeToEdit}
-                  enums={[
-                    { name: "paid", value: "tushum" },
-                    { name: "paid", value: "chikim" },
-                  ]}
-                />
+                <div>
+                  <ItemUpdate
+                    setUpdate={setIncomeToEdit}
+                    type="enum"
+                    value={incomeToEdit.is_paid}
+                    name="is_paid"
+                    title="tushum yoki chikim"
+                    data={incomeToEdit}
+                    enums={[
+                      { name: "paid", value: "tushum" },
+                      { name: "no_paid", value: "chikim" },
+                    ]}
+                  />
+                </div>
                 <ItemUpdate
                   setUpdate={setIncomeToEdit}
                   type="date"

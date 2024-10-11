@@ -25,13 +25,13 @@ export function ItemUpdate({
 }: ITypeUpdate) {
   if (type === "enum") {
     return (
-      <div>
+      <div className="w-full h-[60px]">
+        <Label htmlFor={name}>{title}</Label>
         <Select
           onValueChange={(element) => setUpdate({ ...data, [name]: element })}
           defaultValue={value.toString()}
         >
-          <Label htmlFor={name}>{title}</Label>
-          <SelectContent>
+          <SelectContent className="!w-full !h-full">
             <SelectGroup>
               {enums?.map((el, index) => (
                 <SelectItem key={index} value={el.name}>
