@@ -1,4 +1,5 @@
 import IncomeList from "@/components/pages/income/IncomeList.tsx";
+import IncomeCreate from "@/components/pages/income/IncomeCreate.tsx";
 
 const Income = () => {
   return (
@@ -8,6 +9,7 @@ const Income = () => {
             <p className="text-xl font-semibold text-slate-400">
               Income list
             </p>
+            <IncomeCreate/>
           </div>
           <IncomeList/>
         </div>
