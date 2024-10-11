@@ -99,7 +99,6 @@ const makeColumns = (): ColumnDef<Contract>[] => [
   {
     accessorKey: "eye",
     header: "Batafsil malumotlar",
-
     cell: () => (
       <div className="flex items-center justify-center cursor-pointer">
         <Eye className="w-6 h-6 text-primary hover:text-green-500" />

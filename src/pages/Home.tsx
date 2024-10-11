@@ -13,9 +13,9 @@ import {  TrendingDown, TrendingUp, Users } from "lucide-react";
 const Home = () => {
   const { data: homeStats } = useGetStatistic()
 
-  // const formatNumber = (num: { toString: () => string; }) => {
-  //   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-  // }
+  const formatNumber = (num: number) => {
+    return num?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  }
 
   return (
     <div className="space-y-2">
@@ -37,7 +37,7 @@ const Home = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  {homeStats?.data.data.usersCount}
+                  {homeStats?.data?.data?.usersCount}
                   <span className="pl-2 text-base text-muted-foreground">Mavjud mijozlar soni</span>
                 </div>
               </CardContent>
@@ -51,7 +51,7 @@ const Home = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  {homeStats?.data.data.income}
+                  {homeStats?.data?.data?.income ? formatNumber(homeStats.data.data.income) : ''}
                   <span className="pl-2 text-base text-muted-foreground">Daromadlar</span>
 
                 </div>
@@ -66,7 +66,7 @@ const Home = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  {homeStats?.data.data.expend}
+                  {homeStats?.data?.data?.expend ? formatNumber(homeStats.data.data.expend) : ''}
                   <span className="pl-2 text-base text-muted-foreground">Chiqimlar</span>
                 </div>
               </CardContent>

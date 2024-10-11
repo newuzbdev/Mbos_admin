@@ -132,14 +132,20 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
           />
 
           <ItemForm
-            enums={["paid", "no_paid"]}
+            enums={[
+              { name: "paid", value: "tolangan" },
+              { name: "no_paid", value: "tolanmagan" },
+            ]}
             title="xarid holati"
             type="enum"
             form={form}
             name="purchase_status"
           />
           <ItemForm
-            enums={["subscription_fee", "one_bay"]}
+            enums={[
+              { name: "subscription_fee", value: "Oylik tolov" },
+              { name: "one_bay", value: "Bir martalik tolov" },
+            ]}
             title="shartnoma turi"
             type="enum"
             form={form}

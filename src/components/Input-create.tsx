@@ -21,7 +21,7 @@ interface TypeCreateInput {
   title: string;
   form: any;
   type?: HTMLInputTypeAttribute;
-  enums?: string[];
+  enums?: { name: string; value: string }[];
 }
 
 export const ItemForm = ({
@@ -52,7 +52,7 @@ export const ItemForm = ({
               <SelectContent>
                 <SelectGroup>
                   {enums?.map((el) => (
-                    <SelectItem value={el}>{el}</SelectItem>
+                    <SelectItem value={el.name}>{el.value}</SelectItem>
                   ))}
                 </SelectGroup>
               </SelectContent>
