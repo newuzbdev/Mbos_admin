@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useEffect, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import {
@@ -271,6 +272,10 @@ const IncomeList = () => {
       )}
     </div>
   );
+=======
+const IncomeList = () => {
+  return <div>IncomeList</div>;
+>>>>>>> 8269af6e74967da4adc9cacab6188148b6e22a3f
 };
 
 export default IncomeList;

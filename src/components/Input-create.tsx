@@ -46,7 +46,7 @@ export const ItemForm = ({
             <Select onValueChange={field.onChange}>
               <FormControl>
                 <SelectTrigger className="px-4 py-2 transition duration-200 border-2 rounded-md border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
-                  <SelectValue placeholder="Select a fruit" />
+                  <SelectValue placeholder="Xarid holat" />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
