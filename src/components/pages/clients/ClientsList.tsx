@@ -113,6 +113,7 @@ const ClientsList = () => {
       });
       refetch();
       setDeleteDialogVisible(false);
+      setClientsToDelete(undefined);
     } else if (isDeleteError) {
       toast({
         variant: "destructive",
@@ -162,6 +163,11 @@ const ClientsList = () => {
     setClientsToEdit(undefined);
   };
 
+  const handleDeleteDialogClose = () => {
+    setDeleteDialogVisible(false);
+    setClientsToDelete(undefined);
+  };
+
   if (isLoading) return <div>Loading...</div>;
 
   return (
@@ -177,14 +183,14 @@ const ClientsList = () => {
       {clientsToDelete && (
         <AlertDialog
           open={deleteDialogVisible}
-          onOpenChange={setDeleteDialogVisible}
+          onOpenChange={handleDeleteDialogClose}
         >
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel onClick={() => setDeleteDialogVisible(false)}>
+              <AlertDialogCancel onClick={handleDeleteDialogClose}>
                 Cancel
               </AlertDialogCancel>
               <AlertDialogAction

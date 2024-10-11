@@ -133,6 +133,7 @@ const makeColumns = (): ColumnDef<Contract>[] => [
 
 const ContractList = () => {
   const { data: products, isLoading } = useGetContract();
+  
 
   if (isLoading) return <div>Loading...</div>;
 

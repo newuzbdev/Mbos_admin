@@ -40,8 +40,8 @@ const payment_methods = [
 ];
 
 const makeColumns = (
-  setProductToEdit: (p: Income) => void,
-  setProductToDelete: (p: Income) => void
+  setIncomeToEdit: (p: Income) => void,
+  setIncomeToDelete: (p: Income) => void
 ): ColumnDef<Income>[] => [
   {
     header: "№",
@@ -97,7 +97,7 @@ const makeColumns = (
           aria-label="Edit product"
           variant="ghost"
           size="icon"
-          onClick={() => setProductToEdit(row.original)}
+          onClick={() => setIncomeToEdit(row.original)}
         >
           <PencilIcon size={20} className="text-primary" />
         </Button>
@@ -105,7 +105,7 @@ const makeColumns = (
           aria-label="Delete product"
           variant="destructive"
           size="icon"
-          onClick={() => setProductToDelete(row.original)}
+          onClick={() => setIncomeToDelete(row.original)}
         >
           <Trash2Icon size={20} />
         </Button>
@@ -166,12 +166,25 @@ const IncomeList = () => {
       });
     }
   }, [isUpdateSuccess, isUpdateError, refetch]);
+
   useEffect(() => {
     if (incomeToDelete) setDeleteDialogVisible(true);
   }, [incomeToDelete]);
+
   useEffect(() => {
     if (incomeToEdit) setEditDialogVisible(true);
   }, [incomeToEdit]);
+
+  const handleEditDialogClose = () => {
+    setEditDialogVisible(false);
+    setIncomeToEdit(undefined);
+  };
+
+  const handleDeleteDialogClose = () => {
+    setDeleteDialogVisible(false);
+    setIncomeToDelete(undefined);
+  };
+
   const handleEditSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (incomeToEdit) {
@@ -198,37 +211,39 @@ const IncomeList = () => {
           data={income.data?.data || []}
         />
       </div>
-      {incomeToDelete && (
-        <AlertDialog
-          open={deleteDialogVisible}
-          onOpenChange={setDeleteDialogVisible}
-        >
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>
-                Siz mutlaqo ishonchingiz komilmi?
-              </AlertDialogTitle>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel onClick={() => setDeleteDialogVisible(false)}>
-                Bekor qilish
-              </AlertDialogCancel>
-              <AlertDialogAction
-                className="text-white bg-red-500 hover:bg-red"
-                onClick={() => deleteProduct(incomeToDelete.id.toString())}
-              >
-                Davom eting
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-      )}
-      {incomeToEdit && (
-        <Dialog open={editDialogVisible} onOpenChange={setEditDialogVisible}>
-          <DialogContent className="absolute">
-            <DialogHeader>
-              <DialogTitle>daromadni tahrirlash</DialogTitle>
-            </DialogHeader>
+      <AlertDialog
+        open={deleteDialogVisible}
+        onOpenChange={handleDeleteDialogClose}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Siz mutlaqo ishonchingiz komilmi?
+            </AlertDialogTitle>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={handleDeleteDialogClose}>
+              Bekor qilish
+            </AlertDialogCancel>
+            <AlertDialogAction
+              className="text-white bg-red-500 hover:bg-red"
+              onClick={() => {
+                if (incomeToDelete) {
+                  deleteProduct(incomeToDelete.id.toString());
+                }
+              }}
+            >
+              Davom eting
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      <Dialog open={editDialogVisible} onOpenChange={handleEditDialogClose}>
+        <DialogContent className="absolute">
+          <DialogHeader>
+            <DialogTitle>daromadni tahrirlash</DialogTitle>
+          </DialogHeader>
+          {incomeToEdit && (
             <form onSubmit={handleEditSubmit}>
               <div className="grid gap-4 pb-4">
                 <ItemUpdate
@@ -276,9 +291,9 @@ const IncomeList = () => {
                 </Button>
               </DialogFooter>
             </form>
-          </DialogContent>
-        </Dialog>
-      )}
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
