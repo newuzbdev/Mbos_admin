@@ -31,8 +31,6 @@ export const ItemForm = ({
   form,
   enums,
 }: TypeCreateInput) => {
-  console.log(enums);
-
   return (
     <FormField
       control={form.control}
@@ -51,14 +49,17 @@ export const ItemForm = ({
               </FormControl>
               <SelectContent>
                 <SelectGroup>
-                  {enums?.map((el) => (
-                    <SelectItem value={el.name}>{el.value}</SelectItem>
+                  {enums?.map((el, index) => (
+                    <SelectItem key={index} value={el.name}>
+                      {el.value}
+                    </SelectItem>
                   ))}
                 </SelectGroup>
               </SelectContent>
             </Select>
           ) : (
             <FormControl>
+              
               <Input
                 type={type || "text"}
                 placeholder={title}

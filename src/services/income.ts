@@ -13,3 +13,11 @@ export const deleteIncome = async (id: string) => {
 export async function updateIncome({ id, ...data }: Income) {
   return await axiosPrivate.patch(`/income/${id}`, data);
 }
+export enum EnumIncamTpeTranslation {
+  cash = 'Naqt',
+  translation = "O'tkazma orqali",
+  online = 'Online',
+  salary = 'Oylik',
+  delivery = 'Yetkazib berish',
+  other = 'Boshqalar',
+}

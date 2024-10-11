@@ -136,12 +136,15 @@ const ClientsList = () => {
       });
     }
   }, [isUpdateSuccess, isUpdateError, refetch]);
+
   useEffect(() => {
     if (clientsToDelete) setDeleteDialogVisible(true);
   }, [clientsToDelete]);
+
   useEffect(() => {
     if (clientsToEdit) setEditDialogVisible(true);
   }, [clientsToEdit]);
+
   const handleEditSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (clientsToEdit) {
@@ -152,6 +155,11 @@ const ClientsList = () => {
         adress: clientsToEdit.adress,
       });
     }
+  };
+
+  const handleEditDialogClose = () => {
+    setEditDialogVisible(false);
+    setClientsToEdit(undefined);
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -190,7 +198,7 @@ const ClientsList = () => {
         </AlertDialog>
       )}
       {clientsToEdit && (
-        <Dialog open={editDialogVisible} onOpenChange={setEditDialogVisible}>
+        <Dialog open={editDialogVisible} onOpenChange={handleEditDialogClose}>
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Edit Product</DialogTitle>

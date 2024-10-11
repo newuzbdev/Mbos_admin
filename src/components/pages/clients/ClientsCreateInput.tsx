@@ -17,10 +17,10 @@ import { Clients } from "@/types/clients";
 
 const FormSchema = z.object({
   F_I_O: z.string().min(2, {
-    message: "F.I.O must be at least 2 characters.",  
+    message: "F.I.O must be at least 2 characters.",
   }),
-  phone: z.number().min(1, {
-    message: "Phone number must be at least 1 character.",
+    phone: z.number().min(6, {
+    message: "Phone number must be at least 6 character.",
   }),
   adress: z.string().min(2, {
     message: "Address must be at least 2 characters.",
@@ -33,7 +33,7 @@ interface ClientsCreateInputProps {
 
 const ClientsCreateInput = ({ closeDialog }: ClientsCreateInputProps) => {
   const { mutate: addClient } = useAddClients();
-  
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -46,7 +46,7 @@ const ClientsCreateInput = ({ closeDialog }: ClientsCreateInputProps) => {
   const { refetch: refetchClients } = useGetClients();
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    const clientsData: Omit<Clients, 'id'> = {
+    const clientsData: Omit<Clients, "id"> = {
       F_I_O: data.F_I_O,
       phone: data.phone,
       adress: data.adress,

@@ -6,6 +6,14 @@ import { useGetContract } from "@/hooks/useContract";
 import { Contract } from "@/types/contract";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
+const shartnoma_turi = [
+  { name: "one_bay", value: "Birmartalik to'lov" },
+  { name: "subscription_fee", value: "Oylik to'lov" },
+];
+const purchase_status = [
+  { name: "paid", value: "To'landi" },
+  { name: "no_paid", value: "To'lanmagan" },
+];
 const makeColumns = (): ColumnDef<Contract>[] => [
   {
     header: "№",
@@ -22,7 +30,11 @@ const makeColumns = (): ColumnDef<Contract>[] => [
     accessorKey: "shartnoma_turi",
     header: "shartnoma_turi",
     cell: ({ row }) => (
-      <div className="cursor-pointer">{row.original.shartnoma_turi}</div>
+      <div className="cursor-pointer">
+        {shartnoma_turi.map(
+          (el) => el.name === row.original.shartnoma_turi && el.value
+        )}
+      </div>
     ),
   },
   {
@@ -44,6 +56,18 @@ const makeColumns = (): ColumnDef<Contract>[] => [
     header: "Qolgan to'lov",
     cell: ({ row }) => (
       <div className="cursor-pointer">{row.original.remainingPayment}</div>
+    ),
+  },
+  {
+    accessorKey: "purchase_status",
+    header: "narx",
+    cell: ({ row }) => (
+      <div className="cursor-pointer">
+        {purchase_status.map(
+          (el) => el.name === row.original.purchase_status && el.value
+        )}
+      </div>
+      // <div className="cursor-pointer">{row.original.price}</div>
     ),
   },
   {

@@ -76,21 +76,14 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
       >
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <ItemForm title="Miktori" form={form} name="count" type="number" />
-          <ItemForm title="Narx" form={form} name="price" type="number" />
-
+          <ItemForm title="Narx" form={form} name="price" type="number" 
+          />
           <ItemForm
             title="Oldindan To'lov"
             form={form}
             name="advancePayment"
             type="number"
           />
-          {/* <ItemForm
-            title="Qoldiq"
-            form={form}
-            name="remainingPayment"
-            type="number"
-          /> */}
-
           <ItemForm title="Xizmat" form={form} name="service" />
 
           <FormField
@@ -133,8 +126,8 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
 
           <ItemForm
             enums={[
-              { name: "paid", value: "tolangan" },
-              { name: "no_paid", value: "tolanmagan" },
+              { name: "paid", value: "To'langan" },
+              { name: "no_paid", value: "To'lanmagan" },
             ]}
             title="xarid holati"
             type="enum"

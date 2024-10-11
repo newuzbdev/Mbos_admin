@@ -1,10 +1,9 @@
 export type Income = {
-  translation_benefit:number,
-  cash_benefit:number,
-  online_benefit:number,
-  benefit:number,
-  workers_harm:number,
-  harm:number,
-  id:string,
+  id: string;
+  amount:number,
+  payment_method:string,
+  is_paid:string,
+  description:string,
+  date:string,
 }
 
