@@ -35,7 +35,7 @@ const makeColumns = (
   },
   {
     accessorKey: "shartnoma_turi",
-    header: "shartnoma_turi",
+    header: "Shartnoma turi",
     cell: ({ row }) => (
       <div className="cursor-pointer">
         {shartnoma_turi.map(
@@ -46,7 +46,7 @@ const makeColumns = (
   },
   {
     accessorKey: "price",
-    header: "narx",
+    header: "Narx",
     cell: ({ row }) => (
       <div className="cursor-pointer">{row.original.price}</div>
     ),
@@ -67,7 +67,7 @@ const makeColumns = (
   },
   {
     accessorKey: "purchase_status",
-    header: "narx",
+    header: "Xarid holati",
     cell: ({ row }) => (
       <div className="cursor-pointer">
         {purchase_status.map(
@@ -78,14 +78,14 @@ const makeColumns = (
   },
   {
     accessorKey: "count",
-    header: "miktor",
+    header: "Miktor",
     cell: ({ row }) => (
       <div className="cursor-pointer">{row.original.count}</div>
     ),
   },
   {
     accessorKey: "service",
-    header: "xizmat",
+    header: "Xizmat",
     cell: ({ row }) => (
       <div className="cursor-pointer">{row.original.service}</div>
     ),
@@ -132,7 +132,7 @@ const ContractList = () => {
       <div className="p-4 border rounded-md">
         <h1 className="px-4 pt-4 font-bold">Mijozlar ro'yhati</h1>
         <DataTable
-          title="xizmat boyicha izlash"
+          title="Xizmat boyicha izlash"
           columns={makeColumns(navigate)}
           data={contract?.data || []}
         />

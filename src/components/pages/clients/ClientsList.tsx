@@ -40,14 +40,14 @@ const makeColumns = (
   },
   {
     accessorKey: "F_I_O",
-    header: "Full name",
+    header: "To'liq ism",
     cell: ({ row }) => (
       <div className="cursor-pointer">{row.original.F_I_O}</div>
     ),
   },
   {
     accessorKey: "phone",
-    header: "Phone number",
+    header: "Telefon raqami",
     cell: ({ row }) => (
       <div className="cursor-pointer">{row.original.phone}</div>
     ),
@@ -61,7 +61,7 @@ const makeColumns = (
   },
   {
     id: "actions",
-    header: "Actions",
+    header: "Amallar",
     cell: ({ row }) => (
       <div className="space-x-2">
         <Button
@@ -102,7 +102,7 @@ const ClientsList = () => {
 
   useEffect(() => {
     refetch();
-  }, [page, limit, search]);
+  }, [page, limit, search, refetch]);
 
   const {
     mutate: deleteProduct,
@@ -119,7 +119,7 @@ const ClientsList = () => {
     if (isDeleteSuccess) {
       toast({
         variant: "success",
-        title: "Product successfully deleted",
+        title: "Mijoz muvaffaqiyatli o'chirildi",
       });
       refetch();
       setDeleteDialogVisible(false);
@@ -127,7 +127,7 @@ const ClientsList = () => {
     } else if (isDeleteError) {
       toast({
         variant: "destructive",
-        title: "Error deleting product",
+        title: "Mijozni o'chirishda xatolik",
       });
     }
   }, [isDeleteSuccess, isDeleteError, refetch]);
@@ -136,14 +136,14 @@ const ClientsList = () => {
     if (isUpdateSuccess) {
       toast({
         variant: "success",
-        title: "Product successfully updated",
+        title: "Mijoz ro'yhati muvaffaqiyat tahrirlandi",
       });
       refetch();
       setEditDialogVisible(false);
     } else if (isUpdateError) {
       toast({
         variant: "destructive",
-        title: "Error updating product",
+        title: "Mijoz tahrirlashda xatolik",
       });
     }
   }, [isUpdateSuccess, isUpdateError, refetch]);
@@ -178,14 +178,14 @@ const ClientsList = () => {
     setClientsToDelete(undefined);
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div>Yuklanmoqda...</div>;
 
   return (
     <div className="w-full">
       <div className="p-4 border rounded-md">
         <h1 className="px-4 pt-4 font-bold">Mijozlar ro'yhati</h1>
         <DataTable
-          title={"Full name boyichi izlash"}
+          title={"To'liq ism boyichi izlash"}
           columns={makeColumns(setClientsToEdit, setClientsToDelete)}
           data={client.data || []}
         />
@@ -198,17 +198,17 @@ const ClientsList = () => {
         >
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogTitle>Siz mutlaqo ishonchingiz komilmi?</AlertDialogTitle>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel onClick={handleDeleteDialogClose}>
-                Cancel
+                Bekor qilinsin
               </AlertDialogCancel>
               <AlertDialogAction
                 className="text-white bg-red-500 hover:bg-red"
                 onClick={() => deleteProduct(clientsToDelete.id.toString())}
               >
-                Continue
+                Albatta
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
@@ -218,13 +218,13 @@ const ClientsList = () => {
         <Dialog open={editDialogVisible} onOpenChange={handleEditDialogClose}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Edit Product</DialogTitle>
+              <DialogTitle>Mijozlar ro'yhatini tahrirlash</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleEditSubmit}>
               <div className="grid gap-4 py-4">
                 <div className="grid items-center grid-cols-4 gap-4">
                   <Label htmlFor="name" className="text-right">
-                    Full name
+                    To'liq ism
                   </Label>
                   <Input
                     id="F_I_O"
@@ -240,7 +240,7 @@ const ClientsList = () => {
                 </div>
                 <div className="grid items-center grid-cols-4 gap-4">
                   <Label htmlFor="price" className="text-right">
-                    Phone
+                    Telfon raqami
                   </Label>
                   <Input
                     id="phone"
@@ -274,7 +274,7 @@ const ClientsList = () => {
                 />
               </div>
               <DialogFooter>
-                <Button type="submit">Save changes</Button>
+                <Button type="submit" className="text-white">O'zgarishlarni saqlash</Button>
               </DialogFooter>
             </form>
           </DialogContent>

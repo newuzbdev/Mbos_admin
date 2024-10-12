@@ -91,7 +91,7 @@ const makeColumns = (
   },
   {
     id: "actions",
-    header: "Actions",
+    header: "Amallar",
     cell: ({ row }) => (
       <div className="space-x-2">
         <Button
@@ -131,7 +131,7 @@ const IncomeList = () => {
 
   useEffect(() => {
     refetch();
-  }, [page, limit,refetch]);
+  }, [page, limit, refetch]);
 
   const {
     mutate: deleteProduct,
@@ -148,7 +148,7 @@ const IncomeList = () => {
     if (isDeleteSuccess) {
       toast({
         variant: "success",
-        title: "Product successfully deleted",
+        title: "Daromad muvaffaqiyatli o'chirildi",
       });
       refetch();
       setDeleteDialogVisible(false);
@@ -164,14 +164,14 @@ const IncomeList = () => {
     if (isUpdateSuccess) {
       toast({
         variant: "success",
-        title: "Product successfully updated",
+        title: "Daromad muvaffaqiyatli ozgartirildi successfully updated",
       });
       refetch();
       setEditDialogVisible(false);
     } else if (isUpdateError) {
       toast({
         variant: "destructive",
-        title: "Error updating product",
+        title: "Daromad qo'shishda xatolik",
       });
     }
   }, [isUpdateSuccess, isUpdateError, refetch]);
@@ -213,7 +213,6 @@ const IncomeList = () => {
   return (
     <div className="w-full">
       <div className="p-4 border rounded-md">
-        <h1 className="px-4 pt-4 font-bold">daromad ro'yxati</h1>
         <IncomeDashboard />
         <DataTable
           search={false}

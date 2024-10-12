@@ -17,13 +17,13 @@ import { Clients } from "@/types/clients";
 
 const FormSchema = z.object({
   F_I_O: z.string().min(2, {
-    message: "F.I.O must be at least 2 characters.",
+    message: "To'liq ism kamida 2 ta belgidan iborat boʻlishi kerak.",
   }),
   phone: z.number().min(6, {
-    message: "Phone number must be at least 6 character.",
+    message: "Telefon raqami kamida 6 ta belgidan iborat boʻlishi kerak.",
   }),
   adress: z.string().min(2, {
-    message: "Address must be at least 2 characters.",
+    message: "Address kamida 2 ta belgidan iborat boʻlishi kerak.",
   }),
 });
 
@@ -57,14 +57,14 @@ const ClientsCreateInput = ({ closeDialog }: ClientsCreateInputProps) => {
         refetchClients();
         form.reset();
         toast({
-          title: "Client added successfully.",
+          title: "Mijoz muvaffaqiyatli qo'shildi.",
           variant: "success",
         });
         closeDialog?.();
       },
       onError: (error) => {
         toast({
-          title: "Error adding client.",
+          title: "Mijoz qo'shishda xatolik.",
           variant: "destructive",
           description: error.message,
         });
@@ -85,11 +85,11 @@ const ClientsCreateInput = ({ closeDialog }: ClientsCreateInputProps) => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-lg font-semibold text-slate-700">
-                  F.I.O
+                  To'liq ism
                 </FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Enter full name"
+                    placeholder="To'liq ism kiriting"
                     {...field}
                     className="px-4 py-2 transition duration-200 border-2 rounded-md border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
                   />

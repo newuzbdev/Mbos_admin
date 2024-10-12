@@ -7,7 +7,7 @@ export default function ContractDetails() {
   const { contractId } = useParams<{ contractId: string }>()
   const { data: contractDetails, isLoading, isError } = useGetContract(contractId)
 
-  if (isLoading) return <div>Loading...</div>
+  if (isLoading) return <div>Yuklanmoqda...</div>
   if (isError) return <ErrorState />
 
   const contract = contractDetails?.data?.data
@@ -16,32 +16,32 @@ export default function ContractDetails() {
     <div className="container px-4 py-8 mx-auto">
       <Card className="overflow-hidden">
         <CardHeader className="bg-gradient-to-r from-primary to-blue-800">
-          <CardTitle className="text-2xl font-bold text-white">Contract Details</CardTitle>
+          <CardTitle className="text-2xl font-bold text-white">Shartnoma malumotlari</CardTitle>
         </CardHeader>
         <CardContent className="p-6">
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-            <DetailSection icon={<UserIcon className="w-5 h-5 text-primary" />} title="Client Information">
-              <DetailItem label="Client Name" value={contract?.user?.F_I_O} />
-              <DetailItem label="Contract Type" value={contract?.shartnoma_turi} />
-              <DetailItem label="Contract ID" value={contract?.shartnoma_id} />
+            <DetailSection icon={<UserIcon className="w-5 h-5 text-primary" />} title="Mijoz haqida ma'lumot">
+              <DetailItem label="Mijozning to'liq ismi" value={contract?.user?.F_I_O} />
+              <DetailItem label="Shartnoma turi" value={contract?.shartnoma_turi} />
+              <DetailItem label="Shartnoma ID" value={contract?.shartnoma_id} />
             </DetailSection>
 
-            <DetailSection icon={<CreditCardIcon className="w-5 h-5 text-green-600" />} title="Financial Details">
-              <DetailItem label="Price" value={formatCurrency(contract?.price)} />
-              <DetailItem label="Advance Payment" value={formatCurrency(contract?.advancePayment)} />
-              <DetailItem label="Remaining Payment" value={formatCurrency(contract?.remainingPayment)} />
-              <DetailItem label="Purchase Status" value={contract?.purchase_status} />
+            <DetailSection icon={<CreditCardIcon className="w-5 h-5 text-green-600" />} title="Moliyaviy tafsilotlar">
+              <DetailItem label="Narx" value={formatCurrency(contract?.price)} />
+              <DetailItem label="Oldindan to'lov" value={formatCurrency(contract?.advancePayment)} />
+              <DetailItem label="Qolgan to'lov" value={formatCurrency(contract?.remainingPayment)} />
+              <DetailItem label="Xarid holati" value={contract?.purchase_status} />
             </DetailSection>
 
-            <DetailSection icon={<FileTextIcon className="w-5 h-5 text-purple-600" />} title="Contract Specifics">
-              <DetailItem label="Quantity" value={contract?.count} />
-              <DetailItem label="Contract Duration" value={contract?.shartnoma_muddati} />
-              <DetailItem label="Technical Duration" value={contract?.texnik_muddati} />
+            <DetailSection icon={<FileTextIcon className="w-5 h-5 text-purple-600" />} title="Shartnomaning xususiyatlari">
+              <DetailItem label="Miqdori" value={contract?.count} />
+              <DetailItem label="Shartnoma davomiyligi" value={contract?.shartnoma_muddati} />
+              <DetailItem label="Texnik davomiyligi" value={contract?.texnik_muddati} />
             </DetailSection>
 
-            <DetailSection icon={<CalendarIcon className="w-5 h-5 text-orange-600" />} title="Important Dates">
-              <DetailItem label="Contract Date" value={formatDate(contract?.sana)} />
-              <DetailItem label="Payment Date" value={formatDate(contract?.tolash_sana)} />
+            <DetailSection icon={<CalendarIcon className="w-5 h-5 text-orange-600" />} title="Muhim sanalar">
+              <DetailItem label="Shartnoma kuni" value={formatDate(contract?.sana)} />
+              <DetailItem label="To'lav sanasi" value={formatDate(contract?.tolash_sana)} />
             </DetailSection>
           </div>
         </CardContent>

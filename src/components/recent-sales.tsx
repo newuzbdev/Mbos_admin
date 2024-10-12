@@ -23,9 +23,9 @@ export function RecentSales() {
               <p className="text-sm text-muted-foreground">
                 Sanasi: {contract.sana}
               </p>
-              <p className="text-sm ">
-                Mijoz ismi: {contract.user.F_I_O.charAt(0).toUpperCase() +
-                  contract.user.F_I_O.slice(1)}
+              <p className="text-sm">
+                Mijoz ismi: <span className="text-base">{contract.user.F_I_O.charAt(0).toUpperCase() +
+                  contract.user.F_I_O.slice(1)}</span>
               </p>
             </div>
             <div className="flex gap-2 ml-auto font-medium">

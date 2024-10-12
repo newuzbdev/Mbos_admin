@@ -46,7 +46,7 @@ export function ChartList() {
 
   return (
     <div style={{ overflowX: "auto", width: "100%" }}>
-      <ChartContainer config={chartConfig} className="h-full w-full">
+      <ChartContainer config={chartConfig} className="w-full h-full">
         <BarChart accessibilityLayer data={displayedData} barCategoryGap={10}>
           <CartesianGrid vertical={false} />
           <XAxis
