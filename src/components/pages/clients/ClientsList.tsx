@@ -28,6 +28,7 @@ import { toast } from "@/hooks/use-toast";
 import DataTable from "@/components/data-table";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useSearchParams } from "react-router-dom";
 
 const makeColumns = (
   setProductToEdit: (p: Clients) => void,
@@ -89,11 +90,20 @@ const ClientsList = () => {
   const [clientsToEdit, setClientsToEdit] = useState<Clients | undefined>();
   const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
   const [editDialogVisible, setEditDialogVisible] = useState(false);
+  const [searchParams] = useSearchParams();
+  const page = Number(searchParams.get("page"));
+  const limit = Number(searchParams.get("limit"));
+  const search = searchParams.get("search") || "";
   const {
-    data: products = { data: { data: [] } },
+    data: client = { data: { data: [] } },
     refetch,
     isLoading,
-  } = useGetClients();
+  } = useGetClients({ limit, page, search });
+
+  useEffect(() => {
+    refetch();
+  }, [page, limit, search]);
+
   const {
     mutate: deleteProduct,
     isSuccess: isDeleteSuccess,
@@ -175,8 +185,9 @@ const ClientsList = () => {
       <div className="p-4 border rounded-md">
         <h1 className="px-4 pt-4 font-bold">Mijozlar ro'yhati</h1>
         <DataTable
+          title={"Full name boyichi izlash"}
           columns={makeColumns(setClientsToEdit, setClientsToDelete)}
-          data={products.data?.data || []}
+          data={client.data || []}
         />
       </div>
 

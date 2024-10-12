@@ -1,9 +1,10 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Eye } from "lucide-react";
 import DataTable from "@/components/data-table";
-import { useGetContract } from "@/hooks/useContract";
+import {  useGetContracts } from "@/hooks/useContract";
 import { Contract } from "@/types/contract";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect } from "react";
 
 const shartnoma_turi = [
   { name: "one_bay", value: "Birmartalik to'lov" },
@@ -95,7 +96,10 @@ const makeColumns = (
     cell: ({ row }) => (
       <div 
         className="flex items-center justify-center cursor-pointer"
-        onClick={() => navigate(`/contract/${row.original.id}`)}
+        
+        onClick={() => 
+          navigate(`/contract/${row.original.id}`)
+        }
       >
         <Eye className="w-6 h-6 text-primary hover:text-green-500" />
       </div>
@@ -104,9 +108,22 @@ const makeColumns = (
   },
 ];
 
-const ContractList = ({ id }: { id: string }) => {
-  const navigate = useNavigate();
-  const { data: products, isLoading } = useGetContract(id);
+const ContractList = () => {
+  const navigate =useNavigate()
+  const [searchParams] = useSearchParams();
+  const page = Number(searchParams.get("page") ?? 1);
+  const limit = Number(searchParams.get("limit") ?? 10);
+  const search = searchParams.get("search") || "";
+
+  const {
+    data: contract,
+    refetch,
+    isLoading,
+  } = useGetContracts({ page, limit, search });
+
+  useEffect(() => {
+    refetch();
+  }, [page, limit, search,refetch]);
 
   if (isLoading) return <div>Loading...</div>;
 
@@ -115,8 +132,9 @@ const ContractList = ({ id }: { id: string }) => {
       <div className="p-4 border rounded-md">
         <h1 className="px-4 pt-4 font-bold">Mijozlar ro'yhati</h1>
         <DataTable
+          title="xizmat boyicha izlash"
           columns={makeColumns(navigate)}
-          data={products?.data.data || []}
+          data={contract?.data || []}
         />
       </div>
     </div>

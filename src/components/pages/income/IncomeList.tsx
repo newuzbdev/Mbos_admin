@@ -29,6 +29,7 @@ import DataTable from "@/components/data-table";
 import { Income } from "@/types/income.ts";
 import { ItemUpdate } from "@/components/input-update";
 import IncomeDashboard from "./incomedashboard";
+import { useSearchParams } from "react-router-dom";
 
 const payment_methods = [
   { name: "cash", value: "naqd pul" },
@@ -119,11 +120,19 @@ const IncomeList = () => {
   const [incomeToEdit, setIncomeToEdit] = useState<Income | undefined>();
   const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
   const [editDialogVisible, setEditDialogVisible] = useState(false);
+  const [searchParams] = useSearchParams();
+  const page = Number(searchParams.get("page") ?? 1);
+  const limit = Number(searchParams.get("limit") ?? 10);
   const {
     data: income = { data: { data: [] } },
     refetch,
     isLoading,
-  } = useGetIncome();
+  } = useGetIncome({ page, limit });
+
+  useEffect(() => {
+    refetch();
+  }, [page, limit]);
+
   const {
     mutate: deleteProduct,
     isSuccess: isDeleteSuccess,
@@ -207,8 +216,9 @@ const IncomeList = () => {
         <h1 className="px-4 pt-4 font-bold">daromad ro'yxati</h1>
         <IncomeDashboard />
         <DataTable
+          search={false}
           columns={makeColumns(setIncomeToEdit, setIncomeToDelete)}
-          data={income.data?.data || []}
+          data={income.data || []}
         />
       </div>
       <AlertDialog

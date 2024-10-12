@@ -1,19 +1,23 @@
-import {useMutation, useQuery} from "@tanstack/react-query";
-import {addIncome, deleteIncome, getIncome, updateIncome} from '@/services/income'
-import {Income} from "@/types/income.ts";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import {
+  addIncome,
+  deleteIncome,
+  getIncome,
+  updateIncome,
+} from "@/services/income";
+import { Income, IParams } from "@/types/income.ts";
 
-export const useAddIncome  = () => {
+export const useAddIncome = () => {
   return useMutation({
     mutationFn: addIncome,
   });
-}
-export const useGetIncome = () => {
+};
+export const useGetIncome = (params: IParams) => {
   return useQuery({
     queryKey: ["income"],
-    queryFn: () => getIncome(),
+    queryFn: () => getIncome(params),
   });
-}
-
+};
 
 export function useIncomeDelete() {
   return useMutation({
