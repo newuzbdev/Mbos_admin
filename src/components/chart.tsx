@@ -11,7 +11,7 @@ export function ChartList() {
   const chartConfig = {} satisfies ChartConfig;
   const { data } = useGetStatistik();
   return (
-    <ChartContainer config={chartConfig} className="h-full w-full">
+    <ChartContainer config={chartConfig} className="w-full h-full">
       <BarChart accessibilityLayer data={data?.data?.data}>
         <CartesianGrid vertical={false} />
         <XAxis
@@ -22,8 +22,8 @@ export function ChartList() {
           tickFormatter={(value) => value}
         />
         <ChartTooltip content={<ChartTooltipContent />} />
-        <Bar dataKey="tushum" fill="#77CDFF" radius={4} />
-        <Bar dataKey="chikim" fill="#FF8A8A" radius={4} />
+        <Bar dataKey="tushum" fill="#4CAF50" radius={4} />
+        <Bar dataKey="chikim" fill="#DC2626" radius={4} />
       </BarChart>
     </ChartContainer>
   );

@@ -131,7 +131,7 @@ const IncomeList = () => {
 
   useEffect(() => {
     refetch();
-  }, [page, limit]);
+  }, [page, limit,refetch]);
 
   const {
     mutate: deleteProduct,
