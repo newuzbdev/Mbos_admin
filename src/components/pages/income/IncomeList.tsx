@@ -30,6 +30,7 @@ import { Income } from "@/types/income.ts";
 import { ItemUpdate } from "@/components/input-update";
 import IncomeDashboard from "./incomedashboard";
 import { useSearchParams } from "react-router-dom";
+import { formatNumber } from "@/components/formNumber";
 
 const payment_methods = [
   { name: "cash", value: "naqd pul" },
@@ -52,7 +53,7 @@ const makeColumns = (
     accessorKey: "amount",
     header: "To'lov miqdori",
     cell: ({ row }) => (
-      <div className="cursor-pointer">{row.original.amount}</div>
+      <div className="cursor-pointer">{formatNumber(row.original.amount)}</div>
     ),
   },
   {
@@ -131,7 +132,7 @@ const IncomeList = () => {
 
   useEffect(() => {
     refetch();
-  }, [page, limit,refetch]);
+  }, [page, limit, refetch]);
 
   const {
     mutate: deleteProduct,

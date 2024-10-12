@@ -36,7 +36,7 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
-  const { data: user } = useGetClients();
+  const { data: user } = useGetClients({});
   const { refetch: refetchContract } = useGetContract();
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
@@ -76,8 +76,7 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
       >
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <ItemForm title="Miktori" form={form} name="count" type="number" />
-          <ItemForm title="Narx" form={form} name="price" type="number" 
-          />
+          <ItemForm title="Narx" form={form} name="price" type="number" />
           <ItemForm
             title="Oldindan To'lov"
             form={form}

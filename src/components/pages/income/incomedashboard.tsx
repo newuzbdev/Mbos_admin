@@ -1,3 +1,4 @@
+import { formatNumber } from "@/components/formNumber";
 import { useGetIncomeDash } from "@/hooks/dashboard";
 
 function IncomeDashboard() {
@@ -54,11 +55,11 @@ const Section = ({ title, items }: any) => (
           key={index}
           className="p-3 flex items-center gap-2 border border-gray-300 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-900"
         >
-          <p className="font-medium text-gray-800 dark:text-gray-200">
+          <p className="font-medium text-gray-800 text-sm dark:text-gray-200">
             {item.label}:
           </p>
           <p className="text-gray-600 dark:text-gray-400">
-            {item.value || 0} s'om
+            {formatNumber(item.value) || 0} s'om
           </p>
         </div>
       ))}

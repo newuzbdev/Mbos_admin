@@ -15,7 +15,7 @@ interface IncomeCreateInputProps {
 
 const IncomeCreateInput = ({ closeDialog }: IncomeCreateInputProps) => {
   const { mutate: addIncome } = useAddIncome();
-  const { refetch: refetchIncome } = useGetIncome();
+  const { refetch: refetchIncome } = useGetIncome({});
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -42,7 +42,6 @@ const IncomeCreateInput = ({ closeDialog }: IncomeCreateInputProps) => {
         closeDialog?.();
       },
       onError: (error) => {
-        console.error("Xatolik yuz berdi:", error);
         toast({
           title: "Daromad qo'shishda xatolik.",
           variant: "destructive",
