@@ -1,54 +1,40 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useGetStatistic } from "@/hooks/dashboard";
+import { RecentSale } from "@/types/contract";
+import { Banknote } from "lucide-react";
 
 export function RecentSales() {
+  const { data: homeStats } = useGetStatistic();
+  const formatNumber = (num: number) => {
+    return num?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  };
+
   return (
     <div className="space-y-8">
-      <div className="flex items-center">
-        <Avatar className="flex items-center justify-center space-y-0 border h-9 w-9">
-          <AvatarImage src="/avatars/02.png" alt="Avatar" />
-          <AvatarFallback>JL</AvatarFallback>
-        </Avatar>
-        <div className="ml-4 space-y-1">
-          <p className="text-sm font-medium leading-none">Jackson Lee</p>
-          <p className="text-sm text-muted-foreground">jackson.lee@email.com</p>
-        </div>
-        <div className="ml-auto font-medium">+$39.00</div>
-      </div>
-      <div className="flex items-center">
-        <Avatar className="h-9 w-9">
-          <AvatarImage src="/avatars/03.png" alt="Avatar" />
-          <AvatarFallback>IN</AvatarFallback>
-        </Avatar>
-        <div className="ml-4 space-y-1">
-          <p className="text-sm font-medium leading-none">Isabella Nguyen</p>
-          <p className="text-sm text-muted-foreground">
-            isabella.nguyen@email.com
-          </p>
-        </div>
-        <div className="ml-auto font-medium">+$299.00</div>
-      </div>
-      <div className="flex items-center">
-        <Avatar className="h-9 w-9">
-          <AvatarImage src="/avatars/04.png" alt="Avatar" />
-          <AvatarFallback>WK</AvatarFallback>
-        </Avatar>
-        <div className="ml-4 space-y-1">
-          <p className="text-sm font-medium leading-none">William Kim</p>
-          <p className="text-sm text-muted-foreground">will@email.com</p>
-        </div>
-        <div className="ml-auto font-medium">+$99.00</div>
-      </div>
-      <div className="flex items-center">
-        <Avatar className="h-9 w-9">
-          <AvatarImage src="/avatars/05.png" alt="Avatar" />
-          <AvatarFallback>SD</AvatarFallback>
-        </Avatar>
-        <div className="ml-4 space-y-1">
-          <p className="text-sm font-medium leading-none">Sofia Davis</p>
-          <p className="text-sm text-muted-foreground">sofia.davis@email.com</p>
-        </div>
-        <div className="ml-auto font-medium">+$39.00</div>
-      </div>
+      {homeStats?.data.data.recentContract?.map(
+        (contract: RecentSale, index: number) => (
+          <div key={contract.id} className="flex items-center">
+            <Avatar className="h-9 w-9">
+              <AvatarImage src={`/avatars/0${index + 2}.png`} alt="Avatar" />
+              <AvatarFallback>CT</AvatarFallback>
+            </Avatar>
+            <div className="ml-4 space-y-1">
+              {/* <p className="text-sm font-medium leading-none">Contract {contract.id}</p> */}
+              <p className="text-sm text-muted-foreground">
+                Sanasi: {contract.sana}
+              </p>
+              <p className="text-sm ">
+                Mijoz ismi: {contract.user.F_I_O.charAt(0).toUpperCase() +
+                  contract.user.F_I_O.slice(1)}
+              </p>
+            </div>
+            <div className="flex gap-2 ml-auto font-medium">
+              <Banknote />
+              {formatNumber(Number(contract.price))} so'm
+            </div>
+          </div>
+        )
+      )}
     </div>
   );
 }
