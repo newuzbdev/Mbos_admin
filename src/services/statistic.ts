@@ -6,3 +6,6 @@ export const getStatistic = async () => {
 export const useIncomeDash = async () => {
   return await axiosPrivate.get("/dashboard/income");
 };
+export const useIncomeStatistik = async () => {
+  return await axiosPrivate.get("/dashboard/statstik");
+};

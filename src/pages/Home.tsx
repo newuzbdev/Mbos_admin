@@ -1,20 +1,16 @@
+import { ChartList } from "@/components/chart";
 import { RecentSales } from "@/components/recent-sales";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGetStatistic } from "@/hooks/dashboard";
-import {  TrendingDown, TrendingUp, Users } from "lucide-react";
+import { TrendingDown, TrendingUp, Users } from "lucide-react";
 
 const Home = () => {
-  const { data: homeStats } = useGetStatistic()
+  const { data: homeStats } = useGetStatistic();
 
   const formatNumber = (num: number) => {
     return num?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-  }
+  };
 
   return (
     <div className="space-y-2">
@@ -29,15 +25,15 @@ const Home = () => {
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardTitle className="text-sm font-medium">
-                  Mijozlar 
-                </CardTitle>
-                <Users className="items-center w-12 h-12 p-2 border rounded-lg"/>
+                <CardTitle className="text-sm font-medium">Mijozlar</CardTitle>
+                <Users className="items-center w-12 h-12 p-2 border rounded-lg" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
                   {homeStats?.data?.data?.usersCount}
-                  <span className="pl-2 text-base text-muted-foreground">Mavjud mijozlar soni</span>
+                  <span className="pl-2 text-base text-muted-foreground">
+                    Mavjud mijozlar soni
+                  </span>
                 </div>
               </CardContent>
             </Card>
@@ -50,9 +46,12 @@ const Home = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  {homeStats?.data?.data?.income ? formatNumber(homeStats.data.data.income) : ''}
-                  <span className="pl-2 text-base text-muted-foreground">Daromadlar</span>
-
+                  {homeStats?.data?.data?.income
+                    ? formatNumber(homeStats.data.data.income)
+                    : ""}
+                  <span className="pl-2 text-base text-muted-foreground">
+                    Daromadlar
+                  </span>
                 </div>
               </CardContent>
             </Card>
@@ -65,8 +64,12 @@ const Home = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  {homeStats?.data?.data?.expend ? formatNumber(homeStats.data.data.expend) : ''}
-                  <span className="pl-2 text-base text-muted-foreground">Chiqimlar</span>
+                  {homeStats?.data?.data?.expend
+                    ? formatNumber(homeStats.data.data.expend)
+                    : ""}
+                  <span className="pl-2 text-base text-muted-foreground">
+                    Chiqimlar
+                  </span>
                 </div>
               </CardContent>
             </Card>
@@ -79,6 +82,9 @@ const Home = () => {
               <CardContent>
                 <RecentSales />
               </CardContent>
+            </Card>
+            <Card className="col-span-4 md:col-span-4">
+              <ChartList />
             </Card>
           </div>
         </TabsContent>

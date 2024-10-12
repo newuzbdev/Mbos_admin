@@ -19,7 +19,7 @@ const FormSchema = z.object({
   F_I_O: z.string().min(2, {
     message: "F.I.O must be at least 2 characters.",
   }),
-    phone: z.number().min(6, {
+  phone: z.number().min(6, {
     message: "Phone number must be at least 6 character.",
   }),
   adress: z.string().min(2, {
@@ -43,7 +43,7 @@ const ClientsCreateInput = ({ closeDialog }: ClientsCreateInputProps) => {
     },
   });
 
-  const { refetch: refetchClients } = useGetClients();
+  const { refetch: refetchClients } = useGetClients({ page: 1, limit: 10 });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     const clientsData: Omit<Clients, "id"> = {
