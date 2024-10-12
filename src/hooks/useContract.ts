@@ -12,10 +12,10 @@ export const useAddContract = () => {
     mutationFn: addContract,
   });
 };
-export const useGetContract = () => {
+export const useGetContract = (id: string) => {
   return useQuery({
-    queryKey: ["contract"],
-    queryFn: () => getContract(),
+    queryKey: ["contract",id],
+    queryFn: () => getContract(id),
   });
 };
 
