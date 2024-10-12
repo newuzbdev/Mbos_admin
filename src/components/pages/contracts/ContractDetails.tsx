@@ -1,408 +1,92 @@
-// import { useEffect, useState } from "react";
-import { ColumnDef } from "@tanstack/react-table";
-// import {
-//   AlertDialog,
-//   AlertDialogAction,
-//   AlertDialogCancel,
-//   AlertDialogContent,
-//   AlertDialogFooter,
-//   AlertDialogHeader,
-//   AlertDialogTitle,
-// } from "@/components/ui/alert-dialog";
-// import {
-//   Dialog,
-//   DialogContent,
-//   DialogFooter,
-//   DialogHeader,
-//   DialogTitle,
-// } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Eye } from "lucide-react";
-// import { toast } from "@/hooks/use-toast";
-import DataTable from "@/components/data-table";
-import {
-  // useContractDelete,
-  // useContractUpdate,
-  useGetContract,
-} from "@/hooks/useContract";
-import { Contract } from "@/types/contract";
-// import { Label } from "@/components/ui/label";
-// import { Input } from "@/components/ui/input";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useParams } from "react-router-dom"
+import { useGetContract } from "@/hooks/useContract"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { CalendarIcon, CreditCardIcon, FileTextIcon, UserIcon } from "lucide-react"
 
-const makeColumns = (
-  // setContractToEdit: (p: Contract) => void,
-  // setContractToDelete: (p: Contract) => void
-  
-): ColumnDef<Contract>[] => [
-  {
-    header: "№",
-    cell: (c) => <div className="cursor-pointer">{c.row.index + 1}</div>,
-  },
-  {
-    accessorKey: "user",
-    header: "Mijoz",
-    cell: ({ row }) => (
-      <div className="cursor-pointer">{row.original.user.F_I_O}</div>
-    ),
-  },
-  {
-    accessorKey: "shartnoma_turi",
-    header: "shartnoma_turi",
-    cell: ({ row }) => (
-      <div className="cursor-pointer">{row.original.shartnoma_turi}</div>
-    ),
-  },
-  {
-    accessorKey: "price",
-    header: "narx",
-    cell: ({ row }) => (
-      <div className="cursor-pointer">{row.original.price}</div>
-    ),
-  },
-  {
-    accessorKey: "advancePayment",
-    header: "Oldindan to'lov",
-    cell: ({ row }) => (
-      <div className="cursor-pointer">{row.original.advancePayment}</div>
-    ),
-  },
-  {
-    accessorKey: "remainingPayment",
-    header: "Qolgan to'lov",
-    cell: ({ row }) => (
-      <div className="cursor-pointer">{row.original.remainingPayment}</div>
-    ),
-  },
-  {
-    accessorKey: "count",
-    header: "miktor",
-    cell: ({ row }) => (
-      <div className="cursor-pointer">{row.original.count}</div>
-    ),
-  },
-  {
-    accessorKey: "service",
-    header: "xizmat",
-    cell: ({ row }) => (
-      <div className="cursor-pointer">{row.original.service}</div>
-    ),
-  },
-  {
-    accessorKey: "others",
-    header: "Qolgan malumotlar",
-    cell: ({ row }) => (
-      <Sheet>
-        <SheetTrigger asChild>
-          <div className="cursor-pointer">
-            <Button className="text-white w-30">Qolgan malumotlar</Button>
-          </div>
-        </SheetTrigger>
-        <SheetContent>
-          <div className="space-y-4">
-            <div>
-              <h1 className="pb-4 text-lg text-bold text-primary ">
-                Qoshimcha malumotlar
-              </h1>
-              <strong>Shartnoma id:</strong> {row.original.shartnoma_id}
-            </div>
-            <div>
-              <strong>Sana:</strong> {row.original.sana}
-            </div>
-            <div>
-              <strong>Shartnoma muddati:</strong>{" "}
-              {row.original.shartnoma_muddati}
-            </div>
-            <div>
-              <strong>To'lash sanasi:</strong> {row.original.tolash_sana}
-            </div>
-            <div>
-              <strong>Texnik muddati:</strong> {row.original.texnik_muddati}
-            </div>
-          </div>
-        </SheetContent>
-      </Sheet>
-    ),
-  },
-  {
-    accessorKey: "eye",
-    header: "Batafsil malumotlar",
+export default function ContractDetails() {
+  const { contractId } = useParams<{ contractId: string }>()
+  const { data: contractDetails, isLoading, isError } = useGetContract(contractId)
 
-    cell: () => (
-      <div
-        className="flex items-center justify-center cursor-pointer"
-      >
-        <Eye className="w-6 h-6 text-primary hover:text-blue-500" />
-      </div>
-    ),
-  },
-];
+  if (isLoading) return <div>Loading...</div>
+  if (isError) return <ErrorState />
 
-const ContractDetails = () => {
-  // const [contractToDelete, setContractToDelete] = useState<
-  //   Contract | undefined
-  // >();
-  // const [contractToEdit, setContractToEdit] = useState<Contract | undefined>();
-  // const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
-  // const [editDialogVisible, setEditDialogVisible] = useState(false);
-  const { data: products, isLoading } = useGetContract();
-  // const {
-  //   mutate: deleteProduct,
-  //   isSuccess: isDeleteSuccess,
-  //   isError: isDeleteError,
-  // } = useContractDelete();
-  // const {
-  //   mutate: updateContract,
-  //   isSuccess: isUpdateSuccess,
-  //   isError: isUpdateError,
-  // } = useContractUpdate();
-
-  // useEffect(() => {
-  //   if (isDeleteSuccess) {
-  //     toast({
-  //       variant: "success",
-  //       title: "Product successfully deleted",
-  //     });
-  //     refetch();
-  //     setDeleteDialogVisible(false);
-  //   } else if (isDeleteError) {
-  //     toast({
-  //       variant: "destructive",
-  //       title: "Error deleting product",
-  //     });
-  //   }
-  // }, [isDeleteSuccess, isDeleteError, refetch]);
-
-  // useEffect(() => {
-  //   if (isUpdateSuccess) {
-  //     toast({
-  //       variant: "success",
-  //       title: "Product successfully updated",
-  //     });
-  //     refetch();
-  //     setEditDialogVisible(false);
-  //   } else if (isUpdateError) {
-  //     toast({
-  //       variant: "destructive",
-  //       title: "Error updating product",
-  //     });
-  //   }
-  // }, [isUpdateSuccess, isUpdateError, refetch]);
-  // useEffect(() => {
-  //   if (contractToDelete) setDeleteDialogVisible(true);
-  // }, [contractToDelete]);
-  // useEffect(() => {
-  //   if (contractToEdit) setEditDialogVisible(true);
-  // }, [contractToEdit]);
-
-  // const handleEditSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   if (contractToEdit) {
-  //     updateContract({
-  //       id: contractToEdit.id,
-  //       sana: contractToEdit.sana,
-  //       shartnoma_muddati: contractToEdit.shartnoma_muddati,
-  //       texnik_muddati: contractToEdit.texnik_muddati,
-  //       shartnoma_turi: contractToEdit.shartnoma_turi,
-  //       price: contractToEdit.price,
-  //       count: contractToEdit.count,
-  //       service: contractToEdit.service,
-  //       izoh: contractToEdit.izoh,
-  //       advancePayment: contractToEdit.advancePayment,
-  //     });
-  //   }
-  // };
-
-  if (isLoading) return <div>Loading...</div>;
+  const contract = contractDetails?.data?.data
 
   return (
-    <div className="w-full">
-      <div className="p-4 border rounded-md">
-        <h1 className="px-4 pt-4 font-bold">Mijozlar ro'yhati</h1>
-        <DataTable
-          columns={makeColumns()}
-          data={products?.data.data || []}
-        />
-        {/* <DataTable
-          columns={makeColumns(setContractToEdit, setContractToDelete)}
-          data={products?.data.data || []}
-        /> */}
-      </div>
+    <div className="container px-4 py-8 mx-auto">
+      <Card className="overflow-hidden">
+        <CardHeader className="bg-gradient-to-r from-primary to-blue-800">
+          <CardTitle className="text-2xl font-bold text-white">Contract Details</CardTitle>
+        </CardHeader>
+        <CardContent className="p-6">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+            <DetailSection icon={<UserIcon className="w-5 h-5 text-primary" />} title="Client Information">
+              <DetailItem label="Client Name" value={contract?.user?.F_I_O} />
+              <DetailItem label="Contract Type" value={contract?.shartnoma_turi} />
+              <DetailItem label="Contract ID" value={contract?.shartnoma_id} />
+            </DetailSection>
 
-      {/* {contractToDelete && (
-        <AlertDialog
-          open={deleteDialogVisible}
-          onOpenChange={setDeleteDialogVisible}
-        >
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel onClick={() => setDeleteDialogVisible(false)}>
-                Cancel
-              </AlertDialogCancel>
-              <AlertDialogAction
-                className="text-white bg-red-500 hover:bg-red"
-                onClick={() => deleteProduct(contractToDelete.id.toString())}
-              >
-                Continue
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-      )}
-      {contractToEdit && (
-        <Dialog open={editDialogVisible} onOpenChange={setEditDialogVisible}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Edit Product</DialogTitle>
-            </DialogHeader>
-            <form onSubmit={handleEditSubmit}>
-              <div className="grid gap-4 py-4">
-                <div className="grid items-center grid-cols-4 gap-4">
-                  <Label htmlFor="sana" className="text-right">
-                    Sana
-                  </Label>
-                  <Input
-                    id="sana"
-                    value={contractToEdit.sana}
-                    onChange={(e) =>
-                      setContractToEdit({
-                        ...contractToEdit,
-                        sana: e.target.value,
-                      })
-                    }
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid items-center grid-cols-4 gap-4">
-                  <Label htmlFor="shartnoma_muddati" className="text-right">
-                    Shartnoma muddati
-                  </Label>
-                  <Input
-                    id="shartnoma_muddati"
-                    value={contractToEdit.shartnoma_muddati}
-                    onChange={(e) =>
-                      setContractToEdit({
-                        ...contractToEdit,
-                        shartnoma_muddati: e.target.value,
-                      })
-                    }
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid items-center grid-cols-4 gap-4">
-                  <Label htmlFor="texnik_muddati" className="text-right">
-                    Texnik muddati
-                  </Label>
-                  <Input
-                    id="texnik_muddati"
-                    value={contractToEdit.texnik_muddati}
-                    onChange={(e) =>
-                      setContractToEdit({
-                        ...contractToEdit,
-                        texnik_muddati: e.target.value,
-                      })
-                    }
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid items-center grid-cols-4 gap-4">
-                  <Label htmlFor="shartnoma_turi" className="text-right">
-                    Shartnoma turi
-                  </Label>
-                  <Input
-                    id="shartnoma_turi"
-                    value={contractToEdit.shartnoma_turi}
-                    onChange={(e) =>
-                      setContractToEdit({
-                        ...contractToEdit,
+            <DetailSection icon={<CreditCardIcon className="w-5 h-5 text-green-600" />} title="Financial Details">
+              <DetailItem label="Price" value={formatCurrency(contract?.price)} />
+              <DetailItem label="Advance Payment" value={formatCurrency(contract?.advancePayment)} />
+              <DetailItem label="Remaining Payment" value={formatCurrency(contract?.remainingPayment)} />
+              <DetailItem label="Purchase Status" value={contract?.purchase_status} />
+            </DetailSection>
 
-                        shartnoma_turi: e.target.value as EnumShartnoma,
-                      })
-                    }
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid items-center grid-cols-4 gap-4">
-                  <Label htmlFor="price" className="text-right">
-                    Narx
-                  </Label>
-                  <Input
-                    id="price"
-                    type="number"
-                    value={contractToEdit.price}
-                    onChange={(e) =>
-                      setContractToEdit({
-                        ...contractToEdit,
-                        price: +e.target.value,
-                      })
-                    }
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid items-center grid-cols-4 gap-4">
-                  <Label htmlFor="price" className="text-right">
-                    Oldindan to'lov
-                  </Label>
-                  <Input
-                    id="advancePayment"
-                    type="number"
-                    value={contractToEdit.advancePayment}
-                    onChange={(e) =>
-                      setContractToEdit({
-                        ...contractToEdit,
-                        advancePayment: +e.target.value,
-                      })
-                    }
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid items-center grid-cols-4 gap-4">
-                  <Label htmlFor="count" className="text-right">
-                    Miqdor
-                  </Label>
-                  <Input
-                    id="count"
-                    type="number"
-                    value={contractToEdit.count}
-                    onChange={(e) =>
-                      setContractToEdit({
-                        ...contractToEdit,
-                        count: +e.target.value,
-                      })
-                    }
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid items-center grid-cols-4 gap-4">
-                  <Label htmlFor="service" className="text-right">
-                    Xizmat
-                  </Label>
-                  <Input
-                    id="service"
-                    value={contractToEdit.service}
-                    onChange={(e) =>
-                      setContractToEdit({
-                        ...contractToEdit,
-                        service: e.target.value,
-                      })
-                    }
-                    className="col-span-3"
-                  />
-                </div>
-              </div>
+            <DetailSection icon={<FileTextIcon className="w-5 h-5 text-purple-600" />} title="Contract Specifics">
+              <DetailItem label="Quantity" value={contract?.count} />
+              <DetailItem label="Contract Duration" value={contract?.shartnoma_muddati} />
+              <DetailItem label="Technical Duration" value={contract?.texnik_muddati} />
+            </DetailSection>
 
-              <DialogFooter>
-                <Button type="submit">Save changes</Button>
-              </DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
-      )} */}
+            <DetailSection icon={<CalendarIcon className="w-5 h-5 text-orange-600" />} title="Important Dates">
+              <DetailItem label="Contract Date" value={formatDate(contract?.sana)} />
+              <DetailItem label="Payment Date" value={formatDate(contract?.tolash_sana)} />
+            </DetailSection>
+          </div>
+        </CardContent>
+      </Card>
     </div>
-  );
-};
+  )
+}
 
-export default ContractDetails;
+function DetailSection({ icon, title, children }: { icon: React.ReactNode; title: string; children: React.ReactNode }) {
+  return (
+    <div className="space-y-4">
+      <h3 className="flex items-center gap-2 text-lg font-semibold">
+        {icon}
+        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800">{title}</span>
+      </h3>
+      <div className="p-4 space-y-2 rounded-lg shadow-inner bg-gray-50">{children}</div>
+    </div>
+  )
+}
+function DetailItem({ label, value }: { label: string; value: string | number | undefined }) {
+  return (
+    <div className="flex items-center justify-between py-1 border-b border-gray-200 last:border-b-0">
+      <span className="font-medium text-gray-600">{label}:</span>
+      <span className="font-semibold text-gray-800">{value || "N/A"}</span>
+    </div>
+  )
+}
+function ErrorState() {
+  return (
+    <div className="container px-4 py-8 mx-auto text-center">
+      <Card>
+        <CardContent className="py-12">
+          <h2 className="mb-2 text-2xl font-bold text-red-600">Error</h2>
+          <p className="text-gray-600">An error occurred while fetching contract details. Please try again later.</p>
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
+function formatCurrency(amount: number): string {
+  return `${amount?.toLocaleString('en-US') || '0'} UZS`
+
+  // return new Intl.NumberFormat('uz-UZ', { style: 'currency', currency: 'UZS' }).format(amount || 0)
+}
+
+function formatDate(dateString: string | number | Date) {
+  return new Date(dateString).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+}

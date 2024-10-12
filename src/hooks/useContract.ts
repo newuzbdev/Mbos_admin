@@ -2,6 +2,7 @@ import {
   addContract,
   deleteContract,
   getContract,
+  getContractById,
   updateContract,
 } from "@/services/contract";
 import { Contract } from "@/types/contract";
@@ -13,12 +14,23 @@ export const useAddContract = () => {
     mutationFn: addContract,
   });
 };
-export const useGetContract = (params: IParams) => {
+export const useGetContracts = (params: IParams) => {
   return useQuery({
     queryKey: ["contract"],
     queryFn: () => getContract(params),
   });
 };
+export const useGetContract = (contractId?: string) => {
+  return useQuery({
+    queryKey: ["contract", contractId],
+    queryFn: () => {
+      if (!contractId) throw new Error("Contract ID is required");
+      return getContractById(contractId);
+    },
+    enabled: !!contractId, // only run the query if contractId is provided
+  });
+};
+
 
 export function useContractDelete() {
   return useMutation({

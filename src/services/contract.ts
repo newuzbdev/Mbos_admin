@@ -15,6 +15,9 @@ export const getContract = async ({
     `/shartnoma?page=${page}&limit=${limit}&search=${search}`
   );
 };
+export const getContractById = async (contractId: string) => {
+  return await axiosPrivate.get(`/shartnoma/${contractId}`);
+};
 export const deleteContract = async (id: string) => {
   return await axiosPrivate.delete(`/shartnoma/${id}`);
 };

@@ -1,11 +1,9 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
 import DataTable from "@/components/data-table";
-import { useGetContract } from "@/hooks/useContract";
+import {  useGetContracts } from "@/hooks/useContract";
 import { Contract } from "@/types/contract";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
 
 const shartnoma_turi = [
@@ -16,7 +14,9 @@ const purchase_status = [
   { name: "paid", value: "To'landi" },
   { name: "no_paid", value: "To'lanmagan" },
 ];
-const makeColumns = (): ColumnDef<Contract>[] => [
+const makeColumns = (
+  navigate: (path: string) => void
+): ColumnDef<Contract>[] => [
   {
     header: "№",
     cell: (c) => <div className="cursor-pointer">{c.row.index + 1}</div>,
@@ -25,7 +25,12 @@ const makeColumns = (): ColumnDef<Contract>[] => [
     accessorKey: "user",
     header: "Mijoz",
     cell: ({ row }) => (
-      <div className="cursor-pointer">{row.original.user.F_I_O}</div>
+      <div
+        className="cursor-pointer"
+        onClick={() => navigate(`/clients/${row.original.user.id}`)}
+      >
+        {row.original.user.F_I_O}
+      </div>
     ),
   },
   {
@@ -69,7 +74,6 @@ const makeColumns = (): ColumnDef<Contract>[] => [
           (el) => el.name === row.original.purchase_status && el.value
         )}
       </div>
-      // <div className="cursor-pointer">{row.original.price}</div>
     ),
   },
   {
@@ -87,53 +91,25 @@ const makeColumns = (): ColumnDef<Contract>[] => [
     ),
   },
   {
-    accessorKey: "others",
-    header: "Qolgan malumotlar",
-    cell: ({ row }) => (
-      <Sheet>
-        <SheetTrigger asChild>
-          <div className="cursor-pointer">
-            <Button className="text-white w-30">Qolgan malumotlar</Button>
-          </div>
-        </SheetTrigger>
-        <SheetContent>
-          <div className="space-y-4">
-            <div>
-              <h1 className="pb-4 text-lg text-bold text-primary ">
-                Qoshimcha malumotlar
-              </h1>
-              <strong>Shartnoma id:</strong> {row.original.shartnoma_id}
-            </div>
-            <div>
-              <strong>Sana:</strong> {row.original.sana}
-            </div>
-            <div>
-              <strong>Shartnoma muddati:</strong>{" "}
-              {row.original.shartnoma_muddati}
-            </div>
-            <div>
-              <strong>To'lash sanasi:</strong> {row.original.tolash_sana}
-            </div>
-            <div>
-              <strong>Texnik muddati:</strong> {row.original.texnik_muddati}
-            </div>
-          </div>
-        </SheetContent>
-      </Sheet>
-    ),
-  },
-  {
     accessorKey: "eye",
     header: "Batafsil malumotlar",
-    cell: () => (
-      <div className="flex items-center justify-center cursor-pointer">
+    cell: ({ row }) => (
+      <div 
+        className="flex items-center justify-center cursor-pointer"
+        
+        onClick={() => 
+          navigate(`/contract/${row.original.id}`)
+        }
+      >
         <Eye className="w-6 h-6 text-primary hover:text-green-500" />
       </div>
+      
     ),
   },
 ];
 
 const ContractList = () => {
+  const navigate =useNavigate()
   const [searchParams] = useSearchParams();
   const page = Number(searchParams.get("page") ?? 1);
   const limit = Number(searchParams.get("limit") ?? 10);
@@ -143,11 +119,11 @@ const ContractList = () => {
     data: contract,
     refetch,
     isLoading,
-  } = useGetContract({ page, limit, search });
+  } = useGetContracts({ page, limit, search });
 
   useEffect(() => {
     refetch();
-  }, [page, limit, search]);
+  }, [page, limit, search,refetch]);
 
   if (isLoading) return <div>Loading...</div>;
 
@@ -157,12 +133,11 @@ const ContractList = () => {
         <h1 className="px-4 pt-4 font-bold">Mijozlar ro'yhati</h1>
         <DataTable
           title="xizmat boyicha izlash"
-          columns={makeColumns()}
+          columns={makeColumns(navigate)}
           data={contract?.data || []}
         />
       </div>
     </div>
   );
 };
-
 export default ContractList;

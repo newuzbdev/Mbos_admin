@@ -56,13 +56,17 @@ export const router = createBrowserRouter([
         element: <Clients />,
       },
       {
+        path: "/contract/:contractId",
+        element: <ContractDetails />,
+      },
+      {
         path:'/income',
         element:<Income/>
       },
-      {
-        path:'/contract/details',
-        element:<ContractDetails/>
-      }
+      // {
+      //   path:'/contract/details',
+      //   element:<ContractDetails/>
+      // }
     ],
   },
 ]);
