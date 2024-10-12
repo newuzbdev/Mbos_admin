@@ -34,9 +34,14 @@ export type Contract = {
   total_price: string;
   updated_at: string;
   user_id: number;
+  
 };
 export type RecentSale = {
-  user: string
+  F_I_O: string;
+  price:number
+  sana:string
+  id:string
+  user: Clients
   amount: string;
   name: string
 }
