@@ -35,14 +35,14 @@ const ClientsCreateInput = ({ closeDialog }: ClientsCreateInputProps) => {
         refetchClients();
         form.reset();
         toast({
-          title: "Client added successfully.",
+          title: "Mijoz muvaffaqiyatli qo'shildi.",
           variant: "success",
         });
         closeDialog?.();
       },
       onError: (error) => {
         toast({
-          title: "Error adding client.",
+          title: "Mijoz qo'shishda xatolik.",
           variant: "destructive",
           description: error.message,
         });

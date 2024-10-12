@@ -53,14 +53,14 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
         refetchContract();
         form.reset();
         toast({
-          title: "Contract added successfully.",
+          title: "Shartnoma muvaffaqiyatli qo'shildi.",
           variant: "success",
         });
         closeDialog?.();
       },
       onError: (error) => {
         toast({
-          title: "Error adding Contract.",
+          title: "Shartnoma qo'shishda xatolik.",
           variant: "destructive",
           description: error.message,
         });
@@ -128,7 +128,7 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
               { name: "paid", value: "To'langan" },
               { name: "no_paid", value: "To'lanmagan" },
             ]}
-            title="xarid holati"
+            title="Xarid holati"
             type="enum"
             form={form}
             name="purchase_status"
@@ -138,20 +138,20 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
               { name: "subscription_fee", value: "Oylik tolov" },
               { name: "one_bay", value: "Bir martalik tolov" },
             ]}
-            title="shartnoma turi"
+            title="Shartnoma turi"
             type="enum"
             form={form}
             name="shartnoma_turi"
           />
           <ItemForm title="sana" type="date" form={form} name="sana" />
           <ItemForm
-            title="shartnoma muddati"
+            title="Shartnoma muddati"
             type="date"
             form={form}
             name="shartnoma_muddati"
           />
           <ItemForm
-            title="texnik muddati"
+            title="Texnik muddati"
             type="date"
             form={form}
             name="texnik_muddati"

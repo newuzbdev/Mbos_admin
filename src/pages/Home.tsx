@@ -19,13 +19,14 @@ const Home = () => {
       </div>
       <Tabs defaultValue="overview" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="overview">Umumiy malumotlar
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="overview" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardTitle className="text-sm font-medium">Mijozlar</CardTitle>
+                <CardTitle className="text-lg font-medium">Mijozlar</CardTitle>
                 <Users className="items-center w-12 h-12 p-2 border rounded-lg" />
               </CardHeader>
               <CardContent>
@@ -39,8 +40,8 @@ const Home = () => {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardTitle className="text-sm font-medium">
-                  Income Count
+                <CardTitle className="text-lg font-medium">
+                Daromadlar
                 </CardTitle>
                 <TrendingUp className="items-center w-12 h-12 p-2 rounded-lg bg-emerald-400/10 text-emerald-500" />
               </CardHeader>
@@ -57,8 +58,8 @@ const Home = () => {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardTitle className="text-sm font-medium">
-                  Expend Count
+                <CardTitle className="text-lg font-medium">
+                  Chiqimlar
                 </CardTitle>
                 <TrendingDown className="items-center w-12 h-12 p-2 text-red-500 rounded-lg bg-red-400/10" />
               </CardHeader>
@@ -77,7 +78,7 @@ const Home = () => {
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-7">
             <Card className="col-span-4 md:col-span-3">
               <CardHeader>
-                <CardTitle>So'ngi sotuvlar</CardTitle>
+                <CardTitle>So'ngi 5ta sotuvlar</CardTitle>
               </CardHeader>
               <CardContent>
                 <RecentSales />

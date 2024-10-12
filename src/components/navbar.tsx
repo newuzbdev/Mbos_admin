@@ -45,15 +45,15 @@ const Navbar = () => {
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogTitle>Siz mutlaqo ishonchingiz komilmi?</AlertDialogTitle>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogCancel>Bekor qilinsin</AlertDialogCancel>
                 <AlertDialogAction
-                  className="bg-red-500 hover:bg-red-600"
+                  className="text-white bg-red-500 hover:bg-red-600"
                   onClick={() => handleLogOut()}
                 >
-                  Continue
+                  Albatta
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
