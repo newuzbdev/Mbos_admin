@@ -18,33 +18,35 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useState } from "react";
-import { ArrowDownIcon, ArrowLeft, ArrowRight, ArrowUpIcon } from "lucide-react";
-import { Input } from "@/components/ui/input.tsx";
+import { ArrowDownIcon, ArrowUpIcon } from "lucide-react";
 import ColumnFilter from "@/components/column-filtering";
-import { Button } from "./ui/button";
+import { Pagination } from "./pagination";
+import { Search } from "./search";
 interface DataTableProps<TData, TValue> {
+  title?: string;
+  search?: boolean;
   columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+  data: { pagination: any; data: TData[] };
 }
 
 export default function DataTable<TData, TValue>({
+  title,
   columns,
+  search = true,
   data,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const [globalFilter, setGlobalFilter] = useState<string>("");
+
   const table = useReactTable({
-    data,
+    data: data?.data,
     columns,
     state: {
       columnVisibility,
       sorting,
-      globalFilter,
     },
     onColumnVisibilityChange: setColumnVisibility,
     onSortingChange: setSorting,
-    onGlobalFilterChange: setGlobalFilter,
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getCoreRowModel: getCoreRowModel(),
@@ -54,13 +56,11 @@ export default function DataTable<TData, TValue>({
     <>
       <div className="flex flex-col w-full h-full my-4 space-y-2">
         <div className="flex justify-between pt-6">
-          <div className="w-80">
-            <Input
-              placeholder="Izlash..."
-              value={globalFilter}
-              onChange={(e) => setGlobalFilter(e.target.value)}
-            />
-          </div>
+          {search && (
+            <div className="w-80">
+              <Search title={title} />
+            </div>
+          )}
           <ColumnFilter table={table} />
         </div>
         <div className="border rounded-lg ">
@@ -142,26 +142,7 @@ export default function DataTable<TData, TValue>({
             </TableBody>
           </Table>
         </div>
-        <div className="flex items-center justify-between mt-2">
-          <Button
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-            className="px-4 py-2 rounded"
-          >
-            <ArrowLeft />
-          </Button>
-          <span>
-            Page {table.getState().pagination.pageIndex + 1} of{" "}
-            {table.getPageCount()}
-          </span>
-          <Button
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-            className="px-5 py-2 text-white"
-          >
-            <ArrowRight />
-          </Button>
-        </div>
+        <Pagination table={data?.pagination} />
       </div>
     </>
   );

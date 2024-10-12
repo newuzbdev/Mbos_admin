@@ -5,6 +5,7 @@ import {
   updateContract,
 } from "@/services/contract";
 import { Contract } from "@/types/contract";
+import { IParams } from "@/types/income";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const useAddContract = () => {
@@ -12,10 +13,10 @@ export const useAddContract = () => {
     mutationFn: addContract,
   });
 };
-export const useGetContract = () => {
+export const useGetContract = (params: IParams) => {
   return useQuery({
     queryKey: ["contract"],
-    queryFn: () => getContract(),
+    queryFn: () => getContract(params),
   });
 };
 

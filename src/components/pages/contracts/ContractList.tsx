@@ -5,6 +5,8 @@ import DataTable from "@/components/data-table";
 import { useGetContract } from "@/hooks/useContract";
 import { Contract } from "@/types/contract";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useSearchParams } from "react-router-dom";
+import { useEffect } from "react";
 
 const shartnoma_turi = [
   { name: "one_bay", value: "Birmartalik to'lov" },
@@ -132,8 +134,20 @@ const makeColumns = (): ColumnDef<Contract>[] => [
 ];
 
 const ContractList = () => {
-  const { data: products, isLoading } = useGetContract();
-  
+  const [searchParams] = useSearchParams();
+  const page = Number(searchParams.get("page") ?? 1);
+  const limit = Number(searchParams.get("limit") ?? 10);
+  const search = searchParams.get("search") || "";
+
+  const {
+    data: contract,
+    refetch,
+    isLoading,
+  } = useGetContract({ page, limit, search });
+
+  useEffect(() => {
+    refetch();
+  }, [page, limit, search]);
 
   if (isLoading) return <div>Loading...</div>;
 
@@ -141,7 +155,11 @@ const ContractList = () => {
     <div className="w-full">
       <div className="p-4 border rounded-md">
         <h1 className="px-4 pt-4 font-bold">Mijozlar ro'yhati</h1>
-        <DataTable columns={makeColumns()} data={products?.data.data || []} />
+        <DataTable
+          title="xizmat boyicha izlash"
+          columns={makeColumns()}
+          data={contract?.data || []}
+        />
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ import {
   updateClients,
 } from "@/services/clients";
 import { Clients } from "@/types/clients";
+import { IParams } from "@/types/income";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const useAddClients = () => {
@@ -12,10 +13,11 @@ export const useAddClients = () => {
     mutationFn: addClients,
   });
 };
-export const useGetClients = () => {
+
+export const useGetClients = (params: IParams) => {
   return useQuery({
     queryKey: ["clients"],
-    queryFn: () => getClients(),
+    queryFn: () => getClients(params),
   });
 };
 
