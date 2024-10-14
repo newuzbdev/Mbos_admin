@@ -33,10 +33,11 @@ interface ContractsCreateInputProps {
 
 const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
   const { mutate: addContract } = useAddContract();
+  const { data: user } = useGetClients({});
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
-  const { data: user } = useGetClients({});
   const { refetch: refetchContract } = useGetContract();
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
@@ -84,7 +85,6 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
             type="number"
           />
           <ItemForm title="Xizmat" form={form} name="service" />
-
           <FormField
             control={form.control}
             name={"user_id"}

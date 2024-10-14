@@ -4,8 +4,8 @@ import axiosPrivate from "@/config/api";
 export const addIncome = async (data: Income) => {
   return await axiosPrivate.post("/income", data);
 };
-export const getIncome = async ({ page = 1, limit = 10 }: IParams) => {
-  return await axiosPrivate.get(`/income?page=${page}&limit=${limit}`);
+export const getIncome = async ({ page = 1, limit = 10,search = "" }: IParams) => {
+  return await axiosPrivate.get(`/income?page=${page}&limit=${limit}&search=${search}`);
 };
 export const deleteIncome = async (id: string) => {
   return await axiosPrivate.delete(`/income/${id}`);

@@ -50,6 +50,13 @@ const makeColumns = (
     cell: (c) => <div className="cursor-pointer">{c.row.index + 1}</div>,
   },
   {
+    accessorKey: "user",
+    header: "Mijoz",
+    cell: ({ row }) => (
+      <div className="cursor-pointer">{row.original.user?.F_I_O}</div>
+    ),
+  },
+  {
     accessorKey: "amount",
     header: "To'lov miqdori",
     cell: ({ row }) => (
@@ -71,7 +78,7 @@ const makeColumns = (
     accessorKey: "is_paid",
     header: "Holati",
     cell: ({ row }) => (
-      <div className="cursor-pointer">
+      <div className={`cursor-pointer ${row.original.is_paid === "paid" ? "bg-primary text-white flex justify-center rounded-lg" : "bg-red-500 text-white flex rounded-lg  justify-center"}`}>
         {row.original.is_paid === "paid" ? "kirim" : "chikim"}
       </div>
     ),
@@ -116,6 +123,7 @@ const makeColumns = (
   },
 ];
 
+
 const IncomeList = () => {
   const [incomeToDelete, setIncomeToDelete] = useState<Income | undefined>();
   const [incomeToEdit, setIncomeToEdit] = useState<Income | undefined>();
@@ -124,15 +132,18 @@ const IncomeList = () => {
   const [searchParams] = useSearchParams();
   const page = Number(searchParams.get("page") ?? 1);
   const limit = Number(searchParams.get("limit") ?? 10);
+  const search = searchParams.get("search") ?? "";
+  
+
   const {
     data: income = { data: { data: [] } },
     refetch,
     isLoading,
-  } = useGetIncome({ page, limit });
+  } = useGetIncome({ page, limit, search });
 
   useEffect(() => {
     refetch();
-  }, [page, limit, refetch]);
+  }, [page, limit, search]);
 
   const {
     mutate: deleteProduct,
@@ -200,6 +211,7 @@ const IncomeList = () => {
     if (incomeToEdit) {
       updateProduct({
         id: incomeToEdit.id,
+        // user: incomeToEdit.user,
         amount: +incomeToEdit.amount,
         payment_method: incomeToEdit.payment_method,
         is_paid: incomeToEdit.is_paid,
@@ -216,9 +228,10 @@ const IncomeList = () => {
       <div className="p-4 border rounded-md">
         <IncomeDashboard />
         <DataTable
-          search={false}
+          // search={false}
+          title="Foydalanuvchi ismi boyicha qidiring"
           columns={makeColumns(setIncomeToEdit, setIncomeToDelete)}
-          data={income.data || []}
+          data={income?.data || []}
         />
       </div>
       <AlertDialog
@@ -249,7 +262,7 @@ const IncomeList = () => {
         </AlertDialogContent>
       </AlertDialog>
       <Dialog open={editDialogVisible} onOpenChange={handleEditDialogClose}>
-        <DialogContent className="absolute">
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>daromadni tahrirlash</DialogTitle>
           </DialogHeader>
