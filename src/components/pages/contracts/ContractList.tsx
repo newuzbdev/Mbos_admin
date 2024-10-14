@@ -1,5 +1,4 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { Eye } from "lucide-react";
 import DataTable from "@/components/data-table";
 import { useGetContracts } from "@/hooks/useContract";
 import { Contract } from "@/types/contract";
@@ -26,7 +25,12 @@ const makeColumns = (
     accessorKey: "user",
     header: "Mijoz",
     cell: ({ row }) => (
-      <div className="cursor-pointer">{row.original.user.F_I_O}</div>
+      <div
+        className="cursor-pointer underline text-primary"
+        onClick={() => navigate(`/contract/${row.original.id}`)}
+      >
+        {row.original.user.F_I_O}
+      </div>
     ),
   },
   {
@@ -65,7 +69,13 @@ const makeColumns = (
     accessorKey: "purchase_status",
     header: "Xarid holati",
     cell: ({ row }) => (
-      <div className={`cursor-pointer py-1 text-white rounded-lg flex justify-center  ${row.original.purchase_status === 'paid' ? 'bg-green-500' : 'bg-red-500'}`}>
+      <div
+        className={`cursor-pointer py-1 text-white rounded-lg flex justify-center  ${
+          row.original.purchase_status === "paid"
+            ? "bg-green-500"
+            : "bg-red-500"
+        }`}
+      >
         {purchase_status.map(
           (el) => el.name === row.original.purchase_status && el.value
         )}
@@ -84,18 +94,6 @@ const makeColumns = (
     header: "Xizmat",
     cell: ({ row }) => (
       <div className="cursor-pointer">{row.original.service}</div>
-    ),
-  },
-  {
-    accessorKey: "eye",
-    header: "Batafsil malumotlar",
-    cell: ({ row }) => (
-      <div
-        className="flex items-center justify-center cursor-pointer"
-        onClick={() => navigate(`/contract/${row.original.id}`)}
-      >
-        <Eye className="w-6 h-6 text-primary hover:text-green-500" />
-      </div>
     ),
   },
 ];
@@ -122,7 +120,6 @@ const ContractList = () => {
   return (
     <div className="w-full">
       <div className="p-4 border rounded-md">
-        <h1 className="px-4 pt-4 font-bold">Mijozlar ro'yhati</h1>
         <DataTable
           title="Xizmat boyicha izlash"
           columns={makeColumns(navigate)}

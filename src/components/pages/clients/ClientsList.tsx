@@ -182,7 +182,6 @@ const ClientsList = () => {
   return (
     <div className="w-full">
       <div className="p-4 border rounded-md">
-        <h1 className="px-4 pt-4 font-bold">Mijozlar ro'yhati</h1>
         <DataTable
           title={"To'liq ism boyichi izlash"}
           columns={makeColumns(setClientsToEdit, setClientsToDelete)}

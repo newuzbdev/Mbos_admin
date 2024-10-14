@@ -18,10 +18,10 @@ export function Pagination({ table }: { table: any }) {
         <ArrowLeft />
       </Button>
       <span>
-        Page {paramsPage || 1} of {table?.totalPages}
+        {paramsPage || 1} / {table?.totalPages || 1}
       </span>
       <Button
-        onClick={() => handlePage((+paramsPage + 1).toString(), table.limit)}
+        onClick={() => handlePage((+paramsPage + 1).toString(), table?.limit)}
         disabled={paramsPage >= table?.totalPages}
         className="px-5 py-2 text-white"
       >

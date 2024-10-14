@@ -66,6 +66,7 @@ export function UpdateItem({ contract }: { contract: Contract }) {
       onSuccess: () => {
         toast({ title: "contract ozgartirildi", variant: "success" });
         refetch();
+        form.reset();
         setUpdate(false);
       },
       onError: () => {
@@ -73,7 +74,6 @@ export function UpdateItem({ contract }: { contract: Contract }) {
       },
     });
   };
-  
 
   return (
     <>
@@ -200,7 +200,7 @@ export function UpdateItem({ contract }: { contract: Contract }) {
               <div className="flex justify-end">
                 <Button type="submit" className="text-white">
                   O'zgarishlarni saqlash
-                </Button>                
+                </Button>
               </div>
             </form>
           </Form>
