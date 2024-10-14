@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useGetStatistic } from "@/hooks/dashboard";
-import { RecentSale } from "@/types/contract";
+ import { RecentSale } from "@/types/contract";
 import { Banknote } from "lucide-react";
 
 export function RecentSales() {
