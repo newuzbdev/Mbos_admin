@@ -1,9 +1,13 @@
-export type Clients = {
-  id: string;
-  F_I_O: string;
-  phone: number;
-  adress: string;
-};
+import { Clients } from "./clients";
+
+export enum EnumIncamTpeTranslation {
+  cash = "Naqt",
+  translation = "O'tkazma orqali",
+  online = "Online",
+  salary = "Oylik",
+  delivery = "Yetkazib berish",
+  other = "Boshqalar",
+}
 
 export type Income = {
   id: string;
@@ -13,7 +17,7 @@ export type Income = {
   is_paid: string;
   description: string;
   date: string;
-  user:Clients
+  user: Clients;
 };
 
 export interface IParams {

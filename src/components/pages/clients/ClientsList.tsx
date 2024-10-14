@@ -26,9 +26,8 @@ import {
 } from "@/hooks/useClients";
 import { toast } from "@/hooks/use-toast";
 import DataTable from "@/components/data-table";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useSearchParams } from "react-router-dom";
+import { ItemUpdate } from "@/components/input-update";
 
 const makeColumns = (
   setProductToEdit: (p: Clients) => void,
@@ -198,7 +197,9 @@ const ClientsList = () => {
         >
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Siz mutlaqo ishonchingiz komilmi?</AlertDialogTitle>
+              <AlertDialogTitle>
+                Siz mutlaqo ishonchingiz komilmi?
+              </AlertDialogTitle>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel onClick={handleDeleteDialogClose}>
@@ -222,59 +223,33 @@ const ClientsList = () => {
             </DialogHeader>
             <form onSubmit={handleEditSubmit}>
               <div className="grid gap-4 py-4">
-                <div className="grid items-center grid-cols-4 gap-4">
-                  <Label htmlFor="name" className="text-right">
-                    To'liq ism
-                  </Label>
-                  <Input
-                    id="F_I_O"
-                    value={clientsToEdit.F_I_O}
-                    onChange={(e) =>
-                      setClientsToEdit({
-                        ...clientsToEdit,
-                        F_I_O: e.target.value,
-                      })
-                    }
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid items-center grid-cols-4 gap-4">
-                  <Label htmlFor="price" className="text-right">
-                    Telfon raqami
-                  </Label>
-                  <Input
-                    id="phone"
-                    type="number"
-                    value={clientsToEdit.phone}
-                    onChange={(e) =>
-                      setClientsToEdit({
-                        ...clientsToEdit,
-                        phone: parseInt(e.target.value, 10),
-                      })
-                    }
-                    className="col-span-3"
-                  />
-                </div>
-              </div>
-              <div className="grid items-center grid-cols-4 gap-4">
-                <Label htmlFor="text" className="text-right">
-                  Address
-                </Label>
-                <Input
-                  id="adress"
-                  type="text"
+                <ItemUpdate
+                  data={clientsToEdit}
+                  name="F_I_O"
+                  title="tolik ism"
+                  setUpdate={setClientsToEdit}
+                  value={clientsToEdit.F_I_O}
+                />
+                <ItemUpdate
+                  data={clientsToEdit}
+                  name="phone"
+                  title="Telfon raqami"
+                  setUpdate={setClientsToEdit}
+                  value={clientsToEdit.phone}
+                />
+                <ItemUpdate
+                  data={clientsToEdit}
+                  name="adress"
+                  title="address"
+                  setUpdate={setClientsToEdit}
                   value={clientsToEdit.adress}
-                  onChange={(e) =>
-                    setClientsToEdit({
-                      ...clientsToEdit,
-                      adress: e.target.value,
-                    })
-                  }
-                  className="col-span-3"
                 />
               </div>
+
               <DialogFooter>
-                <Button type="submit" className="text-white">O'zgarishlarni saqlash</Button>
+                <Button type="submit" className="text-white">
+                  O'zgarishlarni saqlash
+                </Button>
               </DialogFooter>
             </form>
           </DialogContent>

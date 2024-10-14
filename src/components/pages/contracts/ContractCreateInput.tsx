@@ -13,7 +13,7 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { ItemForm } from "@/components/Input-create";
-import { FormSchema } from "./validate";
+import { FormSchema } from "../../validate";
 import { useAddContract, useGetContract } from "@/hooks/useContract";
 import { Contract } from "@/types/contract";
 import { useGetClients } from "@/hooks/useClients";
@@ -37,16 +37,19 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
+    defaultValues: {
+      advancePayment: 0,
+    },
   });
   const { refetch: refetchContract } = useGetContract();
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     const contractsData = {
       ...data,
-      count: Number(data.count), // Ensure count is a number
-      price: Number(data.price), // Ensure price is a number
-      advancePayment: Number(data.advancePayment), // Ensure advancePayment is a number
-      user_id: Number(data.user_id), // Convert user_id if necessary
+      count: Number(data.count),
+      price: Number(data.price),
+      advancePayment: Number(data.advancePayment),
+      user_id: Number(data.user_id),
     };
 
     addContract(contractsData as Contract, {
@@ -94,14 +97,14 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
                   Mijozlar
                 </FormLabel>
                 <Select
-                  onValueChange={(value) => field.onChange(+value)} // Casting value to number
+                  onValueChange={(value) => field.onChange(+value)}
                   value={field.value?.toString()}
                 >
                   <FormControl>
                     <SelectTrigger className="px-4 py-2 transition duration-200 border-2 rounded-md border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
                       <SelectValue placeholder="Mijozni tanlang">
                         {field.value
-                          ? user?.data.data.find(
+                          ? user?.data?.data.find(
                               (client: Clients) => client.id === field.value
                             )?.F_I_O
                           : "Mijozni tanlang"}
@@ -110,11 +113,12 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
                   </FormControl>
                   <SelectContent>
                     <SelectGroup>
-                      {user?.data.data?.map((el: Clients) => (
-                        <SelectItem key={el.id} value={el.id.toString()}>
-                          {el.F_I_O}
-                        </SelectItem>
-                      ))}
+                      {user?.data?.data.length &&
+                        user?.data?.data?.map((el: Clients) => (
+                          <SelectItem key={el.id} value={el.id.toString()}>
+                            {el.F_I_O}
+                          </SelectItem>
+                        ))}
                     </SelectGroup>
                   </SelectContent>
                 </Select>

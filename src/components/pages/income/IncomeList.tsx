@@ -78,7 +78,13 @@ const makeColumns = (
     accessorKey: "is_paid",
     header: "Holati",
     cell: ({ row }) => (
-      <div className={`cursor-pointer ${row.original.is_paid === "paid" ? "bg-primary text-white flex justify-center rounded-lg" : "bg-red-500 text-white flex rounded-lg  justify-center"}`}>
+      <div
+        className={`cursor-pointer text-white flex justify-center rounded-lg py-1 ${
+          row.original.is_paid === "paid"
+            ? "bg-primary"
+            : "bg-red-500"
+        }`}
+      >
         {row.original.is_paid === "paid" ? "kirim" : "chikim"}
       </div>
     ),
@@ -123,7 +129,6 @@ const makeColumns = (
   },
 ];
 
-
 const IncomeList = () => {
   const [incomeToDelete, setIncomeToDelete] = useState<Income | undefined>();
   const [incomeToEdit, setIncomeToEdit] = useState<Income | undefined>();
@@ -134,7 +139,6 @@ const IncomeList = () => {
   const page = Number(searchParams.get("page") ?? 1);
   const limit = Number(searchParams.get("limit") ?? 10);
   const search = searchParams.get("search") ?? "";
-  
 
   const {
     data: income = { data: { data: [] } },
@@ -144,8 +148,7 @@ const IncomeList = () => {
 
   useEffect(() => {
     refetch();
-
-  }, [page, limit, search, refetch]);
+  }, [page, limit, search]);
 
   const {
     mutate: deleteProduct,
@@ -213,7 +216,6 @@ const IncomeList = () => {
     if (incomeToEdit) {
       updateProduct({
         id: incomeToEdit.id,
-
         amount: +incomeToEdit.amount,
         payment_method: incomeToEdit.payment_method,
         is_paid: incomeToEdit.is_paid,
@@ -244,7 +246,6 @@ const IncomeList = () => {
       <div className="p-4 border rounded-md">
         <IncomeDashboard />
         <DataTable
-
           title="Foydalanuvchi ismi boyicha qidiring"
           columns={makeColumns(setIncomeToEdit, setIncomeToDelete)}
           data={income?.data || []}
@@ -342,5 +343,4 @@ const IncomeList = () => {
     </div>
   );
 };
-
 export default IncomeList;

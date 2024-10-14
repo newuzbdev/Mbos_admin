@@ -1,7 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Eye } from "lucide-react";
 import DataTable from "@/components/data-table";
-import {  useGetContracts } from "@/hooks/useContract";
+import { useGetContracts } from "@/hooks/useContract";
 import { Contract } from "@/types/contract";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
@@ -14,6 +14,7 @@ const purchase_status = [
   { name: "paid", value: "To'landi" },
   { name: "no_paid", value: "To'lanmagan" },
 ];
+
 const makeColumns = (
   navigate: (path: string) => void
 ): ColumnDef<Contract>[] => [
@@ -25,12 +26,7 @@ const makeColumns = (
     accessorKey: "user",
     header: "Mijoz",
     cell: ({ row }) => (
-      <div
-        className="cursor-pointer"
-        onClick={() => navigate(`/clients/${row.original.user.id}`)}
-      >
-        {row.original.user.F_I_O}
-      </div>
+      <div className="cursor-pointer">{row.original.user.F_I_O}</div>
     ),
   },
   {
@@ -69,7 +65,7 @@ const makeColumns = (
     accessorKey: "purchase_status",
     header: "Xarid holati",
     cell: ({ row }) => (
-      <div className="cursor-pointer">
+      <div className={`cursor-pointer py-1 text-white rounded-lg flex justify-center  ${row.original.purchase_status === 'paid' ? 'bg-green-500' : 'bg-red-500'}`}>
         {purchase_status.map(
           (el) => el.name === row.original.purchase_status && el.value
         )}
@@ -94,22 +90,18 @@ const makeColumns = (
     accessorKey: "eye",
     header: "Batafsil malumotlar",
     cell: ({ row }) => (
-      <div 
+      <div
         className="flex items-center justify-center cursor-pointer"
-        
-        onClick={() => 
-          navigate(`/contract/${row.original.id}`)
-        }
+        onClick={() => navigate(`/contract/${row.original.id}`)}
       >
         <Eye className="w-6 h-6 text-primary hover:text-green-500" />
       </div>
-      
     ),
   },
 ];
 
 const ContractList = () => {
-  const navigate =useNavigate()
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const page = Number(searchParams.get("page") ?? 1);
   const limit = Number(searchParams.get("limit") ?? 10);
@@ -123,7 +115,7 @@ const ContractList = () => {
 
   useEffect(() => {
     refetch();
-  }, [page, limit, search,refetch]);
+  }, [page, limit, search, refetch]);
 
   if (isLoading) return <div>Loading...</div>;
 

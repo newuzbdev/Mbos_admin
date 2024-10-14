@@ -38,37 +38,37 @@ const Home = () => {
                 </div>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="text-white bg-primary">
               <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                 <CardTitle className="text-lg font-medium">
                 Daromadlar
                 </CardTitle>
-                <TrendingUp className="items-center w-12 h-12 p-2 rounded-lg bg-emerald-400/10 text-emerald-500" />
+                <TrendingUp className="items-center w-12 h-12 p-2 rounded-lg bg-emerald-400/10" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
                   {homeStats?.data?.data?.income
                     ? formatNumber(homeStats.data.data.income)
                     : ""}
-                  <span className="pl-2 text-base text-muted-foreground">
+                  <span className="pl-2 text-base ">
                     Daromadlar
                   </span>
                 </div>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="text-white bg-red-500">
               <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                 <CardTitle className="text-lg font-medium">
                   Chiqimlar
                 </CardTitle>
-                <TrendingDown className="items-center w-12 h-12 p-2 text-red-500 rounded-lg bg-red-400/10" />
+                <TrendingDown className="items-center w-12 h-12 p-2 text-white rounded-lg bg-red-400/10" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
                   {homeStats?.data?.data?.expend
                     ? formatNumber(homeStats.data.data.expend)
                     : ""}
-                  <span className="pl-2 text-base text-muted-foreground">
+                  <span className="pl-2 text-base">
                     Chiqimlar
                   </span>
                 </div>
