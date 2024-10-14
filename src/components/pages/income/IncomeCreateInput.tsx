@@ -7,7 +7,7 @@ import { toast } from "@/hooks/use-toast";
 import { Income } from "@/types/income.ts";
 import { useAddIncome, useGetIncome } from "@/hooks/useIncome.ts";
 import { ItemForm } from "@/components/Input-create";
-import { FormSchema } from "../contracts/validate";
+import { FormSchema } from "../../validate";
 
 interface IncomeCreateInputProps {
   closeDialog?: () => void;

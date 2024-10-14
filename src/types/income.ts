@@ -1,3 +1,12 @@
+export enum EnumIncamTpeTranslation {
+  cash = "Naqt",
+  translation = "O'tkazma orqali",
+  online = "Online",
+  salary = "Oylik",
+  delivery = "Yetkazib berish",
+  other = "Boshqalar",
+}
+
 export type Income = {
   id: string;
   amount: number;

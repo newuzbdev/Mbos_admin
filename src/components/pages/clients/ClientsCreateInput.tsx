@@ -7,7 +7,7 @@ import { useAddClients, useGetClients } from "@/hooks/useClients";
 import { toast } from "@/hooks/use-toast";
 import { Clients } from "@/types/clients";
 import { ItemForm } from "@/components/Input-create";
-import { FormSchema } from "../contracts/validate";
+import { FormSchema } from "../../validate";
 
 interface ClientsCreateInputProps {
   closeDialog?: () => void;

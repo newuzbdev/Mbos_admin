@@ -1,7 +1,6 @@
 import { Dispatch, HTMLInputTypeAttribute, SetStateAction } from "react";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
-import { Income } from "@/types/income";
 import { Select, SelectContent, SelectGroup, SelectItem } from "./ui/select";
 
 interface ITypeUpdate {
@@ -9,7 +8,7 @@ interface ITypeUpdate {
   data: any;
   title: string;
   name: string;
-  setUpdate: Dispatch<SetStateAction<Income | undefined>>;
+  setUpdate: Dispatch<SetStateAction<any | undefined>>;
   enums?: { name: string; value: string }[];
   type?: HTMLInputTypeAttribute | "enum";
 }
