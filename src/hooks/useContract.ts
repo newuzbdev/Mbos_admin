@@ -5,7 +5,6 @@ import {
   getContractById,
   updateContract,
 } from "@/services/contract";
-import { Contract } from "@/types/contract";
 import { IParams } from "@/types/income";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
@@ -27,10 +26,9 @@ export const useGetContract = (contractId?: string) => {
       if (!contractId) throw new Error("Contract ID is required");
       return getContractById(contractId);
     },
-    enabled: !!contractId, // only run the query if contractId is provided
+    enabled: !!contractId,
   });
 };
-
 
 export function useContractDelete() {
   return useMutation({
@@ -39,6 +37,6 @@ export function useContractDelete() {
 }
 export function useContractUpdate() {
   return useMutation({
-    mutationFn: (data: Contract) => updateContract(data),
+    mutationFn: (data: any) => updateContract(data),
   });
 }

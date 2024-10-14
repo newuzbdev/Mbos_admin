@@ -108,7 +108,7 @@ export default function ContractDetails() {
           </div>
           <div>
             <div className="space-x-2 flex justify-end">
-              <UpdateItem contract={contract} id={Number(contractId)} />
+              <UpdateItem contract={contract} />
               <DeleteItem />
             </div>
           </div>
