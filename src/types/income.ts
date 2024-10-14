@@ -1,3 +1,5 @@
+import { Clients } from "./clients";
+
 export enum EnumIncamTpeTranslation {
   cash = "Naqt",
   translation = "O'tkazma orqali",
@@ -9,11 +11,13 @@ export enum EnumIncamTpeTranslation {
 
 export type Income = {
   id: string;
+  user_id: number;
   amount: number;
   payment_method: string;
   is_paid: string;
   description: string;
   date: string;
+  user: Clients;
 };
 
 export interface IParams {

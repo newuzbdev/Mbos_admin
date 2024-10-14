@@ -2,12 +2,30 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import { Form } from "@/components/ui/form";
 import { toast } from "@/hooks/use-toast";
 import { Income } from "@/types/income.ts";
 import { useAddIncome, useGetIncome } from "@/hooks/useIncome.ts";
 import { ItemForm } from "@/components/Input-create";
 import { FormSchema } from "../../validate";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Clients } from "@/types/clients";
+import { useGetClients } from "@/hooks/useClients";
 
 interface IncomeCreateInputProps {
   closeDialog?: () => void;
@@ -15,11 +33,14 @@ interface IncomeCreateInputProps {
 
 const IncomeCreateInput = ({ closeDialog }: IncomeCreateInputProps) => {
   const { mutate: addIncome } = useAddIncome();
+  const { data: user } = useGetClients({});
+
   const { refetch: refetchIncome } = useGetIncome({});
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
+      // Convert user_id if necessary
       amount: 0,
       payment_method: "",
       is_paid: "",
@@ -58,6 +79,43 @@ const IncomeCreateInput = ({ closeDialog }: IncomeCreateInputProps) => {
         className="h-auto my-10 mt-4 space-y-5"
       >
         <div className="grid grid-cols-2 gap-3">
+          <FormField
+            control={form.control}
+            name={"user_id"}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-lg font-semibold text-slate-700">
+                  Mijozlar
+                </FormLabel>
+                <Select
+                  onValueChange={(value) => field.onChange(+value)} // Casting value to number
+                  value={field.value?.toString()}
+                >
+                  <FormControl>
+                    <SelectTrigger className="px-4 py-2 transition duration-200 border-2 rounded-md border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                      <SelectValue placeholder="Mijozni tanlang">
+                        {field.value
+                          ? user?.data.data.find(
+                              (client: Clients) => client.id === field.value
+                            )?.F_I_O
+                          : "Mijozni tanlang"}
+                      </SelectValue>
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectGroup>
+                      {user?.data.data?.map((el: Clients) => (
+                        <SelectItem key={el.id} value={el.id.toString()}>
+                          {el.F_I_O}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+                <FormMessage className="text-sm text-red-500" />
+              </FormItem>
+            )}
+          />
           <ItemForm
             form={form}
             name="amount"
@@ -120,5 +178,4 @@ const IncomeCreateInput = ({ closeDialog }: IncomeCreateInputProps) => {
     </Form>
   );
 };
-
 export default IncomeCreateInput;
