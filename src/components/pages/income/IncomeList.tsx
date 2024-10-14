@@ -79,10 +79,10 @@ const makeColumns = (
     header: "Holati",
     cell: ({ row }) => (
       <div
-        className={`cursor-pointer ${
+        className={`cursor-pointer text-white flex justify-center rounded-lg py-1 ${
           row.original.is_paid === "paid"
-            ? "bg-primary text-white flex justify-center rounded-lg"
-            : "bg-red-500 text-white flex rounded-lg  justify-center"
+            ? "bg-primary"
+            : "bg-red-500"
         }`}
       >
         {row.original.is_paid === "paid" ? "kirim" : "chikim"}
@@ -134,7 +134,8 @@ const IncomeList = () => {
   const [incomeToEdit, setIncomeToEdit] = useState<Income | undefined>();
   const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
   const [editDialogVisible, setEditDialogVisible] = useState(false);
-  const [searchParams] = useSearchParams();
+
+  const [searchParams, setSearchParams] = useSearchParams();
   const page = Number(searchParams.get("page") ?? 1);
   const limit = Number(searchParams.get("limit") ?? 10);
   const search = searchParams.get("search") ?? "";
@@ -215,14 +216,27 @@ const IncomeList = () => {
     if (incomeToEdit) {
       updateProduct({
         id: incomeToEdit.id,
-        // user: incomeToEdit.user,
         amount: +incomeToEdit.amount,
         payment_method: incomeToEdit.payment_method,
         is_paid: incomeToEdit.is_paid,
         description: incomeToEdit.description,
         date: incomeToEdit.date,
+        user_id: incomeToEdit.user_id,
+        user: incomeToEdit.user,
       });
     }
+  };
+
+  const handleSearch = (searchValue: string) => {
+    setSearchParams({ ...searchParams, search: searchValue, page: '1' });
+  };
+
+  const handlePageChange = (newPage: number) => {
+    setSearchParams({ ...searchParams, page: newPage.toString() });
+  };
+
+  const handleLimitChange = (newLimit: number) => {
+    setSearchParams({ ...searchParams, limit: newLimit.toString(), page: '1' });
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -232,10 +246,15 @@ const IncomeList = () => {
       <div className="p-4 border rounded-md">
         <IncomeDashboard />
         <DataTable
-          // search={false}
           title="Foydalanuvchi ismi boyicha qidiring"
           columns={makeColumns(setIncomeToEdit, setIncomeToDelete)}
           data={income?.data || []}
+          onSearch={handleSearch}
+          onPageChange={handlePageChange}
+          onLimitChange={handleLimitChange}
+          currentPage={page}
+          pageSize={limit}
+          totalItems={income?.total || 0}
         />
       </div>
       <AlertDialog
@@ -324,5 +343,4 @@ const IncomeList = () => {
     </div>
   );
 };
-
 export default IncomeList;

@@ -65,7 +65,7 @@ const makeColumns = (
     accessorKey: "purchase_status",
     header: "Xarid holati",
     cell: ({ row }) => (
-      <div className="cursor-pointer">
+      <div className={`cursor-pointer py-1 text-white rounded-lg flex justify-center  ${row.original.purchase_status === 'paid' ? 'bg-green-500' : 'bg-red-500'}`}>
         {purchase_status.map(
           (el) => el.name === row.original.purchase_status && el.value
         )}
