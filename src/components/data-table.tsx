@@ -19,7 +19,6 @@ import {
 } from "@/components/ui/table";
 import { useState } from "react";
 import { ArrowDownIcon, ArrowUpIcon } from "lucide-react";
-import ColumnFilter from "@/components/column-filtering";
 import { Pagination } from "./pagination";
 import { Search } from "./search";
 interface DataTableProps<TData, TValue> {
@@ -54,14 +53,13 @@ export default function DataTable<TData, TValue>({
   });
   return (
     <>
-      <div className="flex flex-col w-full h-full my-4 space-y-2">
-        <div className="flex justify-between pt-6">
+      <div className="flex flex-col w-full h-full space-y-2">
+        <div className="flex justify-between">
           {search && (
             <div className="w-80">
               <Search title={title} />
             </div>
           )}
-          <ColumnFilter table={table} />
         </div>
         <div className="border rounded-lg ">
           <Table>
