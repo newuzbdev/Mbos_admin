@@ -64,7 +64,7 @@ const ClientsList = () => {
     <div className="w-full">
       <div className="p-4 border rounded-md">
         <DataTable
-          title={"To'liq ism boyichi izlash"}
+          title={"telefon rakam yoki tolik ism boliche izlash"}
           columns={makeColumns(navigate)}
           data={client.data || []}
         />

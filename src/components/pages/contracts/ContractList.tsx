@@ -108,7 +108,7 @@ const ContractList = () => {
     <div className="w-full">
       <div className="p-4 border rounded-md">
         <DataTable
-          title="Xizmat boyicha izlash"
+          title="Mijoz nomi boyicha izlash"
           columns={makeColumns(navigate)}
           data={contract?.data || []}
         />
