@@ -49,7 +49,7 @@ const Home = () => {
                 <div className="text-2xl font-bold">
                   {homeStats?.data?.data?.income
                     ? formatNumber(homeStats.data.data.income)
-                    : ""}
+                    : 0}
                   <span className="pl-2 text-base ">
                     Daromadlar
                   </span>
@@ -67,7 +67,7 @@ const Home = () => {
                 <div className="text-2xl font-bold">
                   {homeStats?.data?.data?.expend
                     ? formatNumber(homeStats.data.data.expend)
-                    : ""}
+                    : 0}
                   <span className="pl-2 text-base">
                     Chiqimlar
                   </span>
