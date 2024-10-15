@@ -26,7 +26,7 @@ const makeColumns = (
     header: "Mijoz",
     cell: ({ row }) => (
       <div
-        className="cursor-pointer underline text-primary"
+        className="underline cursor-pointer text-primary"
         onClick={() => navigate(`/contract/${row.original.id}`)}
       >
         {row.original.user.F_I_O}
@@ -44,6 +44,7 @@ const makeColumns = (
       </div>
     ),
   },
+
   {
     accessorKey: "advancePayment",
     header: "Oldindan to'lov",

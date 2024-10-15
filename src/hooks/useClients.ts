@@ -2,6 +2,7 @@ import {
   addClients,
   deleteClients,
   getClients,
+  getClientstById,
   updateClients,
 } from "@/services/clients";
 import { Clients } from "@/types/clients";
@@ -18,6 +19,17 @@ export const useGetClients = (params: IParams) => {
   return useQuery({
     queryKey: ["clients"],
     queryFn: () => getClients(params),
+  });
+};
+
+export const useGetClient = (clientsId?: string) => {
+  return useQuery({
+    queryKey: ["clients", clientsId],
+    queryFn: () => {
+      if (!clientsId) throw new Error("Contract ID is required");
+      return getClientstById(clientsId);
+    },
+    enabled: !!clientsId,
   });
 };
 

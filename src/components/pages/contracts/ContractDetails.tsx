@@ -118,7 +118,7 @@ export default function ContractDetails() {
             </DetailSection>
           </div>
           <div>
-            <div className="space-x-2 flex justify-end">
+            <div className="flex justify-end space-x-2">
               <UpdateItem contract={contract} />
               <DeleteItem />
             </div>

@@ -18,6 +18,7 @@ export type Income = {
   description: string;
   date: string;
   user: Clients;
+  income:number
 };
 
 export interface IParams {

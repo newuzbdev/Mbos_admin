@@ -24,7 +24,7 @@ const Home = () => {
         </TabsList>
         <TabsContent value="overview" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            <Card>
+            <Card className="dark:text-white dark:bg-gray-900">
               <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                 <CardTitle className="text-lg font-medium">Mijozlar</CardTitle>
                 <Users className="items-center w-12 h-12 p-2 border rounded-lg" />

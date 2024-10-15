@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useGetStatistic } from "@/hooks/dashboard";
-import { RecentSale } from "@/types/contract";
+ import { RecentSale } from "@/types/contract";
 import { Banknote } from "lucide-react";
 
 export function RecentSales() {
@@ -30,7 +30,7 @@ export function RecentSales() {
             </div>
             <div className="flex gap-2 ml-auto font-medium">
               <Banknote />
-              {formatNumber(Number(contract.price))} so'm
+              {formatNumber(Number(contract.service.price))} so'm
             </div>
           </div>
         )
