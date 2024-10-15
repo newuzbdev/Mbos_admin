@@ -70,10 +70,10 @@ export const router = createBrowserRouter([
         path: "/service/:id",
         element: <ServiceDetails />,
       },
-      {
-        path: "/clients/:clientsId",
-        element: <ClientsDetails />,
-      },
+      // {
+      //   path: "/clients/:clientsId",
+      //   element: <ClientsDetails />,
+      // },
       {
         path: "/clients",
         element: <Clients />,
