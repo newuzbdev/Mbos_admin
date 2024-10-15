@@ -9,25 +9,14 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog";
+
 import { Button } from "@/components/ui/button";
-import { PencilIcon, Trash2Icon } from "lucide-react";
-import {
-  useGetIncome,
-  useIncomeDelete,
-  useIncomeUpdate,
-} from "@/hooks/useIncome.ts";
+import { Trash2Icon } from "lucide-react";
+import { useGetIncome, useIncomeDelete } from "@/hooks/useIncome.ts";
 
 import { toast } from "@/hooks/use-toast";
 import DataTable from "@/components/data-table";
 import { Income } from "@/types/income.ts";
-import { ItemUpdate } from "@/components/input-update";
 import IncomeDashboard from "./incomedashboard";
 import { useSearchParams } from "react-router-dom";
 import { formatNumber } from "@/components/formNumber";
@@ -42,7 +31,6 @@ const payment_methods = [
 ];
 
 const makeColumns = (
-  setIncomeToEdit: (p: Income) => void,
   setIncomeToDelete: (p: Income) => void
 ): ColumnDef<Income>[] => [
   {
@@ -80,9 +68,7 @@ const makeColumns = (
     cell: ({ row }) => (
       <div
         className={`cursor-pointer text-white flex justify-center rounded-lg py-1 ${
-          row.original.is_paid === "paid"
-            ? "bg-primary"
-            : "bg-red-500"
+          row.original.is_paid === "paid" ? "bg-primary" : "bg-red-500"
         }`}
       >
         {row.original.is_paid === "paid" ? "kirim" : "chikim"}
@@ -107,15 +93,7 @@ const makeColumns = (
     id: "actions",
     header: "Amallar",
     cell: ({ row }) => (
-      <div className="space-x-2">
-        <Button
-          aria-label="Edit product"
-          variant="ghost"
-          size="icon"
-          onClick={() => setIncomeToEdit(row.original)}
-        >
-          <PencilIcon size={20} className="text-primary" />
-        </Button>
+      <div>
         <Button
           aria-label="Delete product"
           variant="destructive"
@@ -131,9 +109,7 @@ const makeColumns = (
 
 const IncomeList = () => {
   const [incomeToDelete, setIncomeToDelete] = useState<Income | undefined>();
-  const [incomeToEdit, setIncomeToEdit] = useState<Income | undefined>();
   const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
-  const [editDialogVisible, setEditDialogVisible] = useState(false);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const page = Number(searchParams.get("page") ?? 1);
@@ -155,11 +131,6 @@ const IncomeList = () => {
     isSuccess: isDeleteSuccess,
     isError: isDeleteError,
   } = useIncomeDelete();
-  const {
-    mutate: updateProduct,
-    isSuccess: isUpdateSuccess,
-    isError: isUpdateError,
-  } = useIncomeUpdate();
 
   useEffect(() => {
     if (isDeleteSuccess) {
@@ -178,57 +149,16 @@ const IncomeList = () => {
   }, [isDeleteSuccess, isDeleteError, refetch]);
 
   useEffect(() => {
-    if (isUpdateSuccess) {
-      toast({
-        variant: "success",
-        title: "Daromad muvaffaqiyatli ozgartirildi successfully updated",
-      });
-      refetch();
-      setEditDialogVisible(false);
-    } else if (isUpdateError) {
-      toast({
-        variant: "destructive",
-        title: "Daromad qo'shishda xatolik",
-      });
-    }
-  }, [isUpdateSuccess, isUpdateError, refetch]);
-
-  useEffect(() => {
     if (incomeToDelete) setDeleteDialogVisible(true);
   }, [incomeToDelete]);
-
-  useEffect(() => {
-    if (incomeToEdit) setEditDialogVisible(true);
-  }, [incomeToEdit]);
-
-  const handleEditDialogClose = () => {
-    setEditDialogVisible(false);
-    setIncomeToEdit(undefined);
-  };
 
   const handleDeleteDialogClose = () => {
     setDeleteDialogVisible(false);
     setIncomeToDelete(undefined);
   };
 
-  const handleEditSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (incomeToEdit) {
-      updateProduct({
-        id: incomeToEdit.id,
-        amount: +incomeToEdit.amount,
-        payment_method: incomeToEdit.payment_method,
-        is_paid: incomeToEdit.is_paid,
-        description: incomeToEdit.description,
-        date: incomeToEdit.date,
-        user_id: incomeToEdit.user_id,
-        user: incomeToEdit.user,
-      });
-    }
-  };
-
   const handleSearch = (searchValue: string) => {
-    setSearchParams({ ...searchParams, search: searchValue, page: '1' });
+    setSearchParams({ ...searchParams, search: searchValue, page: "1" });
   };
 
   const handlePageChange = (newPage: number) => {
@@ -236,7 +166,7 @@ const IncomeList = () => {
   };
 
   const handleLimitChange = (newLimit: number) => {
-    setSearchParams({ ...searchParams, limit: newLimit.toString(), page: '1' });
+    setSearchParams({ ...searchParams, limit: newLimit.toString(), page: "1" });
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -247,7 +177,7 @@ const IncomeList = () => {
         <IncomeDashboard />
         <DataTable
           title="Foydalanuvchi ismi boyicha qidiring"
-          columns={makeColumns(setIncomeToEdit, setIncomeToDelete)}
+          columns={makeColumns(setIncomeToDelete)}
           data={income?.data || []}
           onSearch={handleSearch}
           onPageChange={handlePageChange}
@@ -284,62 +214,6 @@ const IncomeList = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      <Dialog open={editDialogVisible} onOpenChange={handleEditDialogClose}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>daromadni tahrirlash</DialogTitle>
-          </DialogHeader>
-          {incomeToEdit && (
-            <form onSubmit={handleEditSubmit}>
-              <div className="grid gap-4 pb-4">
-                <ItemUpdate
-                  setUpdate={setIncomeToEdit}
-                  type="number"
-                  value={incomeToEdit.amount}
-                  name="amount"
-                  title="narx miqdori"
-                  data={incomeToEdit}
-                />
-                <ItemUpdate
-                  setUpdate={setIncomeToEdit}
-                  type="text"
-                  value={incomeToEdit.description}
-                  name="description"
-                  title="izoh"
-                  data={incomeToEdit}
-                />
-                <div>
-                  <ItemUpdate
-                    setUpdate={setIncomeToEdit}
-                    type="enum"
-                    value={incomeToEdit.is_paid}
-                    name="is_paid"
-                    title="tushum yoki chikim"
-                    data={incomeToEdit}
-                    enums={[
-                      { name: "paid", value: "tushum" },
-                      { name: "no_paid", value: "chikim" },
-                    ]}
-                  />
-                </div>
-                <ItemUpdate
-                  setUpdate={setIncomeToEdit}
-                  type="date"
-                  value={incomeToEdit.date}
-                  name="date"
-                  title="sana"
-                  data={incomeToEdit}
-                />
-              </div>
-              <DialogFooter>
-                <Button className="text-white" type="submit">
-                  O'zgarishlarni saqlang
-                </Button>
-              </DialogFooter>
-            </form>
-          )}
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };

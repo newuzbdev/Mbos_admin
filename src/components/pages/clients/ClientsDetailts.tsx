@@ -8,7 +8,7 @@ import { Income } from "@/types/income";
 import { Clients } from "@/types/clients";
 import { Contract } from "@/types/contract";
 
-export default function ContractDetails() {
+export default function ClientsDetails() {
   const { clientsId } = useParams();
 
   const { data: clientsDetails, isLoading } = useGetClient(clientsId);
