@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CreditCardIcon, UserIcon } from "lucide-react";
+import { CreditCardIcon, UserIcon, DollarSignIcon } from "lucide-react";
 import { useGetClient } from "@/hooks/useClients";
 import { DeleteItem } from "@/components/pages/clients/functions/clients-delete";
 import { UpdateItem } from "@/components/pages/clients/functions/clients-edit";
@@ -26,7 +26,7 @@ export default function ContractDetails() {
           </CardTitle>
         </CardHeader>
         <CardContent className="p-6">
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
             <DetailSection
               icon={<UserIcon className="w-5 h-5 text-primary" />}
               title="Mijoz haqida ma'lumot"
@@ -46,7 +46,7 @@ export default function ContractDetails() {
               {clients?.shartnome?.map((shartnoma: Contract, index: number) => (
                 <div
                   key={shartnoma.id}
-                  className="p-4 mb-4 bg-white rounded-lg shadow-md dark:text-white dark:bg-gray-800"
+                  className="p-4 mb-4 bg-white rounded-lg shadow-md dark:text-white dark:bg-gray-700"
                 >
                   <h4 className="mb-2 font-semibold">{`${
                     index + 1
@@ -68,44 +68,40 @@ export default function ContractDetails() {
                     label="Shartnoma texnik davomiyligi"
                     value={shartnoma.texnik_muddati}
                   />
-
-                  <h5 className="mt-4 mb-2 font-semibold">To'lov tarixi</h5>
-                  {clients?.income
-                    ?.filter(
-                      (income: Income) =>
-                        income.amount === Number(shartnoma.advancePayment)
-                    )
-                    .map((income: Income) => (
-                      <div
-                        key={income.id}
-                        className="p-2 mb-2 ml-4 bg-gray-100 rounded dark:bg-gray-700"
-                      >
-                        <DetailItem
-                          label={`To'lov summasi`}
-                          value={income.amount}
-                        />
-                        <DetailItem
-                          label={`To'lov sanasi`}
-                          value={income.date}
-                        />
-                        <DetailItem
-                          label={`To'lov holati`}
-                          value={income.is_paid ? "To'langan" : "To'lanmagan"}
-                        />
-                        <DetailItem
-                          label={`To'lov usuli`}
-                          value={income.payment_method}
-                        />
-                      </div>
-                    ))}
-                  {clients?.income?.filter(
-                    (income) =>
-                      income.amount === Number(shartnoma.advancePayment)
-                  ).length === 0 && (
-                    <p>To'lovlar mavjud emas</p>
-                  )}
                 </div>
               ))}
+            </DetailSection>
+
+            <DetailSection
+              icon={<DollarSignIcon className="w-5 h-5 text-yellow-600" />}
+              title="To'lov tarixi"
+            >
+              {clients?.income?.map((income: Income) => (
+                <div
+                  key={income.id}
+                  className="p-2 mb-2 bg-gray-100 rounded dark:bg-gray-700"
+                >
+                  <DetailItem
+                    label={`To'lov summasi`}
+                    value={income.amount}
+                  />
+                  <DetailItem
+                    label={`To'lov sanasi`}
+                    value={income.date}
+                  />
+                  <DetailItem
+                    label={`To'lov holati`}
+                    value={income.is_paid ? "To'langan" : "To'lanmagan"}
+                  />
+                  <DetailItem
+                    label={`To'lov usuli`}
+                    value={income.payment_method}
+                  />
+                </div>
+              ))}
+              {!clients?.income || clients.income.length === 0 && (
+                <p>To'lovlar mavjud emas</p>
+              )}
             </DetailSection>
           </div>
           <div>

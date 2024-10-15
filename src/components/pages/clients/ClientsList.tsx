@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { ColumnDef } from "@tanstack/react-table";
-
 import { Clients } from "@/types/clients";
 import { useGetClients } from "@/hooks/useClients";
 import DataTable from "@/components/data-table";
