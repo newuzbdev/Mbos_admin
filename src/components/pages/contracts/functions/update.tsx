@@ -25,15 +25,18 @@ import {
 import { toast } from "@/hooks/use-toast";
 import { useGetClients } from "@/hooks/useClients";
 import { useContractUpdate, useGetContract } from "@/hooks/useContract";
+import { useGetServices } from "@/hooks/useService";
 import { Clients } from "@/types/clients";
 import { Contract } from "@/types/contract";
+import { IService } from "@/types/service";
 import { PencilIcon } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 export function UpdateItem({ contract }: { contract: Contract }) {
   const { mutate } = useContractUpdate();
-  const { data: user } = useGetClients({});
+  const { data: user } = useGetClients({ limit: 999 });
+  const { data: service } = useGetServices({ limit: 999 });
 
   const { refetch } = useGetContract(contract?.id?.toString());
 
@@ -103,14 +106,49 @@ export function UpdateItem({ contract }: { contract: Contract }) {
                   name="count"
                   type="number"
                 />
-                <ItemForm title="Narx" form={form} name="price" type="number" />
-                <ItemForm
-                  title="Oldindan To'lov"
-                  form={form}
-                  name="advancePayment"
-                  type="number"
+                <FormField
+                  control={form.control}
+                  name={"service_id"}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-lg font-semibold text-slate-700">
+                        xizmatlar
+                      </FormLabel>
+                      <Select
+                        onValueChange={(value) => field.onChange(+value)}
+                        value={field.value?.toString()}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="px-4 py-2 transition duration-200 border-2 rounded-md border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                            <SelectValue placeholder="Mijozni tanlang">
+                              {field.value
+                                ? service?.data?.data.find(
+                                    (service: IService) =>
+                                      service.id === +field.value
+                                  )?.title
+                                : "Xizmat tanlang"}
+                            </SelectValue>
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectGroup>
+                            {service?.data?.data.length &&
+                              service?.data?.data?.map((el: IService) => (
+                                <SelectItem
+                                  key={el.id}
+                                  value={el.id.toString()}
+                                >
+                                  {el.title}
+                                </SelectItem>
+                              ))}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage className="text-sm text-red-500" />
+                    </FormItem>
+                  )}
                 />
-                <ItemForm title="Xizmat" form={form} name="service" />
+
                 <FormField
                   control={form.control}
                   name={"user_id"}

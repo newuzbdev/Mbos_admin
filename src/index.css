@@ -70,3 +70,12 @@ body {
 input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(50%) sepia(100%) hue-rotate(180deg) saturate(200%);
 }
+
+::-webkit-scrollbar {
+  background: transparent;
+  width: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgb(15, 184, 113);
+  border-radius: 10px;
+}

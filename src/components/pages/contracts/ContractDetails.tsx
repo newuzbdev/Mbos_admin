@@ -63,7 +63,10 @@ export default function ContractDetails() {
             >
               <DetailItem
                 label="Narx"
-                value={formatNumber(contract?.price * contract.count) + " s'om"}
+                value={
+                  formatNumber(contract?.service.price * contract.count) +
+                  " s'om"
+                }
               />
               <DetailItem
                 label="Oldindan to'lov"
@@ -90,11 +93,13 @@ export default function ContractDetails() {
               <DetailItem label="Miqdori" value={contract?.count} />
               <DetailItem
                 label="Shartnoma davomiyligi"
-                value={contract?.shartnoma_muddati}
+                value={new Date(
+                  contract?.shartnoma_muddati
+                ).toLocaleDateString()}
               />
               <DetailItem
                 label="Texnik davomiyligi"
-                value={contract?.texnik_muddati}
+                value={new Date(contract?.texnik_muddati).toLocaleDateString()}
               />
             </DetailSection>
 
@@ -102,8 +107,14 @@ export default function ContractDetails() {
               icon={<CalendarIcon className="w-5 h-5 text-orange-600" />}
               title="Muhim sanalar"
             >
-              <DetailItem label="Shartnoma kuni" value={contract?.sana} />
-              <DetailItem label="To'lav sanasi" value={contract?.tolash_sana} />
+              <DetailItem
+                label="Shartnoma kuni"
+                value={new Date(contract?.sana).toLocaleDateString()}
+              />
+              <DetailItem
+                label="To'lav sanasi"
+                value={new Date(contract?.tolash_sana).toLocaleDateString()}
+              />
             </DetailSection>
           </div>
           <div>
