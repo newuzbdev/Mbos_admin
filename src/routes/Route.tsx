@@ -16,7 +16,8 @@ import { LoginData } from "@/types/auth";
 import Income from "@/pages/Income.tsx";
 import ContractDetails from "@/components/pages/contracts/ContractDetails";
 import ServiceDetails from "@/components/pages/service/ServiceDetails";
-import ClientsDetails from "@/components/pages/clients/ClientsDetailts";
+import ClientsDetailts from "@/components/pages/clients/ClientsDetailts";
+import Product from "@/pages/Product";
 export function useLogin() {
   return useMutation({
     mutationFn: (data: LoginData) => login(data),
@@ -62,6 +63,10 @@ export const router = createBrowserRouter([
         element: <Service />,
       },
       {
+        path: "/product",
+        element: <Product />,
+      },
+      {
         path: "/service/:id",
         element: <ServiceDetails />,
       },
@@ -72,6 +77,10 @@ export const router = createBrowserRouter([
       {
         path: "/clients",
         element: <Clients />,
+      },
+      {
+        path: "/clients/:clientsId",
+        element: <ClientsDetailts />,
       },
       {
         path: "/contract/:contractId",

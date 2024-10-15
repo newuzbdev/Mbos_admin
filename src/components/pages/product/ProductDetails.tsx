@@ -7,7 +7,7 @@ import { UpdateItem } from "./functions/update";
 import { useGetService } from "@/hooks/useService";
 import { Contract } from "@/types/contract";
 
-export default function ServiceDetails() {
+export default function ProductDetails() {
   const { id } = useParams();
   const { data: serviceData, isLoading } = useGetService(id!);
 
