@@ -5,7 +5,9 @@ import {
   ClipboardList,
   Users2,
   ChevronLeft,
-  Menu, CreditCard,
+  Menu,
+  CreditCard,
+  Orbit,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -56,20 +58,24 @@ const Sidebar: React.FC<SidebarProps> = () => {
               {!isMinimized && <span className="text-lg">Asosiy</span>}
             </Link>
           </li>
-          
-            <li>
-              <Link to="/clients" className={getLinkClassName("/clients")}>
-                <Users2 className="w-10 h-5" />
-                {!isMinimized && <span className="text-lg">Mijozlar</span>}
-              </Link>
-            </li>
-            <Link to="/contract" className={getLinkClassName("/contract")}>
-              <ClipboardList className="w-10 h-5" />
-              {!isMinimized && <span className="text-lg">Shartnomalar</span>}
+
+          <li>
+            <Link to="/clients" className={getLinkClassName("/clients")}>
+              <Users2 className="w-10 h-5" />
+              {!isMinimized && <span className="text-lg">Mijozlar</span>}
             </Link>
+          </li>
+          <Link to="/contract" className={getLinkClassName("/contract")}>
+            <ClipboardList className="w-10 h-5" />
+            {!isMinimized && <span className="text-lg">Shartnomalar</span>}
+          </Link>
           <Link to="/income" className={getLinkClassName("/income")}>
             <CreditCard className="w-10 h-5" />
             {!isMinimized && <span className="text-lg">Daromat</span>}
+          </Link>
+          <Link to="/service" className={getLinkClassName("/service")}>
+            <Orbit className="w-10 h-5" />
+            {!isMinimized && <span className="text-lg">Xizmatlar</span>}
           </Link>
         </ul>
       </div>

@@ -1,5 +1,6 @@
 import { Clients } from "./clients";
 import { Income } from "./income";
+import { IService } from "./service";
 
 export enum EnumShartnoma {
   subscription_fee = "subscription_fee",
@@ -30,12 +31,13 @@ export type Contract = {
   remainingPayment: number;
   purchase_status: EnumShartnomaPaid;
   sana: string;
-  service: string;
+  service: IService;
+  service_id: string;
   shartnoma_id: string;
   shartnoma_muddati: string;
   shartnoma_turi: EnumShartnomaTranslaton;
   texnik_muddati: string;
-  tolash_sana: string | null;
+  tolash_sana: string | Date | null;
   total_price: string;
   updated_at: string;
   user_id: number;

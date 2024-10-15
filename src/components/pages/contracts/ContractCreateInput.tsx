@@ -9,7 +9,6 @@ import {
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { ItemForm } from "@/components/Input-create";
@@ -26,6 +25,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Clients } from "@/types/clients";
+import { useGetServices } from "@/hooks/useService";
+import { IService } from "@/types/service";
 
 interface ContractsCreateInputProps {
   closeDialog?: () => void;
@@ -33,23 +34,21 @@ interface ContractsCreateInputProps {
 
 const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
   const { mutate: addContract } = useAddContract();
-  const { data: user } = useGetClients({});
+  const { data: user } = useGetClients({ limit: 999 });
+  const { data: service } = useGetServices({ limit: 999 });
 
-  const form = useForm<z.infer<typeof FormSchema>>({
+  const form = useForm<Contract>({
     resolver: zodResolver(FormSchema),
-    defaultValues: {
-      advancePayment: 0,
-    },
   });
   const { refetch: refetchContract } = useGetContract();
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    const contractsData = {
+  function onSubmit(data: Contract) {
+    const { price, ...contractsData } = {
       ...data,
       count: Number(data.count),
-      price: Number(data.price),
       advancePayment: Number(data.advancePayment),
       user_id: Number(data.user_id),
+      tolash_sana: new Date(),
     };
 
     addContract(contractsData as Contract, {
@@ -80,14 +79,52 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
       >
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <ItemForm title="Miktori" form={form} name="count" type="number" />
-          <ItemForm title="Narx" form={form} name="price" type="number" />
           <ItemForm
             title="Oldindan To'lov"
             form={form}
             name="advancePayment"
             type="number"
           />
-          <ItemForm title="Xizmat" form={form} name="service" />
+
+          <FormField
+            control={form.control}
+            name={"service_id"}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-lg font-semibold text-slate-700">
+                  xizmatlar
+                </FormLabel>
+                <Select
+                  onValueChange={(value) => field.onChange(+value)}
+                  value={field.value?.toString()}
+                >
+                  <FormControl>
+                    <SelectTrigger className="px-4 py-2 transition duration-200 border-2 rounded-md border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                      <SelectValue placeholder="Mijozni tanlang">
+                        {field.value
+                          ? service?.data?.data.find(
+                              (service: IService) => service.id === +field.value
+                            )?.title
+                          : "Xizmat tanlang"}
+                      </SelectValue>
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectGroup>
+                      {service?.data?.data.length &&
+                        service?.data?.data?.map((el: IService) => (
+                          <SelectItem key={el.id} value={el.id.toString()}>
+                            {el.title}
+                          </SelectItem>
+                        ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+                <FormMessage className="text-sm text-red-500" />
+              </FormItem>
+            )}
+          />
+
           <FormField
             control={form.control}
             name={"user_id"}
@@ -129,16 +166,6 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
 
           <ItemForm
             enums={[
-              { name: "paid", value: "To'langan" },
-              { name: "no_paid", value: "To'lanmagan" },
-            ]}
-            title="Xarid holati"
-            type="enum"
-            form={form}
-            name="purchase_status"
-          />
-          <ItemForm
-            enums={[
               { name: "subscription_fee", value: "Oylik tolov" },
               { name: "one_bay", value: "Bir martalik tolov" },
             ]}
@@ -159,12 +186,6 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
             type="date"
             form={form}
             name="texnik_muddati"
-          />
-          <ItemForm
-            title="To'lash sanasi"
-            type="date"
-            form={form}
-            name="tolash_sana"
           />
         </div>
         <Button

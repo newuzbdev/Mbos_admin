@@ -3,14 +3,19 @@ import Home from "@/pages/Home";
 import Login from "@/pages/Login";
 import Notfound from "@/pages/Notfound";
 import Contract from "@/pages/Contract";
+import Service from "@/pages/Service";
 import Clients from "@/pages/Clients";
-import { createBrowserRouter, LoaderFunctionArgs, redirect } from "react-router-dom";
+import {
+  createBrowserRouter,
+  LoaderFunctionArgs,
+  redirect,
+} from "react-router-dom";
 import { isLoggedIn, login, logout } from "@/services/auth";
 import { useMutation } from "@tanstack/react-query";
 import { LoginData } from "@/types/auth";
 import Income from "@/pages/Income.tsx";
 import ContractDetails from "@/components/pages/contracts/ContractDetails";
-import ClientsDetailts from "@/components/pages/clients/ClientsDetailts";
+import ServiceDetails from "@/components/pages/service/ServiceDetails";
 export function useLogin() {
   return useMutation({
     mutationFn: (data: LoginData) => login(data),
@@ -42,7 +47,6 @@ export const router = createBrowserRouter([
     element: <Layout />,
     loader: authLoader,
     errorElement: <Notfound />,
-
     children: [
       {
         index: true,
@@ -53,25 +57,25 @@ export const router = createBrowserRouter([
         element: <Contract />,
       },
       {
-        path: "/clients",
-        element: <Clients />,
+        path: "/service",
+        element: <Service />,
       },
       {
-        path: "/clients/:clientsId",
-        element: <ClientsDetailts />,
+        path: "/service/:id",
+        element: <ServiceDetails />,
+      },
+      {
+        path: "/clients",
+        element: <Clients />,
       },
       {
         path: "/contract/:contractId",
         element: <ContractDetails />,
       },
       {
-        path:'/income',
-        element:<Income/>
+        path: "/income",
+        element: <Income />,
       },
-      // {
-      //   path:'/contract/details',
-      //   element:<ContractDetails/>
-      // }
     ],
   },
 ]);

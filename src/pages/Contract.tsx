@@ -1,7 +1,7 @@
 import ContractCreate from "@/components/pages/contracts/ContractCreate";
 import ContractList from "@/components/pages/contracts/ContractList";
 
-const Services = () => {
+const Contract = () => {
   return (
     <div className="flex min-h-screen">
       <div className="flex-1 mt-2">
@@ -17,4 +17,4 @@ const Services = () => {
   );
 };
 
-export default Services;
+export default Contract;
