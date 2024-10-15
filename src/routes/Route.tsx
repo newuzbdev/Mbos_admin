@@ -57,7 +57,7 @@ export const router = createBrowserRouter([
         element: <Clients />,
       },
       {
-        path: "/clients/:clientId",
+        path: "/clients/:clientsId",
         element: <ClientsDetailts />,
       },
       {

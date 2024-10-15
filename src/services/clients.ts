@@ -16,7 +16,7 @@ export const getClients = async ({
   );
 };
 export const getClientstById = async (clientsId: string) => {
-  return await axiosPrivate.get(`/clients/${clientsId}`);
+  return await axiosPrivate.get(`/user/${clientsId}`);
 };
 export const deleteClients = async (id: string) => {
   return await axiosPrivate.delete(`/user/${id}`);

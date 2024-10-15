@@ -1,53 +1,21 @@
-// import { useGetClientsById } from "@/hooks/useClients";
-// import { useParams } from "react-router-dom";
-
-// const ClientsDetailts = () => {
-//     const { clientsId } = useParams();
-
-//   const { data: clientsDetails, isLoading } = useGetClientsById(clientsId);
-//   console.log(clientsDetails);
-
-//   return(
-    
-//     <div>ClientsDetailts</div>
-//   )
-// };
-
-// export default ClientsDetailts;
 import { useParams } from "react-router-dom";
-// import { useGetContract } from "@/hooks/useContract";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-//   CalendarIcon,
-//   CreditCardIcon,
-//   FileTextIcon,
-  UserIcon,
-} from "lucide-react";
-// import { formatNumber } from "@/components/formNumber";
-import { useGetClient, } from "@/hooks/useClients";
-// import { DeleteItem } from "./functions/delete";
-// import { UpdateItem } from "./functions/update";
+import { CreditCardIcon, UserIcon } from "lucide-react";
+import { useGetClient } from "@/hooks/useClients";
+import { DeleteItem } from "@/components/pages/clients/functions/clients-delete";
+import { UpdateItem } from "@/components/pages/clients/functions/clients-edit";
+import { Income } from "@/types/income";
+import { Clients } from "@/types/clients";
+import { Contract } from "@/types/contract";
 
 export default function ContractDetails() {
-  const {clientsId } = useParams();
-//   const { data: contractDetails, isLoading } = useGetContract(contractId);
-    const { data: clientsDetails, isLoading } = useGetClient(clientsId);
-    console.log(clientsDetails,"clientsDetails");
-    
+  const { clientsId } = useParams();
 
+  const { data: clientsDetails, isLoading } = useGetClient(clientsId);
 
   if (isLoading) return <div>Yuklanmoqda...</div>;
 
-//   const shartnoma_turi = [
-//     { name: "one_bay", value: "Birmartalik to'lov" },
-//     { name: "subscription_fee", value: "Oylik to'lov" },
-//   ];
-//   const purchase_status = [
-//     { name: "paid", value: "To'landi" },
-//     { name: "no_paid", value: "To'lanmagan" },
-//   ];
-
-  const clients = clientsDetails?.data;
+  const clients: Clients | undefined = clientsDetails?.data.data;
 
   return (
     <div className="container px-4 py-8 mx-auto">
@@ -65,73 +33,86 @@ export default function ContractDetails() {
             >
               <DetailItem
                 label="Mijozning to'liq ismi"
-                value={clients?.user?.F_I_O}
+                value={clients?.F_I_O}
               />
-              {/* <DetailItem
-                label="Shartnoma turi"
-                value={
-                  shartnoma_turi.filter(
-                    (el) => el.name === contract?.shartnoma_turi && el.value
-                  )[0].value
-                }
-              /> */}
-              {/* <DetailItem label="Shartnoma ID" value={clients?.shartnoma_id} /> */}
-            </DetailSection>
-
-            {/* <DetailSection
-              icon={<CreditCardIcon className="w-5 h-5 text-green-600" />}
-              title="Moliyaviy tafsilotlar"
-            > */}
-              {/* <DetailItem
-                label="Narx"
-                value={formatNumber(clients?.price * client.count) + " s'om"}
-              />
-              <DetailItem
-                label="Oldindan to'lov"
-                value={formatNumber(contract?.advancePayment) + " s'om"}
-              />
-              <DetailItem
-                label="Qolgan to'lov"
-                value={formatNumber(contract?.remainingPayment) + " s'om"}
-              /> */}
-              {/* <DetailItem
-                label="Xarid holati"
-                value={
-                  purchase_status.filter(
-                    (el) => el.name === contract.purchase_status && el.value
-                  )[0].value
-                }
-              /> */}
-            {/* </DetailSection> */}
-
-            {/* <DetailSection
-              icon={<FileTextIcon className="w-5 h-5 text-purple-600" />}
-              title="Shartnomaning xususiyatlari"
-            >
-              <DetailItem label="Miqdori" value={contract?.count} />
-              <DetailItem
-                label="Shartnoma davomiyligi"
-                value={contract?.shartnoma_muddati}
-              />
-              <DetailItem
-                label="Texnik davomiyligi"
-                value={contract?.texnik_muddati}
-              />
+              <DetailItem label="Telefon raqami" value={clients?.phone} />
+              <DetailItem label="Manzil" value={clients?.adress} />
             </DetailSection>
 
             <DetailSection
-              icon={<CalendarIcon className="w-5 h-5 text-orange-600" />}
-              title="Muhim sanalar"
+              icon={<CreditCardIcon className="w-5 h-5 text-green-600" />}
+              title="Mijozning shartnomalar tarihi"
             >
-              <DetailItem label="Shartnoma kuni" value={contract?.sana} />
-              <DetailItem label="To'lav sanasi" value={contract?.tolash_sana} />
-            </DetailSection> */}
+              {clients?.shartnome?.map((shartnoma: Contract, index: number) => (
+                <div
+                  key={shartnoma.id}
+                  className="p-4 mb-4 bg-white rounded-lg shadow-md dark:text-white dark:bg-gray-800"
+                >
+                  <h4 className="mb-2 font-semibold">{`${
+                    index + 1
+                  }-Shartnoma`}</h4>
+                  <DetailItem
+                    label="Shartnoma ID"
+                    value={shartnoma.shartnoma_id}
+                  />
+                  <DetailItem label="Shartnoma sanasi" value={shartnoma.sana} />
+                  <DetailItem
+                    label="Shartnoma miqdori"
+                    value={shartnoma.count}
+                  />
+                  <DetailItem
+                    label="Shartnoma davomiyligi"
+                    value={shartnoma.shartnoma_muddati}
+                  />
+                  <DetailItem
+                    label="Shartnoma texnik davomiyligi"
+                    value={shartnoma.texnik_muddati}
+                  />
+
+                  <h5 className="mt-4 mb-2 font-semibold">To'lov tarixi</h5>
+                  {clients?.income
+                    ?.filter(
+                      (income: Income) =>
+                        income.amount === Number(shartnoma.advancePayment)
+                    )
+                    .map((income: Income) => (
+                      <div
+                        key={income.id}
+                        className="p-2 mb-2 ml-4 bg-gray-100 rounded dark:bg-gray-700"
+                      >
+                        <DetailItem
+                          label={`To'lov summasi`}
+                          value={income.amount}
+                        />
+                        <DetailItem
+                          label={`To'lov sanasi`}
+                          value={income.date}
+                        />
+                        <DetailItem
+                          label={`To'lov holati`}
+                          value={income.is_paid ? "To'langan" : "To'lanmagan"}
+                        />
+                        <DetailItem
+                          label={`To'lov usuli`}
+                          value={income.payment_method}
+                        />
+                      </div>
+                    ))}
+                  {clients?.income?.filter(
+                    (income) =>
+                      income.amount === Number(shartnoma.advancePayment)
+                  ).length === 0 && (
+                    <p>To'lovlar mavjud emas</p>
+                  )}
+                </div>
+              ))}
+            </DetailSection>
           </div>
           <div>
-            {/* <div className="flex justify-end space-x-2">
-              <UpdateItem contract={contract} />
+            <div className="flex justify-end py-4 space-x-2">
+              <UpdateItem clients={clients} />
               <DeleteItem />
-            </div> */}
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -162,6 +143,7 @@ function DetailSection({
     </div>
   );
 }
+
 function DetailItem({
   label,
   value,
