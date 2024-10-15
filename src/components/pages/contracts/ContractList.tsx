@@ -40,13 +40,13 @@ const makeColumns = (
       </div>
     ),
   },
-  {
-    accessorKey: "price",
-    header: "Narx",
-    cell: ({ row }) => (
-      <div className="cursor-pointer">{row.original.price}</div>
-    ),
-  },
+  // {
+  //   accessorKey: "price",
+  //   header: "Narx",
+  //   cell: ({ row }) => (
+  //     <div className="cursor-pointer">{row.original.price}</div>
+  //   ),
+  // },
   {
     accessorKey: "advancePayment",
     header: "Oldindan to'lov",

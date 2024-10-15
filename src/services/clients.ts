@@ -15,6 +15,9 @@ export const getClients = async ({
     `/user?limit=${limit}&page=${page}&search=${search}`
   );
 };
+export const getClientstById = async (clientsId: string) => {
+  return await axiosPrivate.get(`/clients/${clientsId}`);
+};
 export const deleteClients = async (id: string) => {
   return await axiosPrivate.delete(`/user/${id}`);
 };

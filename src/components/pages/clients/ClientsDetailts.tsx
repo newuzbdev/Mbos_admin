@@ -1,32 +1,53 @@
+// import { useGetClientsById } from "@/hooks/useClients";
+// import { useParams } from "react-router-dom";
+
+// const ClientsDetailts = () => {
+//     const { clientsId } = useParams();
+
+//   const { data: clientsDetails, isLoading } = useGetClientsById(clientsId);
+//   console.log(clientsDetails);
+
+//   return(
+    
+//     <div>ClientsDetailts</div>
+//   )
+// };
+
+// export default ClientsDetailts;
 import { useParams } from "react-router-dom";
-import { useGetContract } from "@/hooks/useContract";
+// import { useGetContract } from "@/hooks/useContract";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  CalendarIcon,
-  CreditCardIcon,
-  FileTextIcon,
+//   CalendarIcon,
+//   CreditCardIcon,
+//   FileTextIcon,
   UserIcon,
 } from "lucide-react";
-import { formatNumber } from "@/components/formNumber";
-import { DeleteItem } from "./functions/delete";
-import { UpdateItem } from "./functions/update";
+// import { formatNumber } from "@/components/formNumber";
+import { useGetClient, } from "@/hooks/useClients";
+// import { DeleteItem } from "./functions/delete";
+// import { UpdateItem } from "./functions/update";
 
 export default function ContractDetails() {
-  const { contractId } = useParams();
-  const { data: contractDetails, isLoading } = useGetContract(contractId);
+  const {clientsId } = useParams();
+//   const { data: contractDetails, isLoading } = useGetContract(contractId);
+    const { data: clientsDetails, isLoading } = useGetClient(clientsId);
+    console.log(clientsDetails,"clientsDetails");
+    
+
 
   if (isLoading) return <div>Yuklanmoqda...</div>;
 
-  const shartnoma_turi = [
-    { name: "one_bay", value: "Birmartalik to'lov" },
-    { name: "subscription_fee", value: "Oylik to'lov" },
-  ];
-  const purchase_status = [
-    { name: "paid", value: "To'landi" },
-    { name: "no_paid", value: "To'lanmagan" },
-  ];
+//   const shartnoma_turi = [
+//     { name: "one_bay", value: "Birmartalik to'lov" },
+//     { name: "subscription_fee", value: "Oylik to'lov" },
+//   ];
+//   const purchase_status = [
+//     { name: "paid", value: "To'landi" },
+//     { name: "no_paid", value: "To'lanmagan" },
+//   ];
 
-  const contract = contractDetails?.data?.data;
+  const clients = clientsDetails?.data;
 
   return (
     <div className="container px-4 py-8 mx-auto">
@@ -44,26 +65,26 @@ export default function ContractDetails() {
             >
               <DetailItem
                 label="Mijozning to'liq ismi"
-                value={contract?.user?.F_I_O}
+                value={clients?.user?.F_I_O}
               />
-              <DetailItem
+              {/* <DetailItem
                 label="Shartnoma turi"
                 value={
                   shartnoma_turi.filter(
                     (el) => el.name === contract?.shartnoma_turi && el.value
                   )[0].value
                 }
-              />
-              <DetailItem label="Shartnoma ID" value={contract?.shartnoma_id} />
+              /> */}
+              {/* <DetailItem label="Shartnoma ID" value={clients?.shartnoma_id} /> */}
             </DetailSection>
 
-            <DetailSection
+            {/* <DetailSection
               icon={<CreditCardIcon className="w-5 h-5 text-green-600" />}
               title="Moliyaviy tafsilotlar"
-            >
-              <DetailItem
+            > */}
+              {/* <DetailItem
                 label="Narx"
-                value={formatNumber(contract?.price * contract.count) + " s'om"}
+                value={formatNumber(clients?.price * client.count) + " s'om"}
               />
               <DetailItem
                 label="Oldindan to'lov"
@@ -72,18 +93,18 @@ export default function ContractDetails() {
               <DetailItem
                 label="Qolgan to'lov"
                 value={formatNumber(contract?.remainingPayment) + " s'om"}
-              />
-              <DetailItem
+              /> */}
+              {/* <DetailItem
                 label="Xarid holati"
                 value={
                   purchase_status.filter(
                     (el) => el.name === contract.purchase_status && el.value
                   )[0].value
                 }
-              />
-            </DetailSection>
+              /> */}
+            {/* </DetailSection> */}
 
-            <DetailSection
+            {/* <DetailSection
               icon={<FileTextIcon className="w-5 h-5 text-purple-600" />}
               title="Shartnomaning xususiyatlari"
             >
@@ -104,13 +125,13 @@ export default function ContractDetails() {
             >
               <DetailItem label="Shartnoma kuni" value={contract?.sana} />
               <DetailItem label="To'lav sanasi" value={contract?.tolash_sana} />
-            </DetailSection>
+            </DetailSection> */}
           </div>
           <div>
-            <div className="flex justify-end space-x-2">
+            {/* <div className="flex justify-end space-x-2">
               <UpdateItem contract={contract} />
               <DeleteItem />
-            </div>
+            </div> */}
           </div>
         </CardContent>
       </Card>

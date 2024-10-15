@@ -22,38 +22,50 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { FormSchema } from "@/components/validate";
 import { toast } from "@/hooks/use-toast";
 import { useGetClients } from "@/hooks/useClients";
-import { useContractUpdate } from "@/hooks/useContract";
+import { useContractUpdate, useGetContract } from "@/hooks/useContract";
 import { Clients } from "@/types/clients";
 import { Contract } from "@/types/contract";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { PencilIcon } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
-export function UpdateItem({
-  id,
-  contract,
-}: {
-  contract: Contract;
-  id: number;
-}) {
+export function UpdateItem({ contract }: { contract: Contract }) {
   const { mutate } = useContractUpdate();
   const { data: user } = useGetClients({});
 
+  const { refetch } = useGetContract(contract?.id?.toString());
+
   const [isUpdate, setUpdate] = useState(false);
   const form = useForm({
-    resolver: zodResolver(FormSchema),
     defaultValues: contract,
   });
 
   const handleSubmit = (item: Contract) => {
-    const contractData = { ...item, id };
-    mutate(contractData, {
+    const {
+      created_at,
+      income,
+      remainingPayment,
+      user,
+      updated_at,
+      shartnoma_id,
+      ...contractData
+    } = {
+      ...item,
+    };
+
+    const dataToSend = {
+      ...contractData,
+      advancePayment: +contractData.advancePayment,
+      count: +contractData.count,
+      price: +contract.price,
+    };
+
+    mutate(dataToSend, {
       onSuccess: () => {
         toast({ title: "contract ozgartirildi", variant: "success" });
+        refetch();
         setUpdate(false);
       },
       onError: () => {
@@ -81,7 +93,7 @@ export function UpdateItem({
           </DialogHeader>
           <Form {...form}>
             <form
-              onSubmit={form.handleSubmit(() => handleSubmit)}
+              onSubmit={form.handleSubmit(handleSubmit)}
               className="h-auto space-y-5"
             >
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -99,48 +111,50 @@ export function UpdateItem({
                   type="number"
                 />
                 <ItemForm title="Xizmat" form={form} name="service" />
-
                 <FormField
                   control={form.control}
                   name={"user_id"}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-lg font-semibold text-slate-700">
-                        Mijozlar
-                      </FormLabel>
-                      <Select
-                        onValueChange={(value) => field.onChange(+value)}
-                        value={field.value?.toString()}
-                      >
-                        <FormControl>
-                          <SelectTrigger className="px-4 py-2 transition duration-200 border-2 rounded-md border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
-                            <SelectValue placeholder="Mijozni tanlang">
-                              {field.value
-                                ? user?.data?.data.find(
-                                    (client: Clients) =>
-                                      +client.id === field.value
-                                  )?.F_I_O
-                                : "Mijozni tanlang"}
-                            </SelectValue>
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectGroup>
-                            {user?.data?.data.length &&
-                              user?.data?.data?.map((el: Clients) => (
-                                <SelectItem
-                                  key={el.id}
-                                  value={el.id.toString()}
-                                >
-                                  {el.F_I_O}
-                                </SelectItem>
-                              ))}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage className="text-sm text-red-500" />
-                    </FormItem>
-                  )}
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormLabel className="text-lg font-semibold text-slate-700">
+                          Mijozlar
+                        </FormLabel>
+                        <Select
+                          onValueChange={(value) => field.onChange(+value)}
+                          value={field.value?.toString()}
+                        >
+                          <FormControl>
+                            <SelectTrigger className="px-4 py-2 transition duration-200 border-2 rounded-md border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                              <SelectValue placeholder="Mijozni tanlang">
+                                {field.value
+                                  ? user?.data.data.filter(
+                                      (client: Clients) =>
+                                        +client.id ===
+                                        (field.value || +contract.user.id)
+                                    ).F_I_O
+                                  : "Mijozni tanlang"}
+                              </SelectValue>
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectGroup>
+                              {user?.data?.data.length &&
+                                user?.data?.data?.map((el: Clients) => (
+                                  <SelectItem
+                                    key={el.id}
+                                    value={el.id.toString()}
+                                  >
+                                    {el.F_I_O}
+                                  </SelectItem>
+                                ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage className="text-sm text-red-500" />
+                      </FormItem>
+                    );
+                  }}
                 />
 
                 <ItemForm

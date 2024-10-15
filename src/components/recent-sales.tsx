@@ -30,7 +30,7 @@ export function RecentSales() {
             </div>
             <div className="flex gap-2 ml-auto font-medium">
               <Banknote />
-              {formatNumber(Number(contract.price))} so'm
+              {formatNumber(Number(contract.service.price))} so'm
             </div>
           </div>
         )

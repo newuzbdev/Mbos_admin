@@ -1,4 +1,5 @@
 import { Clients } from "./clients";
+import { Income } from "./income";
 
 export enum EnumShartnoma {
   subscription_fee = "subscription_fee",
@@ -20,8 +21,9 @@ export enum EnumShartnomaPaid {
 export type Contract = {
   user: Clients;
   count: number;
-  created_at?: string;
-  id?: number;
+  created_at: string;
+  income: Income;
+  id: number;
   izoh: string;
   price: number;
   advancePayment: number;
@@ -35,6 +37,6 @@ export type Contract = {
   texnik_muddati: string;
   tolash_sana: string | null;
   total_price: string;
-  updated_at?: string;
+  updated_at: string;
   user_id: number;
 };

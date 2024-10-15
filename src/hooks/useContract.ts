@@ -27,10 +27,9 @@ export const useGetContract = (contractId?: string) => {
       if (!contractId) throw new Error("Contract ID is required");
       return getContractById(contractId);
     },
-    enabled: !!contractId, // only run the query if contractId is provided
+    enabled: !!contractId,
   });
 };
-
 
 export function useContractDelete() {
   return useMutation({
