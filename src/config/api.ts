@@ -1,12 +1,9 @@
 import axios from "axios";
-
 const baseURL = import.meta.env.VITE__API_KEY;
-
 const axiosPrivate = axios.create({
   baseURL,
 });
 
-// Request interceptor to add the Authorization header
 axiosPrivate.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("accessToken");
@@ -20,14 +17,10 @@ axiosPrivate.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor to handle token refresh
 axiosPrivate.interceptors.response.use(
   (response) => response,
   (error) => {
     const originalRequest = error.config;
-
-    // Log the error response for debugging
-    console.log("Error response:", error.response?.data);
 
     if (
       (error.response?.data?.error === "JWT_EXPIRED" ||
@@ -53,7 +46,6 @@ axiosPrivate.interceptors.response.use(
             );
           }
 
-          // Retry the original request with the new access token
           return axiosPrivate(originalRequest);
         })
         .catch((err) => {

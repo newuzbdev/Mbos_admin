@@ -18,11 +18,6 @@ const ClientsCreateInput = ({ closeDialog }: ClientsCreateInputProps) => {
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: {
-      F_I_O: "",
-      phone: 0,
-      adress: "",
-    },
   });
 
   const { refetch: refetchClients } = useGetClients({});
@@ -40,11 +35,11 @@ const ClientsCreateInput = ({ closeDialog }: ClientsCreateInputProps) => {
         });
         closeDialog?.();
       },
-      onError: (error) => {
+      onError: (error: any) => {
         toast({
           title: "Mijoz qo'shishda xatolik.",
           variant: "destructive",
-          description: error.message,
+          description: error?.response.data.message,
         });
       },
     });

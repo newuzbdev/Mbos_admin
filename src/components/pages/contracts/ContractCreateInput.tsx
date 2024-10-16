@@ -1,11 +1,4 @@
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form } from "@/components/ui/form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -16,17 +9,10 @@ import { FormSchema } from "../../validate";
 import { useAddContract, useGetContracts } from "@/hooks/useContract";
 import { Contract } from "@/types/contract";
 import { useGetClients } from "@/hooks/useClients";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Clients } from "@/types/clients";
 import { useGetServices } from "@/hooks/useService";
-import { IService } from "@/types/service";
+import { SearchService } from "./functions/searchService";
+import { EnumServiceType } from "@/types/service";
+import { SearchClient } from "./functions/searchClient";
 
 interface ContractsCreateInputProps {
   closeDialog?: () => void;
@@ -35,7 +21,10 @@ interface ContractsCreateInputProps {
 const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
   const { mutate: addContract } = useAddContract();
   const { data: user } = useGetClients({ limit: 999 });
-  const { data: service } = useGetServices({ limit: 999 });
+  const { data: service } = useGetServices({
+    limit: 999,
+    type: EnumServiceType.other,
+  });
 
   const form = useForm<Contract>({
     resolver: zodResolver(FormSchema),
@@ -86,83 +75,13 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
             type="number"
           />
 
-          <FormField
-            control={form.control}
-            name={"service_id"}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-lg font-semibold text-slate-700">
-                  xizmatlar
-                </FormLabel>
-                <Select
-                  onValueChange={(value) => field.onChange(+value)}
-                  value={field.value?.toString()}
-                >
-                  <FormControl>
-                    <SelectTrigger className="px-4 py-2 transition duration-200 border-2 rounded-md border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
-                      <SelectValue placeholder="Mijozni tanlang">
-                        {field.value
-                          ? service?.data?.data.find(
-                              (service: IService) => service.id === +field.value
-                            )?.title
-                          : "Xizmat tanlang"}
-                      </SelectValue>
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectGroup>
-                      {service?.data?.data.length &&
-                        service?.data?.data?.map((el: IService) => (
-                          <SelectItem key={el.id} value={el.id.toString()}>
-                            {el.title}
-                          </SelectItem>
-                        ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-                <FormMessage className="text-sm text-red-500" />
-              </FormItem>
-            )}
+          <SearchService
+            form={form}
+            service={service}
+            title={"service / product"}
           />
 
-          <FormField
-            control={form.control}
-            name={"user_id"}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-lg font-semibold text-slate-700">
-                  Mijozlar
-                </FormLabel>
-                <Select
-                  onValueChange={(value) => field.onChange(+value)}
-                  value={field.value?.toString()}
-                >
-                  <FormControl>
-                    <SelectTrigger className="px-4 py-2 transition duration-200 border-2 rounded-md border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
-                      <SelectValue placeholder="Mijozni tanlang">
-                        {field.value
-                          ? user?.data?.data.find(
-                              (client: Clients) => client.id === field.value
-                            )?.F_I_O
-                          : "Mijozni tanlang"}
-                      </SelectValue>
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectGroup>
-                      {user?.data?.data.length &&
-                        user?.data?.data?.map((el: Clients) => (
-                          <SelectItem key={el.id} value={el.id.toString()}>
-                            {el.F_I_O}
-                          </SelectItem>
-                        ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-                <FormMessage className="text-sm text-red-500" />
-              </FormItem>
-            )}
-          />
+          <SearchClient form={form} client={user} title={"foydalanuvchi"} />
 
           <ItemForm
             enums={[

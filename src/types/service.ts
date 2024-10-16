@@ -3,6 +3,7 @@ import { Contract } from "./contract";
 export enum EnumServiceType {
   service = "service",
   product = "product",
+  other = "other",
 }
 
 export interface IService {
