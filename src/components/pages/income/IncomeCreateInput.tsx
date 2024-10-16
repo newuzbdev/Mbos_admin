@@ -7,25 +7,9 @@ import { Income } from "@/types/income.ts";
 import { useAddIncome, useGetIncome } from "@/hooks/useIncome.ts";
 import { ItemForm } from "@/components/Input-create";
 import { FormSchema } from "../../validate";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Clients } from "@/types/clients";
+import { Form } from "@/components/ui/form";
 import { useGetClients } from "@/hooks/useClients";
+import { SearchClient } from "./functions/searchClients";
 
 interface IncomeCreateInputProps {
   closeDialog?: () => void;
@@ -79,43 +63,7 @@ const IncomeCreateInput = ({ closeDialog }: IncomeCreateInputProps) => {
         className="h-auto my-10 mt-4 space-y-5"
       >
         <div className="grid grid-cols-2 gap-3">
-          <FormField
-            control={form.control}
-            name={"user_id"}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-lg font-semibold text-slate-700">
-                  Mijozlar
-                </FormLabel>
-                <Select
-                  onValueChange={(value) => field.onChange(+value)} // Casting value to number
-                  value={field.value?.toString()}
-                >
-                  <FormControl>
-                    <SelectTrigger className="px-4 py-2 transition duration-200 border-2 rounded-md border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
-                      <SelectValue placeholder="Mijozni tanlang">
-                        {field.value
-                          ? user?.data.data.find(
-                              (client: Clients) => client.id === field.value
-                            )?.F_I_O
-                          : "Mijozni tanlang"}
-                      </SelectValue>
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectGroup>
-                      {user?.data.data?.map((el: Clients) => (
-                        <SelectItem key={el.id} value={el.id.toString()}>
-                          {el.F_I_O}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-                <FormMessage className="text-sm text-red-500" />
-              </FormItem>
-            )}
-          />
+          <SearchClient form={form} client={user} title="Mijoz" />
           <ItemForm
             form={form}
             name="amount"
@@ -127,6 +75,12 @@ const IncomeCreateInput = ({ closeDialog }: IncomeCreateInputProps) => {
             type="text"
             name="description"
             title="izoh qoldiring (mojburiy emas)"
+          />
+          <ItemForm
+            form={form}
+            type="date"
+            name="date"
+            title="vaqtni kiriting"
           />
         </div>
         <div className="grid grid-cols-2 gap-3">
@@ -167,7 +121,6 @@ const IncomeCreateInput = ({ closeDialog }: IncomeCreateInputProps) => {
             />
           )}
         </div>
-        <ItemForm form={form} type="date" name="date" title="vaqtni kiriting" />
         <Button
           type="submit"
           className="px-6 py-2 text-white transition duration-200 rounded-md bg-primary"
