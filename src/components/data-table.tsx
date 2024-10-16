@@ -56,7 +56,7 @@ export default function DataTable<TData, TValue>({
       <div className="flex flex-col w-full h-full space-y-2">
         <div className="flex justify-between">
           {search && (
-            <div className="w-80">
+            <div className="mt-2 w-80">
               <Search title={title} />
             </div>
           )}

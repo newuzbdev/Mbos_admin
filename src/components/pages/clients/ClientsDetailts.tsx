@@ -9,6 +9,14 @@ import { Clients } from "@/types/clients";
 import { Contract } from "@/types/contract";
 
 export default function ClientsDetails() {
+  const payment_methods = [
+    { name: "cash", value: "Naqd pul" },
+    { name: "translation", value: "O'tkazma" },
+    { name: "online", value: "Online" },
+    { name: "salary", value: "Ish haqi" },
+    { name: "delivery", value: "Yetkazib berish" },
+    { name: "other", value: "Boshqa" },
+  ];
   const { clientsId } = useParams();
 
   const { data: clientsDetails, isLoading } = useGetClient(clientsId);
@@ -18,6 +26,11 @@ export default function ClientsDetails() {
   const clients: Clients | undefined = clientsDetails?.data.data;
 
   if (!clients) return <div>Mijoz ma'lumotlari topilmadi</div>;
+
+  const getPaymentMethodUzbek = (method: string) => {
+    const paymentMethod = payment_methods.find(pm => pm.name === method);
+    return paymentMethod ? paymentMethod.value : method;
+  };
 
   return (
     <div className="container px-4 py-8 mx-auto">
@@ -33,10 +46,7 @@ export default function ClientsDetails() {
               icon={<UserIcon className="w-5 h-5 text-primary" />}
               title="Mijoz haqida ma'lumot"
             >
-              <DetailItem
-                label="Mijozning to'liq ismi"
-                value={clients.F_I_O}
-              />
+              <DetailItem label="Mijozning to'liq ismi" value={clients.F_I_O} />
               <DetailItem label="Telefon raqami" value={clients.phone} />
               <DetailItem label="Manzil" value={clients.adress} />
             </DetailSection>
@@ -46,7 +56,9 @@ export default function ClientsDetails() {
               title="Mijozning shartnomalar tarihi"
             >
               <div className="overflow-y-auto h-60">
-                {(clients as Clients & { shartnome?: Contract[] })?.shartnome?.map((shartnoma: Contract, index: number) => (
+                {(
+                  clients as Clients & { shartnome?: Contract[] }
+                )?.shartnome?.map((shartnoma: Contract, index: number) => (
                   <div
                     key={shartnoma.id}
                     className="p-4 mb-4 bg-white rounded-lg shadow-md dark:text-white dark:bg-gray-700"
@@ -58,7 +70,10 @@ export default function ClientsDetails() {
                       label="Shartnoma ID"
                       value={shartnoma.shartnoma_id}
                     />
-                    <DetailItem label="Shartnoma sanasi" value={shartnoma.sana} />
+                    <DetailItem
+                      label="Shartnoma sanasi"
+                      value={shartnoma.sana}
+                    />
                     <DetailItem
                       label="Shartnoma miqdori"
                       value={shartnoma.count}
@@ -81,32 +96,31 @@ export default function ClientsDetails() {
               title="To'lov tarixi"
             >
               <div className="overflow-y-auto h-60">
-                {(clients as Clients & { income?: Income[] })?.income?.map((income: Income) => (
-                  <div
-                    key={income.id}
-                    className="p-2 mb-2 bg-gray-100 rounded dark:bg-gray-700"
-                  >
-                    <DetailItem
-                      label={`To'lov summasi`}
-                      value={income.amount}
-                    />
-                    <DetailItem
-                      label={`To'lov sanasi`}
-                      value={income.date}
-                    />
-                    <DetailItem
-                      label={`To'lov holati`}
-                      value={income.is_paid ? "To'langan" : "To'lanmagan"}
-                    />
-                    <DetailItem
-                      label={`To'lov usuli`}
-                      value={income.payment_method}
-                    />
-                  </div>
-                ))}
-                {!(clients as Clients & { income?: Income[] })?.income || (clients as Clients & { income?: Income[] }).income?.length === 0 && (
-                  <p>To'lovlar mavjud emas</p>
+                {(clients as Clients & { income?: Income[] })?.income?.map(
+                  (income: Income) => (
+                    <div
+                      key={income.id}
+                      className="p-2 mb-2 bg-gray-100 rounded dark:bg-gray-700"
+                    >
+                      <DetailItem
+                        label={`To'lov summasi`}
+                        value={income.amount}
+                      />
+                      <DetailItem label={`To'lov sanasi`} value={income.date} />
+                      <DetailItem
+                        label={`To'lov holati`}
+                        value={income.is_paid ? "To'langan" : "To'lanmagan"}
+                      />
+                      <DetailItem
+                        label={`To'lov usuli`}
+                        value={getPaymentMethodUzbek(income.payment_method)}
+                      />
+                    </div>
+                  )
                 )}
+                {!(clients as Clients & { income?: Income[] })?.income ||
+                  ((clients as Clients & { income?: Income[] }).income
+                    ?.length === 0 && <p>To'lovlar mavjud emas</p>)}
               </div>
             </DetailSection>
           </div>
@@ -120,7 +134,8 @@ export default function ClientsDetails() {
       </Card>
     </div>
   );
-}function DetailSection({
+}
+function DetailSection({
   icon,
   title,
   children,

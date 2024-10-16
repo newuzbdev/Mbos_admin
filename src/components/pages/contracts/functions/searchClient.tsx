@@ -30,7 +30,7 @@ export function SearchClient({
 
   const filteredServices = client?.data?.data.filter(
     (el: Clients) =>
-      el.F_I_O.toLowerCase().trim().includes(search.toLowerCase().trim()) ||
+      el.F_I_O.toLowerCase().trim().includes(search.toLowerCase().trim()) || el.phone.toString().includes(search) ||
       !search
   );
 
@@ -65,14 +65,14 @@ export function SearchClient({
                     type="text"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    placeholder="Ism boyicha izlash"
+                    placeholder="Ism bo'yicha yoki telefon orqali izlash"
                     className="w-full mb-2"
                     autoFocus
                   />
                 </div>
                 {filteredServices?.map((el: Clients) => (
                   <SelectItem key={el.id} value={el.id.toString()}>
-                    {el.F_I_O}
+                    {el.F_I_O} - {el.phone}
                   </SelectItem>
                 ))}
               </SelectGroup>

@@ -81,7 +81,7 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
             title={"service / product"}
           />
 
-          <SearchClient form={form} client={user} title={"foydalanuvchi"} />
+          <SearchClient form={form} client={user} title={"Foydalanuvchi"} />
 
           <ItemForm
             enums={[

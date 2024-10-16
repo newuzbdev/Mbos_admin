@@ -8,7 +8,7 @@ import {
   Menu,
   CreditCard,
   Orbit,
-  ChartColumnStacked,
+  Box,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -79,7 +79,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
             {!isMinimized && <span className="text-lg">Xizmatlar</span>}
           </Link>
           <Link to="/product" className={getLinkClassName("/product")}>
-            <ChartColumnStacked className="w-10 h-5" />
+            <Box className="w-10 h-5" />
             {!isMinimized && <span className="text-lg">Productlar</span>}
           </Link>
         </ul>

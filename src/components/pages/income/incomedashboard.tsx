@@ -17,7 +17,7 @@ function IncomeDashboard() {
   } = data?.data?.data?.chikim || {};
 
   return (
-    <div className="p-6 mt-4 bg-white rounded-lg shadow-lg dark:bg-gray-800">
+    <div className="p-6 mt-4 bg-white rounded-lg shadow-md dark:bg-gray-800">
       <h2 className="mb-6 text-3xl font-bold text-gray-800 dark:text-gray-200">
         Daromad va Chikim
       </h2>
@@ -59,7 +59,7 @@ const Section = ({
       {items.map((item, index) => (
         <div
           key={index}
-          className="flex items-center justify-between p-4 transition-all duration-300 border border-gray-200 rounded-md dark:border-gray-700 bg-gray-50 dark:bg-gray-700 hover:shadow-md"
+          className="flex items-center justify-between p-4 transition-all duration-300 border border-gray-200 rounded-md dark:border-gray-700 bg-gray-50 dark:bg-gray-700"
         >
           <p className="text-sm font-medium text-gray-800 dark:text-gray-200">
             {item.label}

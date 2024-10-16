@@ -6,38 +6,22 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Form } from "@/components/ui/form";
 import { toast } from "@/hooks/use-toast";
 import { useGetClients } from "@/hooks/useClients";
 import { useContractUpdate, useGetContract } from "@/hooks/useContract";
 import { useGetServices } from "@/hooks/useService";
-import { Clients } from "@/types/clients";
 import { Contract } from "@/types/contract";
-import { IService } from "@/types/service";
 import { PencilIcon } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { SearchService } from "./searchService";
+import { SearchClient } from "./searchClient";
 
 export function UpdateItem({ contract }: { contract: Contract }) {
   const { mutate } = useContractUpdate();
   const { data: user } = useGetClients({ limit: 999 });
   const { data: service } = useGetServices({ limit: 999 });
-
   const { refetch } = useGetContract(contract?.id?.toString());
 
   const [isUpdate, setUpdate] = useState(false);
@@ -111,94 +95,8 @@ export function UpdateItem({ contract }: { contract: Contract }) {
                   name="advancePayment"
                   type="number"
                 />
-                <FormField
-                  control={form.control}
-                  name={"service_id"}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-lg font-semibold text-slate-700">
-                        xizmatlar
-                      </FormLabel>
-                      <Select
-                        onValueChange={(value) => field.onChange(+value)}
-                        value={field.value?.toString()}
-                      >
-                        <FormControl>
-                          <SelectTrigger className="px-4 py-2 transition duration-200 border-2 rounded-md border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
-                            <SelectValue placeholder="Mijozni tanlang">
-                              {field.value
-                                ? service?.data?.data.find(
-                                    (service: IService) =>
-                                      service.id === +field.value
-                                  )?.title
-                                : "Xizmat tanlang"}
-                            </SelectValue>
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectGroup>
-                            {service?.data?.data.length &&
-                              service?.data?.data?.map((el: IService) => (
-                                <SelectItem
-                                  key={el.id}
-                                  value={el.id.toString()}
-                                >
-                                  {el.title}
-                                </SelectItem>
-                              ))}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage className="text-sm text-red-500" />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name={"user_id"}
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel className="text-lg font-semibold text-slate-700">
-                          Mijozlar
-                        </FormLabel>
-                        <Select
-                          onValueChange={(value) => field.onChange(+value)}
-                          value={field.value?.toString()}
-                        >
-                          <FormControl>
-                            <SelectTrigger className="px-4 py-2 transition duration-200 border-2 rounded-md border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
-                              <SelectValue placeholder="Mijozni tanlang">
-                                {field.value
-                                  ? user?.data.data.filter(
-                                      (client: Clients) =>
-                                        +client.id ===
-                                        (field.value || +contract.user.id)
-                                    ).F_I_O
-                                  : "Mijozni tanlang"}
-                              </SelectValue>
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectGroup>
-                              {user?.data?.data.length &&
-                                user?.data?.data?.map((el: Clients) => (
-                                  <SelectItem
-                                    key={el.id}
-                                    value={el.id.toString()}
-                                  >
-                                    {el.F_I_O}
-                                  </SelectItem>
-                                ))}
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage className="text-sm text-red-500" />
-                      </FormItem>
-                    );
-                  }}
-                />
+                <SearchService form={form} service={service} title="Xizmat" />
+                <SearchClient form={form} client={user} title="Mijoz" />
 
                 <ItemForm
                   enums={[
