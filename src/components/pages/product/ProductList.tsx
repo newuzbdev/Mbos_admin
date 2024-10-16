@@ -2,7 +2,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import DataTable from "@/components/data-table";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
-import { IService } from "@/types/service";
+import { EnumServiceType, IService } from "@/types/service";
 import { useGetServices } from "@/hooks/useService";
 import { Button } from "@/components/ui/button";
 import { formatNumber } from "@/components/formNumber";
@@ -15,7 +15,7 @@ const makeColumns = (
     cell: (c) => <div className="cursor-pointer">{c.row.index + 1}</div>,
   },
   {
-    header: "xizmat nomi",
+    header: "product nomi",
     accessorKey: "title",
     cell: ({ row }) => (
       <Button
@@ -44,7 +44,7 @@ const ProductList = () => {
     data: contract,
     refetch,
     isLoading,
-  } = useGetServices({ page, limit, search });
+  } = useGetServices({ page, limit, search, type: EnumServiceType.product });
 
   useEffect(() => {
     refetch();
@@ -56,7 +56,7 @@ const ProductList = () => {
     <div className="w-full">
       <div className="p-4 border rounded-md">
         <DataTable
-          title="xizmat nomi boyicha izlash"
+          title="product nomi boyicha izlash"
           columns={makeColumns(navigate)}
           data={contract?.data || []}
         />

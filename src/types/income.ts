@@ -1,4 +1,5 @@
 import { Clients } from "./clients";
+import { EnumServiceType } from "./service";
 
 export enum EnumIncamTpeTranslation {
   cash = "Naqt",
@@ -18,11 +19,12 @@ export type Income = {
   description: string;
   date: string;
   user: Clients;
-  income:number
+  income: number;
 };
 
 export interface IParams {
   page?: number;
   limit?: number;
   search?: string;
+  type?: EnumServiceType;
 }

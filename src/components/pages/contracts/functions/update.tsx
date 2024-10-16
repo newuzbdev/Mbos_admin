@@ -52,20 +52,19 @@ export function UpdateItem({ contract }: { contract: Contract }) {
       remainingPayment,
       user,
       updated_at,
+      price,
       shartnoma_id,
+      service,
       ...contractData
-    } = {
-      ...item,
-    };
+    } = item;
 
     const dataToSend = {
       ...contractData,
-      advancePayment: +contractData.advancePayment,
-      count: +contractData.count,
-      price: +contract.price,
+      advancePayment: +item.advancePayment,
+      count: +item.count,
     };
 
-    mutate(dataToSend, {
+    mutate(dataToSend as any, {
       onSuccess: () => {
         toast({ title: "contract ozgartirildi", variant: "success" });
         refetch();
@@ -104,6 +103,12 @@ export function UpdateItem({ contract }: { contract: Contract }) {
                   title="Miktori"
                   form={form}
                   name="count"
+                  type="number"
+                />
+                <ItemForm
+                  title="to'langan"
+                  form={form}
+                  name="advancePayment"
                   type="number"
                 />
                 <FormField

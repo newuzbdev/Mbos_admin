@@ -1,6 +1,6 @@
 import axiosPrivate from "@/config/api";
 import { IParams } from "@/types/income";
-import { IService } from "@/types/service";
+import { EnumServiceType, IService } from "@/types/service";
 
 export const addService = async (data: IService) => {
   return await axiosPrivate.post("/service", data);
@@ -10,9 +10,10 @@ export const getService = async ({
   page = 1,
   limit = 10,
   search = "",
+  type = EnumServiceType.service,
 }: IParams) => {
   return await axiosPrivate.get(
-    `/service?page=${page}&limit=${limit}&search=${search}`
+    `/service?page=${page}&limit=${limit}&search=${search}&type=${type}`
   );
 };
 export const getServiceById = async (id: string) => {

@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { ItemForm } from "@/components/Input-create";
 import { FormSchema } from "../../validate";
-import { useAddContract, useGetContract } from "@/hooks/useContract";
+import { useAddContract, useGetContracts } from "@/hooks/useContract";
 import { Contract } from "@/types/contract";
 import { useGetClients } from "@/hooks/useClients";
 import {
@@ -40,7 +40,7 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
   const form = useForm<Contract>({
     resolver: zodResolver(FormSchema),
   });
-  const { refetch: refetchContract } = useGetContract();
+  const { refetch: refetchContract } = useGetContracts({});
 
   function onSubmit(data: Contract) {
     const { price, ...contractsData } = {

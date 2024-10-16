@@ -24,7 +24,7 @@ export function DeleteItem() {
     mutate(`${id}`, {
       onSuccess: async () => {
         toast({ title: "service ochirildi", variant: "success" });
-        navigate("/service");
+        navigate(-1);
       },
       onError: async () => {
         toast({ title: "xatolik yuz berdi", variant: "destructive" });

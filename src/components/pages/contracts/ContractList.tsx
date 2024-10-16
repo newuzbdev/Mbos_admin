@@ -4,6 +4,7 @@ import { useGetContracts } from "@/hooks/useContract";
 import { Contract } from "@/types/contract";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
+import { formatNumber } from "@/components/formNumber";
 
 const shartnoma_turi = [
   { name: "one_bay", value: "Birmartalik to'lov" },
@@ -49,14 +50,18 @@ const makeColumns = (
     accessorKey: "advancePayment",
     header: "Oldindan to'lov",
     cell: ({ row }) => (
-      <div className="cursor-pointer">{row.original.advancePayment}</div>
+      <div className="cursor-pointer">
+        {formatNumber(row.original.advancePayment)}
+      </div>
     ),
   },
   {
     accessorKey: "remainingPayment",
     header: "Qolgan to'lov",
     cell: ({ row }) => (
-      <div className="cursor-pointer">{row.original.remainingPayment}</div>
+      <div className="cursor-pointer">
+        {formatNumber(row.original.remainingPayment)}
+      </div>
     ),
   },
   {
@@ -108,7 +113,7 @@ const ContractList = () => {
     <div className="w-full">
       <div className="p-4 border rounded-md">
         <DataTable
-          title="Mijoz nomi boyicha izlash"
+          title="Mijoz nomi yoki telefon raqami bo'yicha qidiring"
           columns={makeColumns(navigate)}
           data={contract?.data || []}
         />

@@ -69,7 +69,7 @@ export default function ContractDetails() {
                 }
               />
               <DetailItem
-                label="Oldindan to'lov"
+                label="to'langan"
                 value={formatNumber(contract?.advancePayment) + " s'om"}
               />
               <DetailItem

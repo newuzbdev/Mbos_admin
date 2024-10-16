@@ -13,33 +13,33 @@ interface ContractsCreateInputProps {
 }
 
 const ProductCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
-  const { mutate: addService } = useAddService();
+  const { mutate: addProduct } = useAddService();
 
   const form = useForm<IService>({
     resolver: zodResolver(FormSchema),
   });
-  const { refetch } = useGetServices({});
+  const { refetch } = useGetServices({ type: EnumServiceType.product });
 
   function onSubmit(data: IService) {
     const contractsData = {
       ...data,
       price: +data.price,
-      serviceType: EnumServiceType.service,
+      serviceType: EnumServiceType.product,
     };
 
-    addService(contractsData as IService, {
+    addProduct(contractsData as IService, {
       onSuccess: () => {
         refetch();
         form.reset();
         toast({
-          title: "Service muvaffaqiyatli qo'shildi.",
+          title: "Product muvaffaqiyatli qo'shildi.",
           variant: "success",
         });
         closeDialog?.();
       },
       onError: (error) => {
         toast({
-          title: "Service qo'shishda xatolik.",
+          title: "Product qo'shishda xatolik.",
           variant: "destructive",
           description: error.message,
         });
