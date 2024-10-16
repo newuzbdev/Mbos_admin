@@ -28,9 +28,9 @@ export function SearchService({
 }) {
   const [search, setSearch] = useState("");
 
-  const filteredServices = service?.data?.data.filter(
+  const filteredServices = service?.data?.data?.filter(
     (el: IService) =>
-      el.title.toLowerCase().trim().includes(search.toLowerCase().trim()) ||
+      el?.title.toLowerCase().trim().includes(search.toLowerCase().trim()) ||
       !search
   );
 
@@ -51,7 +51,7 @@ export function SearchService({
               <SelectTrigger className="px-4 py-2 transition duration-200 border-2 rounded-md border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
                 <SelectValue placeholder="Mijozni tanlang">
                   {field.value
-                    ? service?.data?.data.find(
+                    ? service?.data?.data?.find(
                         (service: IService) => service.id === +field.value
                       )?.title
                     : "Xizmat tanlang"}

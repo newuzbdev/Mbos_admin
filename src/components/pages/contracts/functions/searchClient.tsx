@@ -28,9 +28,10 @@ export function SearchClient({
 }) {
   const [search, setSearch] = useState("");
 
-  const filteredServices = client?.data?.data.filter(
+  const filteredServices = client?.data?.data?.filter(
     (el: Clients) =>
-      el.F_I_O.toLowerCase().trim().includes(search.toLowerCase().trim()) || el.phone.toString().includes(search) ||
+      el?.F_I_O.toLowerCase().trim().includes(search.toLowerCase().trim()) ||
+      el?.phone.toString().includes(search) ||
       !search
   );
 
@@ -51,7 +52,7 @@ export function SearchClient({
               <SelectTrigger className="px-4 py-2 transition duration-200 border-2 rounded-md border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
                 <SelectValue placeholder="Mijozni tanlang">
                   {field.value
-                    ? client?.data?.data.find(
+                    ? client?.data?.data?.find(
                         (service: Clients) => service.id === +field.value
                       )?.F_I_O
                     : "Xizmat tanlang"}
