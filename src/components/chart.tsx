@@ -13,23 +13,18 @@ import { Button } from "./ui/button";
 export function ChartList() {
   const chartConfig = {} satisfies ChartConfig;
 
-  // Your complete data
   const { data } = useGetStatistik();
-  // Get the current year
   const currentYear = new Date().getFullYear();
 
-  // Transform the data to reflect the current year for future dates
   const transformedData = data?.data?.data.map((item: any) => {
     const [year, month] = item.date.split("-");
     const updatedYear = parseInt(year) > currentYear ? currentYear : year; // Set to current year if greater
     return { ...item, date: `${updatedYear}-${month}` };
   });
 
-  // State for the current offset
   const [offset, setOffset] = useState(0);
-  const limit = 6; // Maximum number of bars to display
+  const limit = 6;
 
-  // Calculate the data to display
   const displayedData = transformedData?.slice(offset, offset + limit);
 
   const handleNext = () => {
@@ -45,7 +40,7 @@ export function ChartList() {
   };
 
   return (
-    <div style={{ overflowX: "auto", width: "100%" }}>
+    <div className="h-fit">
       <ChartContainer config={chartConfig} className="w-full h-full">
         <BarChart accessibilityLayer data={displayedData} barCategoryGap={10}>
           <CartesianGrid vertical={false} />
@@ -62,7 +57,7 @@ export function ChartList() {
         </BarChart>
       </ChartContainer>
 
-      <div className="flex justify-between mt-4">
+      <div className="flex justify-between">
         <Button onClick={handlePrev} variant="ghost" disabled={offset === 0}>
           <ArrowLeft />
         </Button>

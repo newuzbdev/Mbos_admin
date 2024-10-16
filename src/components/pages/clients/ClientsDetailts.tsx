@@ -28,7 +28,7 @@ export default function ClientsDetails() {
   if (!clients) return <div>Mijoz ma'lumotlari topilmadi</div>;
 
   const getPaymentMethodUzbek = (method: string) => {
-    const paymentMethod = payment_methods.find(pm => pm.name === method);
+    const paymentMethod = payment_methods.find((pm) => pm.name === method);
     return paymentMethod ? paymentMethod.value : method;
   };
 
@@ -53,7 +53,7 @@ export default function ClientsDetails() {
 
             <DetailSection
               icon={<CreditCardIcon className="w-5 h-5 text-green-600" />}
-              title="Mijozning shartnomalar tarihi"
+              title={`Mijozning shartnomalar tarihi: ${clients?.shartnome?.length}`}
             >
               <div className="overflow-y-auto h-60">
                 {(
@@ -93,7 +93,7 @@ export default function ClientsDetails() {
 
             <DetailSection
               icon={<DollarSignIcon className="w-5 h-5 text-yellow-600" />}
-              title="To'lov tarixi"
+              title={`To'lov tarixi: ${clients?.income?.length}`}
             >
               <div className="overflow-y-auto h-60">
                 {(clients as Clients & { income?: Income[] })?.income?.map(
