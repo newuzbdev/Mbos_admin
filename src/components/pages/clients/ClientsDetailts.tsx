@@ -17,6 +17,8 @@ export default function ClientsDetails() {
 
   const clients: Clients | undefined = clientsDetails?.data.data;
 
+  if (!clients) return <div>Mijoz ma'lumotlari topilmadi</div>;
+
   return (
     <div className="container px-4 py-8 mx-auto">
       <Card className="overflow-hidden">
@@ -33,75 +35,79 @@ export default function ClientsDetails() {
             >
               <DetailItem
                 label="Mijozning to'liq ismi"
-                value={clients?.F_I_O}
+                value={clients.F_I_O}
               />
-              <DetailItem label="Telefon raqami" value={clients?.phone} />
-              <DetailItem label="Manzil" value={clients?.adress} />
+              <DetailItem label="Telefon raqami" value={clients.phone} />
+              <DetailItem label="Manzil" value={clients.adress} />
             </DetailSection>
 
             <DetailSection
               icon={<CreditCardIcon className="w-5 h-5 text-green-600" />}
               title="Mijozning shartnomalar tarihi"
             >
-              {clients?.shartnome?.map((shartnoma: Contract, index: number) => (
-                <div
-                  key={shartnoma.id}
-                  className="p-4 mb-4 bg-white rounded-lg shadow-md dark:text-white dark:bg-gray-700"
-                >
-                  <h4 className="mb-2 font-semibold">{`${
-                    index + 1
-                  }-Shartnoma`}</h4>
-                  <DetailItem
-                    label="Shartnoma ID"
-                    value={shartnoma.shartnoma_id}
-                  />
-                  <DetailItem label="Shartnoma sanasi" value={shartnoma.sana} />
-                  <DetailItem
-                    label="Shartnoma miqdori"
-                    value={shartnoma.count}
-                  />
-                  <DetailItem
-                    label="Shartnoma davomiyligi"
-                    value={shartnoma.shartnoma_muddati}
-                  />
-                  <DetailItem
-                    label="Shartnoma texnik davomiyligi"
-                    value={shartnoma.texnik_muddati}
-                  />
-                </div>
-              ))}
+              <div className="overflow-y-auto h-60">
+                {(clients as Clients & { shartnome?: Contract[] })?.shartnome?.map((shartnoma: Contract, index: number) => (
+                  <div
+                    key={shartnoma.id}
+                    className="p-4 mb-4 bg-white rounded-lg shadow-md dark:text-white dark:bg-gray-700"
+                  >
+                    <h4 className="mb-2 font-semibold">{`${
+                      index + 1
+                    }-Shartnoma`}</h4>
+                    <DetailItem
+                      label="Shartnoma ID"
+                      value={shartnoma.shartnoma_id}
+                    />
+                    <DetailItem label="Shartnoma sanasi" value={shartnoma.sana} />
+                    <DetailItem
+                      label="Shartnoma miqdori"
+                      value={shartnoma.count}
+                    />
+                    <DetailItem
+                      label="Shartnoma davomiyligi"
+                      value={shartnoma.shartnoma_muddati}
+                    />
+                    <DetailItem
+                      label="Shartnoma texnik davomiyligi"
+                      value={shartnoma.texnik_muddati}
+                    />
+                  </div>
+                ))}
+              </div>
             </DetailSection>
 
             <DetailSection
               icon={<DollarSignIcon className="w-5 h-5 text-yellow-600" />}
               title="To'lov tarixi"
             >
-              {clients?.income?.map((income: Income) => (
-                <div
-                  key={income.id}
-                  className="p-2 mb-2 bg-gray-100 rounded dark:bg-gray-700"
-                >
-                  <DetailItem
-                    label={`To'lov summasi`}
-                    value={income.amount}
-                  />
-                  <DetailItem
-                    label={`To'lov sanasi`}
-                    value={income.date}
-                  />
-                  <DetailItem
-                    label={`To'lov holati`}
-                    value={income.is_paid ? "To'langan" : "To'lanmagan"}
-                  />
-                  <DetailItem
-                    label={`To'lov usuli`}
-                    value={income.payment_method}
-                  />
-                </div>
-              ))}
-              {!clients?.income || clients.income.length === 0 && (
-                <p>To'lovlar mavjud emas</p>
-              )}
+              <div className="overflow-y-auto h-60">
+                {(clients as Clients & { income?: Income[] })?.income?.map((income: Income) => (
+                  <div
+                    key={income.id}
+                    className="p-2 mb-2 bg-gray-100 rounded dark:bg-gray-700"
+                  >
+                    <DetailItem
+                      label={`To'lov summasi`}
+                      value={income.amount}
+                    />
+                    <DetailItem
+                      label={`To'lov sanasi`}
+                      value={income.date}
+                    />
+                    <DetailItem
+                      label={`To'lov holati`}
+                      value={income.is_paid ? "To'langan" : "To'lanmagan"}
+                    />
+                    <DetailItem
+                      label={`To'lov usuli`}
+                      value={income.payment_method}
+                    />
+                  </div>
+                ))}
+                {!(clients as Clients & { income?: Income[] })?.income || (clients as Clients & { income?: Income[] }).income?.length === 0 && (
+                  <p>To'lovlar mavjud emas</p>
+                )}
+              </div>
             </DetailSection>
           </div>
           <div>
@@ -114,9 +120,7 @@ export default function ClientsDetails() {
       </Card>
     </div>
   );
-}
-
-function DetailSection({
+}function DetailSection({
   icon,
   title,
   children,

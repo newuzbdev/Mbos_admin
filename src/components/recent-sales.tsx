@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useGetStatistic } from "@/hooks/dashboard";
- import { RecentSale } from "@/types/contract";
+ import { Contract } from "@/types/contract";
 import { Banknote } from "lucide-react";
 
 export function RecentSales() {
@@ -12,7 +12,7 @@ export function RecentSales() {
   return (
     <div className="space-y-8">
       {homeStats?.data.data.recentContract?.map(
-        (contract: RecentSale, index: number) => (
+        (contract: Contract, index: number) => (
           <div key={contract.id} className="flex items-center">
             <Avatar className="h-9 w-9">
               <AvatarImage src={`/avatars/0${index + 2}.png`} alt="Avatar" />
