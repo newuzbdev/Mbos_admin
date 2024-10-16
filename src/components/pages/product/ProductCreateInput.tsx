@@ -56,6 +56,8 @@ const ProductCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <ItemForm title="xizmat nomi" form={form} name="title" />
           <ItemForm title="narxi" type="number" form={form} name="price" />
+          <ItemForm title="marta(ixtiyoriy)" form={form} name="marta" />
+          <ItemForm title="dona(ixtiyoriy)" form={form} name="dona" />
         </div>
         <Button
           type="submit"

@@ -72,6 +72,8 @@ export function UpdateItem({ service }: { service: IService }) {
                   form={form}
                   name="price"
                 />
+                <ItemForm title="marta(ixtiyoriy)" form={form} name="marta" />
+                <ItemForm title="dona(ixtiyoriy)" form={form} name="dona" />
               </div>
               <div className="flex justify-end">
                 <Button type="submit" className="text-white">
