@@ -10,10 +10,14 @@ import {
 import { formatNumber } from "@/components/formNumber";
 import { DeleteItem } from "./functions/delete";
 import { UpdateItem } from "./functions/update";
-
+import { useGetGetAdmin } from "@/hooks/useAdmin";
 export default function ContractDetails() {
   const { contractId } = useParams();
   const { data: contractDetails, isLoading } = useGetContract(contractId);
+
+  const contract = contractDetails?.data?.data;
+  const { data: craetedAdmin } = useGetGetAdmin(Number(contract?.whoCreated));
+  const { data: updatedAdmin } = useGetGetAdmin(Number(contract?.whoUpdated));
 
   if (isLoading) return <div>Yuklanmoqda...</div>;
 
@@ -21,12 +25,11 @@ export default function ContractDetails() {
     { name: "one_bay", value: "Birmartalik to'lov" },
     { name: "subscription_fee", value: "Oylik to'lov" },
   ];
+
   const purchase_status = [
     { name: "paid", value: "To'landi" },
     { name: "no_paid", value: "To'lanmagan" },
   ];
-
-  const contract = contractDetails?.data?.data;
 
   return (
     <div className="container p-0 mx-auto">
@@ -67,6 +70,14 @@ export default function ContractDetails() {
               <DetailItem
                 label="Mijozning telefon raqami"
                 value={contract?.user?.phone}
+              />
+              <DetailItem
+                label="Kim yaratdi"
+                value={craetedAdmin?.data?.data?.user_name || "N/A"}
+              />
+              <DetailItem
+                label="Kim o'zgartirdi"
+                value={updatedAdmin?.data?.data?.user_name || "N/A"}
               />
             </DetailSection>
 

@@ -31,6 +31,8 @@ export type Contract = {
   purchase_status: EnumShartnomaPaid;
   sana: string;
   service: IService;
+  whoCreated: string;
+  whoUpdated: string;
   service_id: string;
   shartnoma_id: string;
   shartnoma_muddati: string;

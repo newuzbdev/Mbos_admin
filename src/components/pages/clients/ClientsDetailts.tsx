@@ -12,6 +12,7 @@ import { Contract } from "@/types/contract";
 import { formatNumber } from "@/components/formNumber";
 import IncomeCreate from "../income/IncomeCreate";
 import ContractCreate from "../contracts/ContractCreate";
+import { useGetGetAdmin } from "@/hooks/useAdmin";
 
 const makeColumns = (): ColumnDef<Income>[] => [
   {
@@ -96,15 +97,15 @@ const makeColumnsShartnoma = (
 
 export default function ClientsDetails() {
   const { clientsId } = useParams();
+  const { data: clientsDetails, isLoading } = useGetClient(clientsId);
+  const clients: Clients | undefined = clientsDetails?.data.data;
+
+  const { data: createAdmin } = useGetGetAdmin(Number(clients?.whoCreated));
+  const { data: updateAdmin } = useGetGetAdmin(Number(clients?.whoUpdated));
 
   const navigate = useNavigate();
 
-  const { data: clientsDetails, isLoading } = useGetClient(clientsId);
-
   if (isLoading) return <div>Yuklanmoqda...</div>;
-
-  const clients: Clients | undefined = clientsDetails?.data.data;
-
   if (!clients) return <div>Mijoz ma'lumotlari topilmadi</div>;
 
   return (
@@ -130,6 +131,14 @@ export default function ClientsDetails() {
               <DetailItem label="Mijozning to'liq ismi" value={clients.F_I_O} />
               <DetailItem label="Telefon raqami" value={clients.phone} />
               <DetailItem label="Manzil" value={clients.adress} />
+              <DetailItem
+                label="kim yaratdi"
+                value={createAdmin?.data.data.user_name}
+              />
+              <DetailItem
+                label="kim o'zgartirdi"
+                value={updateAdmin?.data.data.user_name}
+              />
             </DetailSection>
 
             <div>
