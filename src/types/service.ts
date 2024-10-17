@@ -12,8 +12,7 @@ export interface IService {
   shartnoma: Contract;
   updated_at: string;
   title: string;
-  marta: string;
-  dona: string;
+  birliklar: string;
   price: number;
   serviceType: EnumServiceType;
 }

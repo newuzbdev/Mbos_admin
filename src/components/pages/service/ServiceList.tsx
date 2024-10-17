@@ -32,14 +32,9 @@ const makeColumns = (
     cell: ({ row }) => <p>{formatNumber(row.original.price)} s'om</p>,
   },
   {
-    header: "marta",
-    accessorKey: "marta",
-    cell: ({ row }) => <p>{row.original.marta || "mavjut emas"}</p>,
-  },
-  {
-    header: "dona",
-    accessorKey: "dona",
-    cell: ({ row }) => <p>{row.original.dona || "mavjut emas"}</p>,
+    header: "birliklari",
+    accessorKey: "birliklar",
+    cell: ({ row }) => <p>{row.original.birliklar || "mavjut emas"}</p>,
   },
 ];
 

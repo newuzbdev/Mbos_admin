@@ -1,11 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  ContactRoundIcon,
-  Contrast,
-  PictureInPictureIcon,
-  UserIcon,
-} from "lucide-react";
+import { ContactRoundIcon, PictureInPictureIcon, UserIcon } from "lucide-react";
 import { useGetClient } from "@/hooks/useClients";
 import { DeleteItem } from "@/components/pages/clients/functions/clients-delete";
 import { UpdateItem } from "@/components/pages/clients/functions/clients-edit";
@@ -15,6 +10,8 @@ import DataTable from "@/components/data-table";
 import { ColumnDef } from "@tanstack/react-table";
 import { Contract } from "@/types/contract";
 import { formatNumber } from "@/components/formNumber";
+import IncomeCreate from "../income/IncomeCreate";
+import ContractCreate from "../contracts/ContractCreate";
 
 const makeColumns = (): ColumnDef<Income>[] => [
   {
@@ -136,12 +133,15 @@ export default function ClientsDetails() {
             </DetailSection>
 
             <div>
-              <p className="flex items-center gap-2 text-lg font-semibold mb-1.5">
-                <ContactRoundIcon className="text-primary" />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800">
-                  daromat haqida ma'lumot
-                </span>
-              </p>
+              <div className="flex justify-between">
+                <p className="flex items-center gap-2 text-lg font-semibold mb-1.5">
+                  <ContactRoundIcon className="text-primary flex" />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800">
+                    daromat haqida ma'lumot
+                  </span>
+                </p>
+                <IncomeCreate />
+              </div>
               <DataTable
                 data={(clients?.income as any) || []}
                 columns={makeColumns()}
@@ -150,12 +150,15 @@ export default function ClientsDetails() {
               />
             </div>
             <div className="col-span-2">
-              <p className="flex items-center gap-2 text-lg font-semibold mb-1.5">
-                <PictureInPictureIcon className="text-primary" />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800">
-                  shartnoma haqida ma'lumot
-                </span>
-              </p>
+              <div className="flex justify-between">
+                <p className="flex items-center gap-2 text-lg font-semibold mb-1.5">
+                  <PictureInPictureIcon className="text-primary" />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800">
+                    shartnoma haqida ma'lumot
+                  </span>
+                </p>
+                <ContractCreate />
+              </div>
               <DataTable
                 data={(clients?.shartnome as any) || []}
                 columns={makeColumnsShartnoma(navigate)}

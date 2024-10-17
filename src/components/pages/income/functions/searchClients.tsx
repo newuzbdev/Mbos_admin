@@ -71,11 +71,12 @@ export function SearchClient({
                     autoFocus
                   />
                 </div>
-                {filteredServices?.map((el: Clients) => (
-                  <SelectItem key={el.id} value={el.id.toString()}>
-                    {el.F_I_O} - {el.phone}
-                  </SelectItem>
-                ))}
+                {search.length > 3 &&
+                  filteredServices?.map((el: Clients) => (
+                    <SelectItem key={el.id} value={el.id.toString()}>
+                      {el.F_I_O} - {el.phone}
+                    </SelectItem>
+                  ))}
               </SelectGroup>
             </SelectContent>
           </Select>
