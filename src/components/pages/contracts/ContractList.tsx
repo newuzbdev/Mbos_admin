@@ -35,6 +35,11 @@ const makeColumns = (
     ),
   },
   {
+    accessorKey: "service",
+    header: "Xizmat / Product",
+    cell: ({ row }) => <div>{row.original.service.title}</div>,
+  },
+  {
     accessorKey: "shartnoma_turi",
     header: "Shartnoma turi",
     cell: ({ row }) => (

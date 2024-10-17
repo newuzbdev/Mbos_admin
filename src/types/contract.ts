@@ -26,7 +26,6 @@ export type Contract = {
   income: Income;
   id: number;
   izoh: string;
-  price: number;
   advancePayment: number;
   remainingPayment: number;
   purchase_status: EnumShartnomaPaid;

@@ -18,12 +18,19 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useState } from "react";
-import { ArrowDownIcon, ArrowUpIcon } from "lucide-react";
+import {
+  ArrowDownIcon,
+  ArrowLeft,
+  ArrowRight,
+  ArrowUpIcon,
+} from "lucide-react";
 import { Pagination } from "./pagination";
 import { Search } from "./search";
+import { Button } from "./ui/button";
 interface DataTableProps<TData, TValue> {
   title?: string;
   search?: boolean;
+  defaultPagination?: boolean;
   columns: ColumnDef<TData, TValue>[];
   data: { pagination: any; data: TData[] };
 }
@@ -32,13 +39,14 @@ export default function DataTable<TData, TValue>({
   title,
   columns,
   search = true,
+  defaultPagination = false,
   data,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
   const table = useReactTable({
-    data: data?.data,
+    data: data?.data || data,
     columns,
     state: {
       columnVisibility,
@@ -140,7 +148,28 @@ export default function DataTable<TData, TValue>({
             </TableBody>
           </Table>
         </div>
-        <Pagination table={data?.pagination} />
+        {defaultPagination ? (
+          <div className="flex items-center justify-end space-x-2 py-4">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              <ArrowLeft />
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              <ArrowRight />
+            </Button>
+          </div>
+        ) : (
+          <Pagination table={data?.pagination} />
+        )}
       </div>
     </>
   );

@@ -1,23 +1,106 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CreditCardIcon, UserIcon, DollarSignIcon } from "lucide-react";
+import {
+  ContactRoundIcon,
+  Contrast,
+  PictureInPictureIcon,
+  UserIcon,
+} from "lucide-react";
 import { useGetClient } from "@/hooks/useClients";
 import { DeleteItem } from "@/components/pages/clients/functions/clients-delete";
 import { UpdateItem } from "@/components/pages/clients/functions/clients-edit";
 import { Income } from "@/types/income";
 import { Clients } from "@/types/clients";
+import DataTable from "@/components/data-table";
+import { ColumnDef } from "@tanstack/react-table";
 import { Contract } from "@/types/contract";
+import { formatNumber } from "@/components/formNumber";
+
+const makeColumns = (): ColumnDef<Income>[] => [
+  {
+    header: "№",
+    cell: (c) => <div className="cursor-pointer">{c.row.index + 1}</div>,
+  },
+  {
+    accessorKey: "amount",
+    header: "Narx",
+    cell: ({ row }) => <div>{formatNumber(row.original.amount)} s'om</div>,
+  },
+  {
+    accessorKey: "description",
+    header: "izoh",
+    cell: ({ row }) => (
+      <div className="cursor-pointer">{row.original.description}</div>
+    ),
+  },
+  {
+    accessorKey: "date",
+    header: "vaqt",
+    cell: ({ row }) => (
+      <div className="cursor-pointer">
+        {new Date(row.original.date).toLocaleDateString()}
+      </div>
+    ),
+  },
+];
+
+const makeColumnsShartnoma = (
+  navigate: (path: string) => void
+): ColumnDef<Contract>[] => [
+  {
+    header: "№",
+    cell: (c) => <div className="cursor-pointer">{c.row.index + 1}</div>,
+  },
+  {
+    accessorKey: "service",
+    header: "Xizmat / Product",
+    cell: ({ row }) => (
+      <div
+        className="underline text-primary cursor-pointer"
+        onClick={() => navigate(`/contract/${row.original.id}`)}
+      >
+        {row.original.service.title}
+      </div>
+    ),
+  },
+  {
+    accessorKey: "advancePayment",
+    header: "Tolangan",
+    cell: ({ row }) => (
+      <div>{formatNumber(row.original.advancePayment)} s'om</div>
+    ),
+  },
+  {
+    accessorKey: "remainingPayment",
+    header: "qolgan to'lov",
+    cell: ({ row }) => (
+      <div className="cursor-pointer">
+        {formatNumber(row.original.remainingPayment)} s'om
+      </div>
+    ),
+  },
+  {
+    accessorKey: "count",
+    header: "miktor",
+    cell: ({ row }) => (
+      <div className="cursor-pointer">{formatNumber(row.original.count)}</div>
+    ),
+  },
+  {
+    accessorKey: "sana",
+    header: "vaqt",
+    cell: ({ row }) => (
+      <div className="cursor-pointer">
+        {new Date(row.original.sana).toLocaleDateString()}
+      </div>
+    ),
+  },
+];
 
 export default function ClientsDetails() {
-  const payment_methods = [
-    { name: "cash", value: "Naqd pul" },
-    { name: "translation", value: "O'tkazma" },
-    { name: "online", value: "Online" },
-    { name: "salary", value: "Ish haqi" },
-    { name: "delivery", value: "Yetkazib berish" },
-    { name: "other", value: "Boshqa" },
-  ];
   const { clientsId } = useParams();
+
+  const navigate = useNavigate();
 
   const { data: clientsDetails, isLoading } = useGetClient(clientsId);
 
@@ -27,21 +110,22 @@ export default function ClientsDetails() {
 
   if (!clients) return <div>Mijoz ma'lumotlari topilmadi</div>;
 
-  const getPaymentMethodUzbek = (method: string) => {
-    const paymentMethod = payment_methods.find((pm) => pm.name === method);
-    return paymentMethod ? paymentMethod.value : method;
-  };
-
   return (
-    <div className="container px-4 py-8 mx-auto">
+    <div className="container p-0 mx-auto">
       <Card className="overflow-hidden">
         <CardHeader className="bg-gradient-to-r from-primary to-blue-800">
-          <CardTitle className="text-2xl font-bold text-white">
-            Shartnoma malumotlari
-          </CardTitle>
+          <div className="flex justify-between">
+            <CardTitle className="text-2xl font-bold text-white">
+              Mijoz malumotlari
+            </CardTitle>
+            <div className="flex justify-end">
+              <UpdateItem clients={clients} />
+              <DeleteItem />
+            </div>
+          </div>
         </CardHeader>
         <CardContent className="p-6">
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
             <DetailSection
               icon={<UserIcon className="w-5 h-5 text-primary" />}
               title="Mijoz haqida ma'lumot"
@@ -51,83 +135,33 @@ export default function ClientsDetails() {
               <DetailItem label="Manzil" value={clients.adress} />
             </DetailSection>
 
-            <DetailSection
-              icon={<CreditCardIcon className="w-5 h-5 text-green-600" />}
-              title={`Mijozning shartnomalar tarihi: ${clients?.shartnome?.length}`}
-            >
-              <div className="overflow-y-auto h-60">
-                {(
-                  clients as Clients & { shartnome?: Contract[] }
-                )?.shartnome?.map((shartnoma: Contract, index: number) => (
-                  <div
-                    key={shartnoma.id}
-                    className="p-4 mb-4 bg-white rounded-lg shadow-md dark:text-white dark:bg-gray-700"
-                  >
-                    <h4 className="mb-2 font-semibold">{`${
-                      index + 1
-                    }-Shartnoma`}</h4>
-                    <DetailItem
-                      label="Shartnoma ID"
-                      value={shartnoma.shartnoma_id}
-                    />
-                    <DetailItem
-                      label="Shartnoma sanasi"
-                      value={shartnoma.sana}
-                    />
-                    <DetailItem
-                      label="Shartnoma miqdori"
-                      value={shartnoma.count}
-                    />
-                    <DetailItem
-                      label="Shartnoma davomiyligi"
-                      value={shartnoma.shartnoma_muddati}
-                    />
-                    <DetailItem
-                      label="Shartnoma texnik davomiyligi"
-                      value={shartnoma.texnik_muddati}
-                    />
-                  </div>
-                ))}
-              </div>
-            </DetailSection>
-
-            <DetailSection
-              icon={<DollarSignIcon className="w-5 h-5 text-yellow-600" />}
-              title={`To'lov tarixi: ${clients?.income?.length}`}
-            >
-              <div className="overflow-y-auto h-60">
-                {(clients as Clients & { income?: Income[] })?.income?.map(
-                  (income: Income) => (
-                    <div
-                      key={income.id}
-                      className="p-2 mb-2 bg-gray-100 rounded dark:bg-gray-700"
-                    >
-                      <DetailItem
-                        label={`To'lov summasi`}
-                        value={income.amount}
-                      />
-                      <DetailItem label={`To'lov sanasi`} value={income.date} />
-                      <DetailItem
-                        label={`To'lov holati`}
-                        value={income.is_paid ? "To'langan" : "To'lanmagan"}
-                      />
-                      <DetailItem
-                        label={`To'lov usuli`}
-                        value={getPaymentMethodUzbek(income.payment_method)}
-                      />
-                    </div>
-                  )
-                )}
-                {!(clients as Clients & { income?: Income[] })?.income ||
-                  ((clients as Clients & { income?: Income[] }).income
-                    ?.length === 0 && <p>To'lovlar mavjud emas</p>)}
-              </div>
-            </DetailSection>
-          </div>
-          <div>
-            <div className="flex justify-end py-4 space-x-2">
-              <UpdateItem clients={clients} />
-              <DeleteItem />
+            <div>
+              <p className="flex items-center gap-2 text-lg font-semibold mb-1.5">
+                <ContactRoundIcon className="text-primary" />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800">
+                  daromat haqida ma'lumot
+                </span>
+              </p>
+              <DataTable
+                data={(clients?.income as any) || []}
+                columns={makeColumns()}
+                search={false}
+                defaultPagination
+              />
+            </div>
+            <div className="col-span-2">
+              <p className="flex items-center gap-2 text-lg font-semibold mb-1.5">
+                <PictureInPictureIcon className="text-primary" />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800">
+                  shartnoma haqida ma'lumot
+                </span>
+              </p>
+              <DataTable
+                data={(clients?.shartnome as any) || []}
+                columns={makeColumnsShartnoma(navigate)}
+                search={false}
+                defaultPagination
+              />
             </div>
           </div>
         </CardContent>
@@ -146,12 +180,12 @@ function DetailSection({
 }) {
   return (
     <div className="space-y-4">
-      <h3 className="flex items-center gap-2 text-lg font-semibold">
+      <p className="flex items-center gap-2 text-lg font-semibold">
         {icon}
         <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800">
           {title}
         </span>
-      </h3>
+      </p>
       <div className="p-4 space-y-2 rounded-lg shadow-inner bg-gray-50 dark:bg-gray-800">
         {children}
       </div>
