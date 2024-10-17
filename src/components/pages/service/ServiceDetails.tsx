@@ -1,11 +1,11 @@
 import { useParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CreditCardIcon, FileTextIcon } from "lucide-react";
+import { CreditCardIcon, } from "lucide-react";
 import { formatNumber } from "@/components/formNumber";
 import { DeleteItem } from "./functions/delete";
 import { UpdateItem } from "./functions/update";
 import { useGetService } from "@/hooks/useService";
-import { Contract } from "@/types/contract";
+import ServiceStats from "./ServiceStats";
 
 export default function ServiceDetails() {
   const { id } = useParams();
@@ -16,15 +16,22 @@ export default function ServiceDetails() {
   const service = serviceData?.data?.data;
 
   return (
-    <div className="container px-4 py-8 mx-auto">
+    <div className="container p-0 mx-auto">
       <Card className="overflow-hidden">
         <CardHeader className="bg-gradient-to-r from-primary to-blue-800">
-          <CardTitle className="text-2xl font-bold text-white">
-            Service malumotlari
-          </CardTitle>
+          <div className="flex justify-between">
+            <CardTitle className="text-2xl font-bold text-white">
+              Service malumotlari
+            </CardTitle>
+            <div className="flex justify-end space-x-2">
+              <UpdateItem service={service} />
+              <DeleteItem />
+            </div>
+          </div>
         </CardHeader>
-        <CardContent className="p-6">
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+        <ServiceStats />
+        <CardContent className="p-6 ">
+          <div className="grid w-full grid-cols-1 gap-8 md:grid-cols-1">
             <DetailSection
               icon={<CreditCardIcon className="w-5 h-5 text-green-600" />}
               title="Moliyaviy tafsilotlar"
@@ -41,29 +48,13 @@ export default function ServiceDetails() {
                 label="xizmat turi"
                 value={formatNumber(service?.serviceType)}
               />
+                <DetailItem
+                label="Dona"
+                value={formatNumber(service?.dona)}
+              />
             </DetailSection>
 
-            <DetailSection
-              icon={<FileTextIcon className="w-5 h-5 text-purple-600" />}
-              title="Shartnomalar ro'yxati"
-            >
-              {!service?.shartnoma && (
-                <p className="text-center">contractlar royxati</p>
-              )}
-              {service?.shartnoma.map((el: Contract) => (
-                <DetailItem
-                  key={el.id}
-                  label="shartnoma_id"
-                  value={el?.shartnoma_id}
-                />
-              ))}
-            </DetailSection>
-          </div>
-          <div>
-            <div className="space-x-2 flex justify-end pt-5">
-              <UpdateItem service={service} />
-              <DeleteItem />
-            </div>
+          
           </div>
         </CardContent>
       </Card>
@@ -88,7 +79,7 @@ function DetailSection({
           {title}
         </span>
       </h3>
-      <div className="p-4 space-y-2 rounded-lg shadow-inner bg-gray-50 dark:bg-gray-800 max-h-72 overflow-auto">
+      <div className="p-4 space-y-2 overflow-auto rounded-lg shadow-inner bg-gray-50 dark:bg-gray-800 max-h-72">
         {children}
       </div>
     </div>
