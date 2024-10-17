@@ -50,8 +50,8 @@ import {
     });
     return (
       <>
-        <div className="flex flex-col w-full h-full my-4 space-y-2">
-          <div className="flex justify-end pt-6">
+        <div className="flex flex-col w-full h-full">
+          <div className="flex justify-end ">
             <ColumnFilter table={table} />
           </div>
           <div className="border rounded-lg ">

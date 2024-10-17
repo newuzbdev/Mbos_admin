@@ -21,7 +21,7 @@ export default function ServiceDetails() {
         <CardHeader className="bg-gradient-to-r from-primary to-blue-800">
           <div className="flex justify-between">
             <CardTitle className="text-2xl font-bold text-white">
-              Service malumotlari
+              Service / Product
             </CardTitle>
             <div className="flex justify-end space-x-2">
               <UpdateItem service={service} />
@@ -53,8 +53,6 @@ export default function ServiceDetails() {
                 value={formatNumber(service?.dona)}
               />
             </DetailSection>
-
-          
           </div>
         </CardContent>
       </Card>
