@@ -29,12 +29,18 @@ export default function ContractDetails() {
   const contract = contractDetails?.data?.data;
 
   return (
-    <div className="container px-4 py-8 mx-auto">
+    <div className="container p-0 mx-auto">
       <Card className="overflow-hidden">
         <CardHeader className="bg-gradient-to-r from-primary to-blue-800">
-          <CardTitle className="text-2xl font-bold text-white">
-            Shartnoma malumotlari
-          </CardTitle>
+          <div className="flex justify-between">
+            <CardTitle className="text-2xl font-bold text-white">
+              Shartnoma malumotlari
+            </CardTitle>
+            <div className="flex justify-end">
+              <UpdateItem contract={contract} />
+              <DeleteItem />
+            </div>
+          </div>
         </CardHeader>
         <CardContent className="p-6">
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
@@ -57,6 +63,10 @@ export default function ContractDetails() {
               <DetailItem
                 label="Shartnoma nomeri"
                 value={contract?.shartnoma_nomer}
+              />
+              <DetailItem
+                label="Mijozning telefon raqami"
+                value={contract?.user?.phone}
               />
             </DetailSection>
 
@@ -119,12 +129,6 @@ export default function ContractDetails() {
                 value={new Date(contract?.tolash_sana).toLocaleDateString()}
               />
             </DetailSection>
-          </div>
-          <div>
-            <div className="flex justify-end space-x-2">
-              <UpdateItem contract={contract} />
-              <DeleteItem />
-            </div>
           </div>
         </CardContent>
       </Card>

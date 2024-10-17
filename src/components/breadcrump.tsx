@@ -1,26 +1,3 @@
-// import {
-//     Breadcrumb,
-//     BreadcrumbItem,
-//     BreadcrumbLink,
-//     BreadcrumbList,
-//     BreadcrumbPage,
-//     BreadcrumbSeparator,
-//   } from "@/components/ui/breadcrumb"
-//   <Breadcrumb>
-//   <BreadcrumbList>
-//     <BreadcrumbItem>
-//       <BreadcrumbLink href="/">Home</BreadcrumbLink>
-//     </BreadcrumbItem>
-//     <BreadcrumbSeparator />
-//     <BreadcrumbItem>
-//       <BreadcrumbLink href="/components">Components</BreadcrumbLink>
-//     </BreadcrumbItem>
-//     <BreadcrumbSeparator />
-//     <BreadcrumbItem>
-//       <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
-//     </BreadcrumbItem>
-//   </BreadcrumbList>
-// </Breadcrumb>
 import React from "react";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from "@/components/ui/breadcrumb"; // Adjust import based on your folder structure"
 import { useLocation } from "react-router-dom";
@@ -40,9 +17,9 @@ const BreadcrumbComponent: React.FC = () => {
         {breadcrumbItems.map((item, index) => (
           <React.Fragment key={index}>
             <BreadcrumbItem>
-              <BreadcrumbLink href={item.path}>{item.label}</BreadcrumbLink>
+              <BreadcrumbLink href={item.path} className="text-xl text-white">{item.label}</BreadcrumbLink>
             </BreadcrumbItem>
-            {index < breadcrumbItems.length - 1 && <BreadcrumbSeparator />}
+            {index < breadcrumbItems.length - 1 && <BreadcrumbSeparator className="text-white " />}
           </React.Fragment>
         ))}
       </BreadcrumbList>
