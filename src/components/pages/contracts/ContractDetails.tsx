@@ -54,7 +54,10 @@ export default function ContractDetails() {
                   )[0].value
                 }
               />
-              <DetailItem label="Shartnoma ID" value={contract?.shartnoma_id} />
+              <DetailItem
+                label="Shartnoma nomeri"
+                value={contract?.shartnoma_nomer}
+              />
             </DetailSection>
 
             <DetailSection

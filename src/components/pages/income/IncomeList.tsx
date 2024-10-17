@@ -111,7 +111,7 @@ const IncomeList = () => {
   const [incomeToDelete, setIncomeToDelete] = useState<Income | undefined>();
   const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const page = Number(searchParams.get("page") ?? 1);
   const limit = Number(searchParams.get("limit") ?? 10);
   const search = searchParams.get("search") ?? "";
@@ -157,18 +157,6 @@ const IncomeList = () => {
     setIncomeToDelete(undefined);
   };
 
-  const handleSearch = (searchValue: string) => {
-    setSearchParams({ ...searchParams, search: searchValue, page: "1" });
-  };
-
-  const handlePageChange = (newPage: number) => {
-    setSearchParams({ ...searchParams, page: newPage.toString() });
-  };
-
-  const handleLimitChange = (newLimit: number) => {
-    setSearchParams({ ...searchParams, limit: newLimit.toString(), page: "1" });
-  };
-
   if (isLoading) return <div>Loading...</div>;
 
   return (
@@ -179,12 +167,6 @@ const IncomeList = () => {
           title="Foydalanuvchi ismi boyicha qidiring"
           columns={makeColumns(setIncomeToDelete)}
           data={income?.data || []}
-          onSearch={handleSearch}
-          onPageChange={handlePageChange}
-          onLimitChange={handleLimitChange}
-          currentPage={page}
-          pageSize={limit}
-          totalItems={income?.total || 0}
         />
       </div>
       <AlertDialog

@@ -1,4 +1,5 @@
 import { Clients } from "./clients";
+import { Contract } from "./contract";
 import { EnumServiceType } from "./service";
 
 export enum EnumIncamTpeTranslation {
@@ -14,6 +15,7 @@ export type Income = {
   id: string;
   user_id: number;
   amount: number;
+  shartnoma: Contract;
   payment_method: string;
   is_paid: string;
   description: string;
