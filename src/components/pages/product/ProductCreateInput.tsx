@@ -54,10 +54,9 @@ const ProductCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
         className="h-auto my-10 mt-4 space-y-5"
       >
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <ItemForm title="xizmat nomi" form={form} name="title" />
+          <ItemForm title="product nomi" form={form} name="title" />
           <ItemForm title="narxi" type="number" form={form} name="price" />
-          <ItemForm title="marta(ixtiyoriy)" form={form} name="marta" />
-          <ItemForm title="dona(ixtiyoriy)" form={form} name="dona" />
+          <ItemForm title="birliklar(ixtiyoriy)" form={form} name="birliklar" />
         </div>
         <Button
           type="submit"

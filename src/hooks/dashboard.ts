@@ -7,14 +7,14 @@ import { useQuery } from "@tanstack/react-query";
 
 export const useGetStatistic = () => {
   return useQuery({
-    queryKey: ["clients"],
+    queryKey: ["statistiks"],
     queryFn: () => getStatistic(),
   });
 };
 
 export const useGetIncomeDash = () => {
   return useQuery({
-    queryKey: ["dashboard"],
+    queryKey: ["incomeDash"],
     queryFn: () => useIncomeDash(),
   });
 };

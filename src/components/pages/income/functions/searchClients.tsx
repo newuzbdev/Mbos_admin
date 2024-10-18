@@ -28,6 +28,10 @@ export function SearchClient({
 }) {
   const [search, setSearch] = useState("");
 
+  if (!client?.data?.data) {
+    return "asd";
+  }
+
   const filteredServices = client?.data?.data?.filter(
     (el: Clients) =>
       el?.F_I_O.toLowerCase().trim().includes(search.toLowerCase().trim()) ||

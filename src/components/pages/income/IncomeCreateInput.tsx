@@ -17,20 +17,12 @@ interface IncomeCreateInputProps {
 
 const IncomeCreateInput = ({ closeDialog }: IncomeCreateInputProps) => {
   const { mutate: addIncome } = useAddIncome();
-  const { data: user } = useGetClients({});
+  const { data: user } = useGetClients({ limit: 999 });
 
   const { refetch: refetchIncome } = useGetIncome({});
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: {
-      // Convert user_id if necessary
-      amount: 0,
-      payment_method: "",
-      is_paid: "",
-      description: "",
-      date: "",
-    },
   });
 
   const onSubmit = (data: z.infer<typeof FormSchema>) => {

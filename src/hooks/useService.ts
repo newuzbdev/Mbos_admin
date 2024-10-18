@@ -6,7 +6,7 @@ import {
   updateService,
 } from "@/services/service";
 import { getServiceDash } from "@/services/statistic";
-import { IParams,  } from "@/types/income";
+import { IParams } from "@/types/income";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const useAddService = () => {
@@ -44,7 +44,7 @@ export function useServiceUpdate() {
 
 export const useGetServiceDash = (id: string) => {
   return useQuery({
-    queryKey: ["serviceDash", id],
+    queryKey: ["service", id],
     queryFn: () => {
       if (!id) throw new Error("Service ID is required");
       return getServiceDash(id);
@@ -52,9 +52,3 @@ export const useGetServiceDash = (id: string) => {
     enabled: !!id,
   });
 };
-// export const useGetServicesDash = (id: ServiceDashData) => {
-//   return useQuery({
-//     queryKey: ["serviceDash"],
-//     queryFn: (id: ServiceDashData) => getServiceDash(id),
-//   });
-// };

@@ -13,6 +13,8 @@ export interface IService {
   updated_at: string;
   title: string;
   birliklar: string;
+  whoCreated: string;
+  whoUpdated: string;
   price: number;
   serviceType: EnumServiceType;
 }

@@ -1,19 +1,23 @@
 import { useParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CreditCardIcon, } from "lucide-react";
+import { CreditCardIcon } from "lucide-react";
 import { formatNumber } from "@/components/formNumber";
 import { DeleteItem } from "./functions/delete";
 import { UpdateItem } from "./functions/update";
 import { useGetService } from "@/hooks/useService";
 import ServiceStats from "./ServiceStats";
+import { IService } from "@/types/service";
+import { useGetGetAdmin } from "@/hooks/useAdmin";
 
 export default function ServiceDetails() {
   const { id } = useParams();
   const { data: serviceData, isLoading } = useGetService(id!);
+  const service = serviceData?.data?.data as IService;
+
+  const { data: createAdmin } = useGetGetAdmin(Number(service?.whoCreated));
+  const { data: updateAdmin } = useGetGetAdmin(Number(service?.whoUpdated));
 
   if (isLoading) return <div>Yuklanmoqda...</div>;
-
-  const service = serviceData?.data?.data;
 
   return (
     <div className="container p-0 mx-auto">
@@ -40,17 +44,16 @@ export default function ServiceDetails() {
                 label="Narx"
                 value={formatNumber(service?.price) + " s'om"}
               />
+              <DetailItem label="xizmat nomi" value={service?.title} />
+              <DetailItem label="xizmat turi" value={service?.serviceType} />
+              <DetailItem label="Dona" value={service?.birliklar} />
               <DetailItem
-                label="xizmat nomi"
-                value={formatNumber(service?.title)}
+                label="kim yaratdi"
+                value={createAdmin?.data.data.user_name}
               />
               <DetailItem
-                label="xizmat turi"
-                value={formatNumber(service?.serviceType)}
-              />
-                <DetailItem
-                label="Dona"
-                value={formatNumber(service?.dona)}
+                label="kim o'zgartirdi"
+                value={updateAdmin?.data.data.user_name}
               />
             </DetailSection>
           </div>

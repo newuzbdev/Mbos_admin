@@ -10,11 +10,6 @@ export const useIncomeStatistik = async () => {
   return await axiosPrivate.get("/dashboard/statstik");
 };
 
-// export const getServiceDash = async (id: any) => {
-//   return await axiosPrivate.get(`/dashboard/serviceDash/${id}`);
-// };
-// Ensure correct import path for axiosPrivate
-
 export const getServiceDash = async (id: string) => {
   return await axiosPrivate.get(`/dashboard/serviceDash/${id}`);
 };
