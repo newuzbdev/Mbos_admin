@@ -17,7 +17,6 @@ import { useForm } from "react-hook-form";
 
 export function UpdateItem({ clients }: { clients: Clients }) {
   const { mutate } = useClientsUpdate();
-
   const { refetch } = useGetClient(clients.id.toString());
 
   const [isUpdate, setUpdate] = useState(false);
@@ -27,12 +26,13 @@ export function UpdateItem({ clients }: { clients: Clients }) {
 
   const handleSubmit = (item: Clients) => {
     const { F_I_O, phone, adress } = item;
-
     const dataToSend = {
       id: clients.id,
       F_I_O,
       phone: +phone,
       adress,
+      whoCreated: clients.whoCreated,
+      whoUpdated: clients.whoUpdated
     };
 
     mutate(dataToSend, {
