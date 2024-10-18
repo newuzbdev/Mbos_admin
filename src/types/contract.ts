@@ -42,4 +42,5 @@ export type Contract = {
   total_price: string;
   updated_at: string;
   user_id: number;
+  price: number;
 };

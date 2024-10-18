@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
@@ -8,6 +8,7 @@ import { toast } from "@/hooks/use-toast";
 import { Clients } from "@/types/clients";
 import { ItemForm } from "@/components/Input-create";
 import { FormSchema } from "../../validate";
+import { PhoneInput } from "@/components/phone-input"; 
 
 interface ClientsCreateInputProps {
   closeDialog?: () => void;
@@ -23,7 +24,9 @@ const ClientsCreateInput = ({ closeDialog }: ClientsCreateInputProps) => {
   const { refetch: refetchClients } = useGetClients({});
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    const clientsData = { ...data, phone: +data.phone };
+    const phoneNumber = typeof data.phone === 'string' ? data.phone.replace(/\D/g, "") : data.phone.toString();
+
+    const clientsData = { ...data, phone: parseInt(phoneNumber,) };
 
     addClient(clientsData as Clients, {
       onSuccess: () => {
@@ -44,7 +47,6 @@ const ClientsCreateInput = ({ closeDialog }: ClientsCreateInputProps) => {
       },
     });
   }
-
   return (
     <Form {...form}>
       <form
@@ -53,11 +55,17 @@ const ClientsCreateInput = ({ closeDialog }: ClientsCreateInputProps) => {
       >
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <ItemForm title="Tolik ism" form={form} name="F_I_O" />
-          <ItemForm
-            title="telefon rakam"
-            form={form}
+          
+          <Controller
             name="phone"
-            type="number"
+            control={form.control}
+            render={({ field }) => (
+              <PhoneInput
+                {...field}
+                onValueChange={(values) => field.onChange(values.value)}
+                placeholder="telefon rakam9"
+              />
+            )}
           />
           <ItemForm title="manzil" form={form} name="adress" />
         </div>
