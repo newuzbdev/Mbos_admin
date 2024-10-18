@@ -55,16 +55,20 @@ const ClientsCreateInput = ({ closeDialog }: ClientsCreateInputProps) => {
       >
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <ItemForm title="Tolik ism" form={form} name="F_I_O" />
-          
+         
           <Controller
             name="phone"
             control={form.control}
             render={({ field }) => (
-              <PhoneInput
-                {...field}
-                onValueChange={(values) => field.onChange(values.value)}
-                placeholder="telefon rakam9"
-              />
+              <div>
+                <label htmlFor="phone" className="block mb-2 text-base font-bold text-gray-500">Telefon raqami</label>
+                <PhoneInput
+                  {...field}
+                  id="phone"
+                  onValueChange={(values) => field.onChange(values.value)}
+                  placeholder="telefon rakam9"
+                />
+              </div>
             )}
           />
           <ItemForm title="manzil" form={form} name="adress" />
