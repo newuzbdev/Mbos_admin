@@ -10,6 +10,7 @@ import { FormSchema } from "../../validate";
 import { Form } from "@/components/ui/form";
 import { useGetClients } from "@/hooks/useClients";
 import { SearchClient } from "./functions/searchClients";
+import { useLocation, useParams } from "react-router-dom";
 
 interface IncomeCreateInputProps {
   closeDialog?: () => void;
@@ -18,6 +19,8 @@ interface IncomeCreateInputProps {
 const IncomeCreateInput = ({ closeDialog }: IncomeCreateInputProps) => {
   const { mutate: addIncome } = useAddIncome();
   const { data: user } = useGetClients({ limit: 999 });
+  const location = useLocation();
+  const { clientsId } = useParams();
 
   const { refetch: refetchIncome } = useGetIncome({});
 
@@ -26,7 +29,11 @@ const IncomeCreateInput = ({ closeDialog }: IncomeCreateInputProps) => {
   });
 
   const onSubmit = (data: z.infer<typeof FormSchema>) => {
-    const incomeData = { ...data, amount: +data.amount };
+    const incomeData = {
+      ...data,
+      amount: +data.amount,
+      user_id: Number(clientsId) || data.user_id,
+    };
 
     addIncome(incomeData as Income, {
       onSuccess: () => {
@@ -55,7 +62,9 @@ const IncomeCreateInput = ({ closeDialog }: IncomeCreateInputProps) => {
         className="h-auto my-10 mt-4 space-y-5"
       >
         <div className="grid grid-cols-2 gap-3">
-          <SearchClient form={form} client={user} title="Mijoz" />
+          {!location.pathname.includes("clients/") && (
+            <SearchClient form={form} client={user} title="Mijoz" />
+          )}
           <ItemForm
             form={form}
             name="amount"

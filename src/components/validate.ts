@@ -1,10 +1,7 @@
 import { z } from "zod";
 
 export const FormSchema = z
-  .object({
-    marta: z.string().optional(),
-    dona: z.string().optional(),
-  })
+  .object({ description: z.string().optional() })
   .catchall(
     z.union([
       z.string().nonempty("Maydon bo'sh qator bo'lishi mumkin emas"),

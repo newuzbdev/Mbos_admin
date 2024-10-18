@@ -1,5 +1,4 @@
 import { Form } from "@/components/ui/form";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -13,6 +12,7 @@ import { useGetServices } from "@/hooks/useService";
 import { SearchService } from "./functions/searchService";
 import { EnumServiceType } from "@/types/service";
 import { SearchClient } from "./functions/searchClient";
+import { useLocation, useParams } from "react-router-dom";
 
 interface ContractsCreateInputProps {
   closeDialog?: () => void;
@@ -30,13 +30,15 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
     resolver: zodResolver(FormSchema),
   });
   const { refetch: refetchContract } = useGetContracts({});
+  const location = useLocation();
+  const { clientsId } = useParams();
 
   function onSubmit(data: Contract) {
-    const { price, ...contractsData } = {
+    const { ...contractsData } = {
       ...data,
       count: Number(data.count),
       advancePayment: Number(data.advancePayment),
-      user_id: Number(data.user_id),
+      user_id: Number(clientsId) || Number(data?.user_id),
       tolash_sana: new Date(),
     };
 
@@ -80,9 +82,9 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
             service={service}
             title={"service / product"}
           />
-
-          <SearchClient form={form} client={user} title={"Foydalanuvchi"} />
-
+          {!location.pathname.includes("clients/") && (
+            <SearchClient form={form} client={user} title={"Foydalanuvchi"} />
+          )}
           <ItemForm
             enums={[
               { name: "subscription_fee", value: "Oylik tolov" },
