@@ -23,6 +23,7 @@ interface TypeCreateInput {
   type?: HTMLInputTypeAttribute;
   enums?: { name: string; value: string }[];
 }
+import { NumericFormat } from "react-number-format";
 
 export const ItemForm = ({
   name,
@@ -59,11 +60,16 @@ export const ItemForm = ({
             </Select>
           ) : type === "number" ? (
             <FormControl>
-              <Input
-                type="number"
+              <NumericFormat
+                value={field.value}
+                thousandSeparator=" "
+                allowNegative={false}
+                onValueChange={(values) => {
+                  const { value } = values;
+                  field.onChange(value);
+                }}
                 placeholder={title}
-                {...field}
-                className="px-4 py-2 transition duration-200 border-2 rounded-md border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
+                className="w-full px-4 py-1 transition duration-200 border-2 rounded-md border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
               />
             </FormControl>
           ) : (
