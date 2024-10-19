@@ -18,11 +18,12 @@ interface IncomeCreateInputProps {
 
 const IncomeCreateInput = ({ closeDialog }: IncomeCreateInputProps) => {
   const { mutate: addIncome } = useAddIncome();
-  const { data: user } = useGetClients({ limit: 999 });
+  const { data: user, refetch: refetchClients } = useGetClients({ limit: 999 });
   const location = useLocation();
   const { clientsId } = useParams();
 
   const { refetch: refetchIncome } = useGetIncome({});
+  // const {refetch: refetchClients} = useGetClients();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -37,7 +38,9 @@ const IncomeCreateInput = ({ closeDialog }: IncomeCreateInputProps) => {
 
     addIncome(incomeData as Income, {
       onSuccess: () => {
+        refetchClients();
         refetchIncome();
+
         form.reset();
         toast({
           title: "Daromad muvaffaqiyatli qo'shildi.",

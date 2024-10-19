@@ -28,10 +28,8 @@ export function SearchService({
 }) {
   const [search, setSearch] = useState("");
 
-  const filteredServices = service?.data?.data?.filter(
-    (el: IService) =>
-      el?.title.toLowerCase().trim().includes(search.toLowerCase().trim()) ||
-      !search
+  const filteredServices = service?.data?.data?.filter((el: IService) =>
+    el?.title?.toLowerCase().trim().includes(search.toLowerCase().trim())
   );
 
   return (
@@ -52,8 +50,8 @@ export function SearchService({
                 <SelectValue placeholder={title}>
                   {field.value
                     ? service?.data?.data?.find(
-                        (service: IService) => service.id === +field.value
-                      )?.title
+                        (service: IService) => service?.id === +field.value
+                      )?.title || "Xizmat topilmadi" 
                     : "Xizmat tanlang"}
                 </SelectValue>
               </SelectTrigger>
@@ -70,12 +68,15 @@ export function SearchService({
                     autoFocus
                   />
                 </div>
-                {search.length > 3 &&
-                  filteredServices?.map((el: IService) => (
+                {filteredServices?.length > 0 ? (
+                  filteredServices.map((el: IService) => (
                     <SelectItem key={el.id} value={el.id.toString()}>
                       {el.title}
                     </SelectItem>
-                  ))}
+                  ))
+                ) : (
+                  <div className="px-4 py-2 text-gray-500">Xizmat topilmadi</div>
+                )}
               </SelectGroup>
             </SelectContent>
           </Select>

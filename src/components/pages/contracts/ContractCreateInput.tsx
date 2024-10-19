@@ -20,7 +20,7 @@ interface ContractsCreateInputProps {
 
 const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
   const { mutate: addContract } = useAddContract();
-  const { data: user } = useGetClients({ limit: 999 });
+  const { data: user, refetch: refetchClients } = useGetClients({ limit: 999 });
   const { data: service } = useGetServices({
     limit: 999,
     type: EnumServiceType.other,
@@ -44,6 +44,7 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
 
     addContract(contractsData as Contract, {
       onSuccess: () => {
+        refetchClients()
         refetchContract();
         form.reset();
         toast({
