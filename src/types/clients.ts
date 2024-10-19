@@ -6,8 +6,8 @@ export type Clients = {
   F_I_O: string;
   phone: number;
   adress: string;
-  whoCreated: string;
-  whoUpdated: string;
+  // whoCreated: string;
+  // whoUpdated: string;
   shartnome?: Contract[];
   income?: Income[];
 };

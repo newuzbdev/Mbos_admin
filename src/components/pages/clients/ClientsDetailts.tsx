@@ -13,6 +13,7 @@ import { formatNumber } from "@/components/formNumber";
 import IncomeCreate from "../income/IncomeCreate";
 import ContractCreate from "../contracts/ContractCreate";
 import { useGetGetAdmin } from "@/hooks/useAdmin";
+import { AdminType } from "@/types/auth";
 
 const makeColumns = (): ColumnDef<Income>[] => [
   {
@@ -54,7 +55,7 @@ const makeColumnsShartnoma = (
     header: "Xizmat / Product",
     cell: ({ row }) => (
       <div
-        className="underline text-primary cursor-pointer"
+        className="underline cursor-pointer text-primary"
         onClick={() => navigate(`/contract/${row.original.id}`)}
       >
         {row.original.service.title}
@@ -99,9 +100,10 @@ export default function ClientsDetails() {
   const { clientsId } = useParams();
   const { data: clientsDetails, isLoading } = useGetClient(clientsId);
   const clients: Clients | undefined = clientsDetails?.data.data;
+  const admins: AdminType | undefined = clientsDetails?.data.data;
 
-  const { data: createAdmin } = useGetGetAdmin(Number(clients?.whoCreated));
-  const { data: updateAdmin } = useGetGetAdmin(Number(clients?.whoUpdated));
+  const { data: createAdmin } = useGetGetAdmin(Number(admins?.whoCreated));
+  const { data: updateAdmin } = useGetGetAdmin(Number(admins?.whoUpdated));
 
   const navigate = useNavigate();
 
@@ -144,7 +146,7 @@ export default function ClientsDetails() {
             <div>
               <div className="flex justify-between">
                 <p className="flex items-center gap-2 text-lg font-semibold mb-1.5">
-                  <ContactRoundIcon className="text-primary flex" />
+                  <ContactRoundIcon className="flex text-primary" />
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800">
                     daromat haqida ma'lumot
                   </span>

@@ -16,3 +16,8 @@ export type LoginData = {
   user_name: string
   password: string
 }
+
+export type AdminType ={
+  whoCreated: string
+  whoUpdated: string
+}
