@@ -58,7 +58,7 @@ const makeColumnsShartnoma = (
         className="underline cursor-pointer text-primary"
         onClick={() => navigate(`/contract/${row.original.id}`)}
       >
-        {row.original.service.title}
+        {row.original.service?.title || 'N/A'}
       </div>
     ),
   },

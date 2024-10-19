@@ -7,7 +7,7 @@ import { ItemForm } from "@/components/Input-create";
 import { FormSchema } from "../../validate";
 import { useAddContract, useGetContracts } from "@/hooks/useContract";
 import { Contract } from "@/types/contract";
-import { useGetClients } from "@/hooks/useClients";
+import { useGetClient, useGetClients } from "@/hooks/useClients";
 import { useGetServices } from "@/hooks/useService";
 import { SearchService } from "./functions/searchService";
 import { EnumServiceType } from "@/types/service";
@@ -20,7 +20,9 @@ interface ContractsCreateInputProps {
 
 const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
   const { mutate: addContract } = useAddContract();
-  const { data: user, refetch: refetchClients } = useGetClients({ limit: 999 });
+  const { data: user,  } = useGetClients({ limit: 999 });
+  const { clientsId } = useParams<{ clientsId: string }>();
+  const { refetch: refetchClients } = useGetClient(clientsId || '');
   const { data: service } = useGetServices({
     limit: 999,
     type: EnumServiceType.other,
@@ -31,7 +33,7 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
   });
   const { refetch: refetchContract } = useGetContracts({});
   const location = useLocation();
-  const { clientsId } = useParams();
+ 
 
   function onSubmit(data: Contract) {
     const { ...contractsData } = {

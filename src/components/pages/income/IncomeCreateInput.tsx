@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import {  z } from "zod";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { Income } from "@/types/income.ts";
@@ -8,7 +8,7 @@ import { useAddIncome, useGetIncome } from "@/hooks/useIncome.ts";
 import { ItemForm } from "@/components/Input-create";
 import { FormSchema } from "../../validate";
 import { Form } from "@/components/ui/form";
-import { useGetClients } from "@/hooks/useClients";
+import { useGetClient, useGetClients } from "@/hooks/useClients";
 import { SearchClient } from "./functions/searchClients";
 import { useLocation, useParams } from "react-router-dom";
 
@@ -18,12 +18,12 @@ interface IncomeCreateInputProps {
 
 const IncomeCreateInput = ({ closeDialog }: IncomeCreateInputProps) => {
   const { mutate: addIncome } = useAddIncome();
-  const { data: user, refetch: refetchClients } = useGetClients({ limit: 999 });
+  const { data: user } = useGetClients({ limit: 999 });
   const location = useLocation();
-  const { clientsId } = useParams();
+  const { clientsId } = useParams<{ clientsId: string }>();
 
   const { refetch: refetchIncome } = useGetIncome({});
-  // const {refetch: refetchClients} = useGetClients();
+  const { refetch: refetchClients } = useGetClient(clientsId || '');
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -40,7 +40,6 @@ const IncomeCreateInput = ({ closeDialog }: IncomeCreateInputProps) => {
       onSuccess: () => {
         refetchClients();
         refetchIncome();
-
         form.reset();
         toast({
           title: "Daromad muvaffaqiyatli qo'shildi.",
