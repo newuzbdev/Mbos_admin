@@ -49,7 +49,7 @@ export function SearchService({
           >
             <FormControl>
               <SelectTrigger className="px-4 py-2 transition duration-200 border-2 rounded-md border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
-                <SelectValue placeholder="Mijozni tanlang">
+                <SelectValue placeholder={title}>
                   {field.value
                     ? service?.data?.data?.find(
                         (service: IService) => service.id === +field.value

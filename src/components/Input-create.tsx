@@ -69,7 +69,7 @@ export const ItemForm = ({
                   field.onChange(value);
                 }}
                 placeholder={title}
-                className="flex w-full px-3 py-1 text-sm transition-colors bg-transparent border rounded-md shadow-sm border-slate-300 h-9 border-input file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                className="flex w-full px-3 py-1 text-sm transition-colors bg-transparent border rounded-md shadow-sm border-slate-300 h-9 border-input focus:ring focus:ring-blue-200 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
               />
             </FormControl>
           ) : (

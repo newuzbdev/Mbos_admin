@@ -54,7 +54,7 @@ export function SearchClient({
                   {field.value
                     ? client?.data?.data?.find(
                         (service: Clients) => service.id === +field.value
-                      )?.F_I_O
+                      )?.F_I_O  
                     : "Xizmat tanlang"}
                 </SelectValue>
               </SelectTrigger>
