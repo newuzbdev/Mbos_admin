@@ -6,6 +6,11 @@ export enum EnumShartnoma {
   subscription_fee = "subscription_fee",
   one_bay = "one_bay",
 }
+export enum EnumShartnomeTpeTranslation {
+  cash = 'cash',
+  translation = 'translation',
+  online = 'online',
+}
 
 export enum EnumShartnomaTranslaton {
   cash = "Naqt",
@@ -23,6 +28,7 @@ export type Contract = {
   user: Clients;
   count: number;
   created_at: string;
+  payment_method:EnumShartnomeTpeTranslation,
   income: Income;
   id: number;
   izoh: string;

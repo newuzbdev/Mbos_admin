@@ -20,9 +20,9 @@ interface ContractsCreateInputProps {
 
 const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
   const { mutate: addContract } = useAddContract();
-  const { data: user,  } = useGetClients({ limit: 999 });
+  const { data: user } = useGetClients({ limit: 999 });
   const { clientsId } = useParams<{ clientsId: string }>();
-  const { refetch: refetchClients } = useGetClient(clientsId || '');
+  const { refetch: refetchClients } = useGetClient(clientsId || "");
   const { data: service } = useGetServices({
     limit: 999,
     type: EnumServiceType.other,
@@ -33,7 +33,6 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
   });
   const { refetch: refetchContract } = useGetContracts({});
   const location = useLocation();
- 
 
   function onSubmit(data: Contract) {
     const { ...contractsData } = {
@@ -42,11 +41,12 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
       advancePayment: Number(data.advancePayment),
       user_id: Number(clientsId) || Number(data?.user_id),
       tolash_sana: new Date(),
+      // payment_method: data.payment_method,
     };
 
     addContract(contractsData as Contract, {
       onSuccess: () => {
-        refetchClients()
+        refetchClients();
         refetchContract();
         form.reset();
         toast({
@@ -98,6 +98,19 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
             form={form}
             name="shartnoma_turi"
           />
+
+          <ItemForm
+            form={form}
+            type="enum"
+            name="paymentMethod"
+            enums={[
+              { name: "cash", value: "naxt" },
+              { name: "translation", value: "otkazma" },
+              { name: "online", value: "online" },
+            ]}
+            title="To'lov usuli "
+          />
+
           <ItemForm title="sana" type="date" form={form} name="sana" />
           <ItemForm
             title="Shartnoma muddati"

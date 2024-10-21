@@ -55,7 +55,7 @@ const ClientsCreateInput = ({ closeDialog }: ClientsCreateInputProps) => {
       >
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <ItemForm title="Tolik ism" form={form} name="F_I_O" />
-         
+          <ItemForm title="Inn raqamini kiriting" form={form} name="INN_number" />
           <Controller
             name="phone"
             control={form.control}

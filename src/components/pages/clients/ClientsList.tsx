@@ -24,6 +24,14 @@ const makeColumns = (
       </div>
     ),
   },
+  
+  {
+    accessorKey: "INN_number",
+    header: "Mijozning Inni raqami",
+    cell: ({ row }) => (
+      <div className="cursor-pointer">{row.original.INN_number}</div>
+    ),
+  },
   {
     accessorKey: "phone",
     header: "Telefon raqami",
@@ -63,7 +71,7 @@ const ClientsList = () => {
     <div className="w-full">
       <div className="p-4 border rounded-md">
         <DataTable
-          title={"telefon rakam yoki tolik ism boliche izlash"}
+          title={"Mijoz INNI raqami yoki to'lik ism bo'yicha izlang"}
           columns={makeColumns(navigate)}
           data={client.data || []}
         />

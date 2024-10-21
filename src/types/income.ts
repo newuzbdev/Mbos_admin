@@ -10,12 +10,17 @@ export enum EnumIncamTpeTranslation {
   delivery = "Yetkazib berish",
   other = "Boshqalar",
 }
-
+export enum EnumIncamIsPaid {
+  paid = 'paid',
+  confirm_payment = 'confirm_payment',
+  no_paid = 'no_paid',
+}
 export type Income = {
   id: string;
   user_id: number;
   amount: number;
   shartnoma: Contract;
+  confirm_payment:EnumIncamIsPaid,
   payment_method: string;
   is_paid: string;
   description: string;

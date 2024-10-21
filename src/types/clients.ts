@@ -6,6 +6,7 @@ export type Clients = {
   F_I_O: string;
   phone: number;
   adress: string;
+  INN_number:string
   // whoCreated: string;
   // whoUpdated: string;
   shartnome?: Contract[];

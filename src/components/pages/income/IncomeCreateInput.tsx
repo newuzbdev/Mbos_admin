@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import {  z } from "zod";
+import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { Income } from "@/types/income.ts";
@@ -23,7 +23,7 @@ const IncomeCreateInput = ({ closeDialog }: IncomeCreateInputProps) => {
   const { clientsId } = useParams<{ clientsId: string }>();
 
   const { refetch: refetchIncome } = useGetIncome({});
-  const { refetch: refetchClients } = useGetClient(clientsId || '');
+  const { refetch: refetchClients } = useGetClient(clientsId || "");
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -123,6 +123,17 @@ const IncomeCreateInput = ({ closeDialog }: IncomeCreateInputProps) => {
               title="tushum yoki chikim"
             />
           )}
+          <ItemForm
+            enums={[
+              { name: "paid", value: "Tolangan" },
+              { name: "confirm_payment", value: "To'lovni tasdiqlash" },
+              { name: "no_paid", value: "To'lanmagan" },
+            ]}
+            title="Harid holati"
+            type="enum"
+            form={form}
+            name="confirm_payment"
+          />
         </div>
         <Button
           type="submit"

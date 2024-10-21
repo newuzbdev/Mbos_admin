@@ -16,6 +16,21 @@ function IncomeDashboard() {
     other: otherChikim,
   } = data?.data?.data?.chikim || {};
 
+  const tushumItems = [
+    { label: "Naxt pul", value: cash },
+    { label: "Otkazma", value: translation },
+    { label: "Online", value: online },
+    { label: "Boshqa", value: otherTushum },
+  ];
+
+  const chikimItems = [
+    { label: "Yetkazib berish", value: delivery },
+    { label: "Ish haqi", value: salary },
+    { label: "Boshqa", value: otherChikim },
+  ];
+
+
+
   return (
     <div className="p-6 mt-4 bg-white rounded-lg shadow-md dark:bg-gray-800">
       <h2 className="mb-6 text-3xl font-bold text-gray-800 dark:text-gray-200">
@@ -24,26 +39,18 @@ function IncomeDashboard() {
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
         <Section
           title="Tushum"
-          items={[
-            { label: "Naxt pul", value: cash },
-            { label: "Otkazma", value: translation },
-            { label: "Online", value: online },
-            { label: "Boshqa", value: otherTushum },
-          ]}
+          items={tushumItems}
         />
 
         <Section
           title="Chikim"
-          items={[
-            { label: "Yetkazib berish", value: delivery },
-            { label: "Ish haqi", value: salary },
-            { label: "Boshqa", value: otherChikim },
-          ]}
+          items={chikimItems}
         />
       </div>
     </div>
   );
 }
+
 const Section = ({
   title,
   items,
@@ -68,7 +75,7 @@ const Section = ({
             {formatNumber(item.value ?? 0)} s'om
           </p>
         </div>
-      ))}{" "}
+      ))}
     </div>
   </div>
 );

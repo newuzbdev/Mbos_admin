@@ -133,6 +133,7 @@ export default function ClientsDetails() {
               <DetailItem label="Mijozning to'liq ismi" value={clients.F_I_O} />
               <DetailItem label="Telefon raqami" value={clients.phone} />
               <DetailItem label="Manzil" value={clients.adress} />
+              <DetailItem label="Inni raqami" value={clients.INN_number} />
               <DetailItem
                 label="kim yaratdi"
                 value={createAdmin?.data.data.user_name}
