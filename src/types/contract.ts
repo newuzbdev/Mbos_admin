@@ -44,7 +44,7 @@ export type Contract = {
   shartnoma_muddati: string;
   shartnoma_turi: EnumShartnomaTranslaton;
   texnik_muddati: string;
-  tolash_sana: string | Date | null;
+  tolash_sana: Date
   total_price: string;
   updated_at: string;
   user_id: number;

@@ -84,7 +84,7 @@ export function UpdateItem({ contract }: { contract: Contract }) {
             >
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <ItemForm
-                  title="Miktori"
+                  title="Miqdori"
                   form={form}
                   name="count"
                   type="number"

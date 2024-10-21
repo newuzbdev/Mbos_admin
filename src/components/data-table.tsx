@@ -20,6 +20,7 @@ import {
 import { useState } from "react";
 import {
   ArrowDownIcon,
+  ArrowDownNarrowWide,
   ArrowLeft,
   ArrowRight,
   ArrowUpIcon,
@@ -27,9 +28,11 @@ import {
 import { Pagination } from "./pagination";
 import { Search } from "./search";
 import { Button } from "./ui/button";
+import { useSearchParams } from "react-router-dom";
 interface DataTableProps<TData, TValue> {
   title?: string;
   search?: boolean;
+  filter?: boolean;
   defaultPagination?: boolean;
   columns: ColumnDef<TData, TValue>[];
   data: { pagination: any; data: TData[] };
@@ -40,10 +43,12 @@ export default function DataTable<TData, TValue>({
   columns,
   search = true,
   defaultPagination = false,
+  filter = false,
   data,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const table = useReactTable({
     data: data?.data || data,
@@ -67,6 +72,18 @@ export default function DataTable<TData, TValue>({
             <div className="mt-2 w-80">
               <Search title={title} />
             </div>
+          )}
+          {filter && (
+            <Button
+              variant="default"
+              onClick={() =>
+                setSearchParams({
+                  filter: searchParams.get("filter") === "ASC" ? "DESC" : "ASC",
+                })
+              }
+            >
+              <ArrowDownNarrowWide />
+            </Button>
           )}
         </div>
         <div className="border rounded-lg ">
@@ -149,7 +166,7 @@ export default function DataTable<TData, TValue>({
           </Table>
         </div>
         {defaultPagination ? (
-          <div className="flex items-center justify-end space-x-2 py-4">
+          <div className="flex items-center justify-end py-4 space-x-2">
             <Button
               variant="outline"
               size="sm"

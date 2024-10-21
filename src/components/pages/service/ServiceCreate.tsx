@@ -16,7 +16,7 @@ const ServiceCreate = () => {
     <div>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger className="p-2 text-white border rounded-md bg-primary">
-          Shartnoma yaratish
+          Xizmat yaratish
         </DialogTrigger>
         <DialogContent className="max-w-3xl">
           <ServiceCreateInput closeDialog={closeDialog} />

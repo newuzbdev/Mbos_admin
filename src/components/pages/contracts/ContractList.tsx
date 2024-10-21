@@ -93,6 +93,19 @@ const makeColumns = (
       <div className="cursor-pointer">{row.original.count}</div>
     ),
   },
+  {
+    accessorKey: "tolash_sana",
+    header: "Tolash sanasi",
+    cell: ({ row }) => (
+      <div className="cursor-pointer">
+        {new Date(row.original.tolash_sana).toLocaleString('uz-UZ', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+        })}
+      </div>
+    ),
+  },
 ];
 
 const ContractList = () => {
@@ -101,16 +114,22 @@ const ContractList = () => {
   const page = Number(searchParams.get("page") ?? 1);
   const limit = Number(searchParams.get("limit") ?? 10);
   const search = searchParams.get("search") || "";
+  const filter = searchParams.get("filter") as "ASC" | "DESC" | undefined;
 
   const {
     data: contract,
     refetch,
     isLoading,
-  } = useGetContracts({ page, limit, search });
+  } = useGetContracts({
+    page,
+    limit,
+    search,
+    filter,
+  });
 
   useEffect(() => {
     refetch();
-  }, [page, limit, search, refetch]);
+  }, [page, limit, search, filter]);
 
   if (isLoading) return <div>Loading...</div>;
 
@@ -118,6 +137,7 @@ const ContractList = () => {
     <div className="w-full">
       <div className="p-4 border rounded-md">
         <DataTable
+          filter
           title="Mijoz nomi yoki telefon raqami bo'yicha qidiring"
           columns={makeColumns(navigate)}
           data={contract?.data || []}

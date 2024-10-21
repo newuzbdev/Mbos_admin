@@ -16,7 +16,7 @@ const ProductCreate = () => {
     <div>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger className="p-2 text-white border rounded-md bg-primary">
-          Shartnoma yaratish
+          Mahsulot yaratish
         </DialogTrigger>
         <DialogContent className="max-w-3xl">
           <ProductCreateInput closeDialog={closeDialog} />

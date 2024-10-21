@@ -10,9 +10,10 @@ export const getContract = async ({
   page = 1,
   limit = 10,
   search = "",
+  filter = "ASC",
 }: IParams) => {
   return await axiosPrivate.get(
-    `/shartnoma?page=${page}&limit=${limit}&search=${search}`
+    `/shartnoma?page=${page}&limit=${limit}&search=${search}&filter=${filter}`
   );
 };
 export const getContractById = async (contractId: string) => {

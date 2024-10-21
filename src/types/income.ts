@@ -34,4 +34,5 @@ export interface IParams {
   limit?: number;
   search?: string;
   type?: EnumServiceType;
+  filter?: 'ASC' | 'DESC';
 }

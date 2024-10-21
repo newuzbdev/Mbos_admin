@@ -72,7 +72,7 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
         className="h-auto my-10 mt-4 space-y-5"
       >
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <ItemForm title="Miktori" form={form} name="count" type="number" />
+          <ItemForm title="Miqdori" form={form} name="count" type="number" />
           <ItemForm
             title="Oldindan To'lov"
             form={form}
@@ -123,6 +123,12 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
             type="date"
             form={form}
             name="texnik_muddati"
+          />
+           <ItemForm
+            title="To'lash sanasi"
+            type="date"
+            form={form}
+            name="tolash_sana"
           />
         </div>
         <Button

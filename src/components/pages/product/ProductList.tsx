@@ -15,7 +15,7 @@ const makeColumns = (
     cell: (c) => <div className="cursor-pointer">{c.row.index + 1}</div>,
   },
   {
-    header: "product nomi",
+    header: "Mahsulot nomi",
     accessorKey: "title",
     cell: ({ row }) => (
       <Button
@@ -61,7 +61,7 @@ const ProductList = () => {
     <div className="w-full">
       <div className="p-4 border rounded-md">
         <DataTable
-          title="product nomi boyicha izlash"
+          title="Mahsulot nomi boyicha izlash"
           columns={makeColumns(navigate)}
           data={contract?.data || []}
         />
