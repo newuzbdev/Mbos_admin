@@ -11,18 +11,18 @@ export enum EnumIncamTpeTranslation {
   other = "Boshqalar",
 }
 export enum EnumIncamIsPaid {
-  paid = 'paid',
-  confirm_payment = 'confirm_payment',
-  no_paid = 'no_paid',
+  paid = "paid",
+  no_paid = "no_paid",
+  confirm_payment = "confirm_payment",
 }
 export type Income = {
   id: string;
   user_id: number;
   amount: number;
   shartnoma: Contract;
-  confirm_payment:EnumIncamIsPaid,
-  payment_method: string;
-  is_paid: string;
+  confirm_payment: EnumIncamIsPaid;
+  payment_method: EnumIncamTpeTranslation;
+  is_paid: EnumIncamIsPaid;
   description: string;
   date: string;
   user: Clients;

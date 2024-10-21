@@ -11,7 +11,11 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { PencilIcon, Trash2Icon } from "lucide-react";
-import { useGetIncome, useIncomeDelete, useIncomeUpdate } from "@/hooks/useIncome.ts";
+import {
+  useGetIncome,
+  useIncomeDelete,
+  useIncomeUpdate,
+} from "@/hooks/useIncome.ts";
 
 import { toast } from "@/hooks/use-toast";
 import DataTable from "@/components/data-table";
@@ -19,11 +23,14 @@ import { Income } from "@/types/income.ts";
 import IncomeDashboard from "./incomedashboard";
 import { useSearchParams } from "react-router-dom";
 import { formatNumber } from "@/components/formNumber";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-
-// ... (previous code remains unchanged)
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { ItemUpdate } from "@/components/input-update";
 
 const payment_methods = [
   { name: "cash", value: "naqd pul" },
@@ -162,7 +169,7 @@ const IncomeList = () => {
   useEffect(() => {
     refetch();
   }, [page, limit, search, refetch]);
-  
+
   useEffect(() => {
     if (isUpdateSuccess) {
       toast({
@@ -224,12 +231,11 @@ const IncomeList = () => {
       });
     }
   };
-  
+
   const handleDeleteDialogClose = () => {
     setDeleteDialogVisible(false);
     setIncomeToDelete(undefined);
   };
-  
 
   if (isLoading) return <div>Loading...</div>;
 
@@ -277,77 +283,62 @@ const IncomeList = () => {
               <DialogTitle>Edit Income</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleEditSubmit}>
-              <div className="grid gap-4 py-4">
-                <div className="grid items-center grid-cols-4 gap-4">
-                  <Label htmlFor="amount" className="text-right">
-                    Amount
-                  </Label>
-                  <Input
-                    id="amount"
-                    type="number"
-                    value={incomeToEdit.amount}
-                    onChange={(e) =>
-                      setIncomeToEdit({
-                        ...incomeToEdit,
-                        amount: e.target.value,
-                      })
-                    }
-                    className="col-span-3"
-                  />
-                </div>
-             
-                <div className="grid items-center grid-cols-4 gap-4">
-                  <Label htmlFor="date" className="text-right">
-                    Date
-                  </Label>
-                  <Input
-                    id="date"
-                    type="date"
-                    value={incomeToEdit.date}
-                    onChange={(e) =>
-                      setIncomeToEdit({
-                        ...incomeToEdit,
-                        date: e.target.value,
-                      })
-                    }
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid items-center grid-cols-4 gap-4">
-                  <Label htmlFor="description" className="text-right">
-                    Description
-                  </Label>
-                  <Input
-                    id="description"
-                    value={incomeToEdit.description}
-                    onChange={(e) =>
-                      setIncomeToEdit({
-                        ...incomeToEdit,
-                        description: e.target.value,
-                      })
-                    }
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid items-center grid-cols-4 gap-4">
-                  <Label htmlFor="description" className="text-right">
-                    Description
-                  </Label>
-                  <Input
-                    id="description"
-                    value={incomeToEdit.description}
-                    onChange={(e) =>
-                      setIncomeToEdit({
-                        ...incomeToEdit,
-                        description: e.target.value,
-                      })
-                    }
-                    className="col-span-3"
-                  />
-                </div>
-               
+              <div className="grid gap-4">
+                <ItemUpdate
+                  data={incomeToEdit}
+                  title="norx"
+                  setUpdate={setIncomeToEdit}
+                  value={incomeToEdit.amount}
+                  name="amount"
+                />
+
+                <ItemUpdate
+                  data={incomeToEdit}
+                  title="Date"
+                  setUpdate={setIncomeToEdit}
+                  value={incomeToEdit.date}
+                  name="date"
+                />
+
+                <ItemUpdate
+                  data={incomeToEdit}
+                  title="Description"
+                  setUpdate={setIncomeToEdit}
+                  value={incomeToEdit.description}
+                  name="description"
+                />
+
+                <ItemUpdate
+                  data={incomeToEdit}
+                  type="enum"
+                  enums={[
+                    { value: "cash", name: "Naqt" },
+                    { value: "translation", name: "O'tkazma orqali" },
+                    { value: "online", name: "Online" },
+                    { value: "salary", name: "Oylik" },
+                    { value: "delivery", name: "Yetkazib berish" },
+                    { value: "other", name: "Boshqalar" },
+                  ]}
+                  title="tolash usuli"
+                  setUpdate={setIncomeToEdit}
+                  value={incomeToEdit.payment_method}
+                  name="payment_method"
+                />
+
+                <ItemUpdate
+                  type="enum"
+                  enums={[
+                    { value: "paid", name: "tolangan" },
+                    { value: "no_paid", name: "tolanmagan" },
+                  ]}
+                  data={incomeToEdit}
+                  title="is_paid"
+                  setUpdate={setIncomeToEdit}
+                  value={incomeToEdit.is_paid}
+                  name="tolash holati"
+                />
               </div>
-              <DialogFooter>
+              <DialogFooter className="mt-6">
                 <Button type="submit">Save changes</Button>
               </DialogFooter>
             </form>

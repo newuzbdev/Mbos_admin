@@ -1,7 +1,6 @@
 import { Dispatch, HTMLInputTypeAttribute, SetStateAction } from "react";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
-import { Select, SelectContent, SelectGroup, SelectItem } from "./ui/select";
 
 interface ITypeUpdate {
   value: string | number;
@@ -26,20 +25,17 @@ export function ItemUpdate({
     return (
       <div className="w-full h-[60px]">
         <Label htmlFor={name}>{title}</Label>
-        <Select
-          onValueChange={(element) => setUpdate({ ...data, [name]: element })}
+        <select
+          className="flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1"
+          onChange={(element) => setUpdate({ ...data, [name]: element })}
           defaultValue={value.toString()}
         >
-          <SelectContent className="!w-full !h-full">
-            <SelectGroup>
-              {enums?.map((el, index) => (
-                <SelectItem key={index} value={el.name}>
-                  {el.value}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+          {enums?.map((el, index) => (
+            <option className="dark:bg-black" key={index} value={el.value}>
+              {el.name}
+            </option>
+          ))}
+        </select>
       </div>
     );
   }
