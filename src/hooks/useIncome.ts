@@ -5,7 +5,7 @@ import {
   getIncome,
   updateIncome,
 } from "@/services/income";
-import { Income, IParams } from "@/types/income.ts";
+import {  IParams } from "@/types/income.ts";
 
 export const useAddIncome = () => {
   return useMutation({
@@ -26,6 +26,6 @@ export function useIncomeDelete() {
 }
 export function useIncomeUpdate() {
   return useMutation({
-    mutationFn: (data: Income) => updateIncome(data),
+    mutationFn: (data: any) => updateIncome(data),
   });
 }

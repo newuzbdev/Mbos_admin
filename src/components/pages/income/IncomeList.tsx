@@ -224,10 +224,6 @@ const IncomeList = () => {
         payment_method: incomeToEdit.payment_method,
         is_paid: incomeToEdit.is_paid,
         confirm_payment: incomeToEdit.confirm_payment,
-        user_id: incomeToEdit.user_id,
-        shartnoma: incomeToEdit.shartnoma,
-        user: incomeToEdit.user,
-        income: incomeToEdit.income,
       });
     }
   };
@@ -235,6 +231,11 @@ const IncomeList = () => {
   const handleDeleteDialogClose = () => {
     setDeleteDialogVisible(false);
     setIncomeToDelete(undefined);
+  };
+
+  const handleEditDialogClose = () => {
+    setEditDialogVisible(false);
+    setIncomeToEdit(undefined);
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -277,7 +278,7 @@ const IncomeList = () => {
         </AlertDialogContent>
       </AlertDialog>
       {incomeToEdit && (
-        <Dialog open={editDialogVisible} onOpenChange={setEditDialogVisible}>
+        <Dialog open={editDialogVisible} onOpenChange={handleEditDialogClose}>
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Edit Income</DialogTitle>
@@ -330,12 +331,25 @@ const IncomeList = () => {
                   enums={[
                     { value: "paid", name: "tolangan" },
                     { value: "no_paid", name: "tolanmagan" },
+                    { value: "confirm_payment", name: "To'lovni tasdiqlash" },
                   ]}
                   data={incomeToEdit}
-                  title="is_paid"
+                  title="tolash holati"
                   setUpdate={setIncomeToEdit}
                   value={incomeToEdit.is_paid}
-                  name="tolash holati"
+                  name="is_paid"
+                />
+                <ItemUpdate
+                  type="enum"
+                  enums={[
+                    { value: "paid", name: "tolangan" },
+                    { value: "no_paid", name: "tolanmagan" },
+                  ]}
+                  data={incomeToEdit}
+                  title="Tolovni tasdiqlash"
+                  setUpdate={setIncomeToEdit}
+                  value={incomeToEdit.confirm_payment}
+                  name="confirm_payment"
                 />
               </div>
               <DialogFooter className="mt-6">
