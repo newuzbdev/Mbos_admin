@@ -40,9 +40,7 @@ export default function ContractDetails() {
               Shartnoma malumotlari
             </CardTitle>
             <div className="flex justify-end space-x-3">
-              {/* <IncomeAdd /> */}
-              {/* <IncomeAdd refetchContract={refetch} /> */}
-              <ContractIncomeCreateInput/>
+              <ContractIncomeCreateInput />
               <UpdateItem contract={contract} />
               <DeleteItem />
             </div>
@@ -56,23 +54,23 @@ export default function ContractDetails() {
             >
               <DetailItem
                 label="Mijozning to'liq ismi"
-                value={contract?.user?.F_I_O}
+                value={contract.user?.F_I_O}
               />
               <DetailItem
                 label="Shartnoma turi"
                 value={
-                  shartnoma_turi.filter(
-                    (el) => el.name === contract?.shartnoma_turi && el.value
-                  )[0].value
+                  shartnoma_turi.find(
+                    (el) => el.name === contract.shartnoma_turi
+                  )?.value || "N/A"
                 }
               />
               <DetailItem
                 label="Shartnoma nomeri"
-                value={contract?.shartnoma_nomer}
+                value={contract.shartnoma_nomer}
               />
               <DetailItem
                 label="Mijozning telefon raqami"
-                value={contract?.user?.phone}
+                value={contract.user?.phone}
               />
               <DetailItem
                 label="Kim yaratdi"
@@ -91,24 +89,26 @@ export default function ContractDetails() {
               <DetailItem
                 label="Narx"
                 value={
-                  formatNumber(contract?.service.price * contract.count) +
-                  " s'om"
+                  contract.service && contract.service.price
+                    ? formatNumber(contract.service.price * contract.count) +
+                      " s'om"
+                    : "N/A"
                 }
               />
               <DetailItem
                 label="to'langan"
-                value={formatNumber(contract?.advancePayment) + " s'om"}
+                value={formatNumber(contract.advancePayment) + " s'om"}
               />
               <DetailItem
                 label="Qolgan to'lov"
-                value={formatNumber(contract?.remainingPayment) + " s'om"}
+                value={formatNumber(contract.remainingPayment) + " s'om"}
               />
               <DetailItem
                 label="Xarid holati"
                 value={
-                  purchase_status.filter(
-                    (el) => el.name === contract.purchase_status && el.value
-                  )[0].value
+                  purchase_status.find(
+                    (el) => el.name === contract.purchase_status
+                  )?.value || "N/A"
                 }
               />
             </DetailSection>
@@ -117,16 +117,14 @@ export default function ContractDetails() {
               icon={<FileTextIcon className="w-5 h-5 text-purple-600" />}
               title="Shartnomaning xususiyatlari"
             >
-              <DetailItem label="Miqdori" value={contract?.count} />
+              <DetailItem label="Miqdori" value={contract.count} />
               <DetailItem
                 label="Shartnoma davomiyligi"
-                value={new Date(
-                  contract?.shartnoma_muddati
-                ).toLocaleDateString()}
+                value={new Date(contract.shartnoma_muddati).toLocaleDateString()}
               />
               <DetailItem
                 label="Texnik davomiyligi"
-                value={new Date(contract?.texnik_muddati).toLocaleDateString()}
+                value={new Date(contract.texnik_muddati).toLocaleDateString()}
               />
             </DetailSection>
 
@@ -136,11 +134,11 @@ export default function ContractDetails() {
             >
               <DetailItem
                 label="Shartnoma kuni"
-                value={new Date(contract?.sana).toLocaleDateString()}
+                value={new Date(contract.sana).toLocaleDateString()}
               />
               <DetailItem
                 label="To'lav sanasi"
-                value={new Date(contract?.tolash_sana).toLocaleDateString()}
+                value={new Date(contract.tolash_sana).toLocaleDateString()}
               />
             </DetailSection>
           </div>
@@ -173,6 +171,7 @@ function DetailSection({
     </div>
   );
 }
+
 function DetailItem({
   label,
   value,

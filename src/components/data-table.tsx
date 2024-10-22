@@ -82,7 +82,7 @@ export default function DataTable<TData, TValue>({
                 })
               }
             >
-              <ArrowDownNarrowWide />
+              <ArrowDownNarrowWide className="text-white"/>
             </Button>
           )}
         </div>

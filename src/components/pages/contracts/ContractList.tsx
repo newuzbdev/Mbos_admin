@@ -37,7 +37,7 @@ const makeColumns = (
   {
     accessorKey: "service",
     header: "Xizmat / Product",
-    cell: ({ row }) => <div>{row.original.service.title}</div>,
+    cell: ({ row }) => <div>{row.original.service?.title || 'N/A'}</div>,
   },
   {
     accessorKey: "shartnoma_turi",

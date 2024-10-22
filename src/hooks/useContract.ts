@@ -5,7 +5,6 @@ import {
   getContractById,
   updateContract,
 } from "@/services/contract";
-import { Contract } from "@/types/contract";
 import { IParams } from "@/types/income";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
@@ -38,6 +37,6 @@ export function useContractDelete() {
 }
 export function useContractUpdate() {
   return useMutation({
-    mutationFn: (data: Contract) => updateContract(data),
+    mutationFn: (data: any) => updateContract(data),
   });
 }

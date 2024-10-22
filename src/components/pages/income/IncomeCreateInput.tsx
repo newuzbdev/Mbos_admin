@@ -85,6 +85,17 @@ const IncomeCreateInput = ({ closeDialog }: IncomeCreateInputProps) => {
             name="date"
             title="vaqtni kiriting"
           />
+          <ItemForm
+            enums={[
+              { name: "paid", value: "Tolangan" },
+              { name: "confirm_payment", value: "To'lovni tasdiqlash" },
+              { name: "no_paid", value: "To'lanmagan" },
+            ]}
+            title="Harid holati"
+            type="enum"
+            form={form}
+            name="confirm_payment"
+          />
         </div>
         <div className="grid grid-cols-2 gap-3">
           <ItemForm
@@ -123,17 +134,6 @@ const IncomeCreateInput = ({ closeDialog }: IncomeCreateInputProps) => {
               title="tushum yoki chikim"
             />
           )}
-          <ItemForm
-            enums={[
-              { name: "paid", value: "Tolangan" },
-              { name: "confirm_payment", value: "To'lovni tasdiqlash" },
-              { name: "no_paid", value: "To'lanmagan" },
-            ]}
-            title="Harid holati"
-            type="enum"
-            form={form}
-            name="confirm_payment"
-          />
         </div>
         <Button
           type="submit"

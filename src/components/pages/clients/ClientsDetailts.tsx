@@ -58,7 +58,7 @@ const makeColumnsShartnoma = (
         className="underline cursor-pointer text-primary"
         onClick={() => navigate(`/contract/${row.original.id}`)}
       >
-        {row.original.service?.title || 'N/A'}
+        {row.original.service?.title || "N/A"}
       </div>
     ),
   },
@@ -110,6 +110,12 @@ export default function ClientsDetails() {
   if (isLoading) return <div>Yuklanmoqda...</div>;
   if (!clients) return <div>Mijoz ma'lumotlari topilmadi</div>;
 
+  const totalDebt = clients.income
+    ? clients.income
+        .filter((income) => income.is_paid === "no_paid")
+        .reduce((sum, income) => sum + income.amount, 0)
+    : 0;
+
   return (
     <div className="container p-0 mx-auto">
       <Card className="overflow-hidden">
@@ -135,12 +141,16 @@ export default function ClientsDetails() {
               <DetailItem label="Manzil" value={clients.adress} />
               <DetailItem label="Inni raqami" value={clients.INN_number} />
               <DetailItem
-                label="kim yaratdi"
+                label="Kim yaratdi"
                 value={createAdmin?.data.data.user_name}
               />
               <DetailItem
-                label="kim o'zgartirdi"
+                label="Kim o'zgartirdi"
                 value={updateAdmin?.data.data.user_name}
+              />
+              <DetailItem
+                label="Barcha qarzlari"
+                value={`${formatNumber(totalDebt)} s'om`}
               />
             </DetailSection>
 
@@ -155,7 +165,7 @@ export default function ClientsDetails() {
                 <IncomeCreate />
               </div>
               <DataTable
-                data={(clients?.income as any) || []}
+                data={{ pagination: {}, data: clients.income || [] }}
                 columns={makeColumns()}
                 search={false}
                 defaultPagination
@@ -172,7 +182,7 @@ export default function ClientsDetails() {
                 <ContractCreate />
               </div>
               <DataTable
-                data={(clients?.shartnome as any) || []}
+                data={{ pagination: {}, data: clients.shartnome || [] }}
                 columns={makeColumnsShartnoma(navigate)}
                 search={false}
                 defaultPagination
@@ -184,8 +194,8 @@ export default function ClientsDetails() {
     </div>
   );
 }
-function DetailSection({
-  icon,
+
+function DetailSection({  icon,
   title,
   children,
 }: {
