@@ -11,10 +11,10 @@ import { formatNumber } from "@/components/formNumber";
 import { DeleteItem } from "./functions/delete";
 import { UpdateItem } from "./functions/update";
 import { useGetGetAdmin } from "@/hooks/useAdmin";
+import ContractIncomeCreateInput from "./functions/incomeAdd";
 export default function ContractDetails() {
   const { contractId } = useParams();
   const { data: contractDetails, isLoading } = useGetContract(contractId);
-
   const contract = contractDetails?.data?.data;
   const { data: craetedAdmin } = useGetGetAdmin(Number(contract?.whoCreated));
   const { data: updatedAdmin } = useGetGetAdmin(Number(contract?.whoUpdated));
@@ -39,7 +39,10 @@ export default function ContractDetails() {
             <CardTitle className="text-2xl font-bold text-white">
               Shartnoma malumotlari
             </CardTitle>
-            <div className="flex justify-end">
+            <div className="flex justify-end space-x-3">
+              {/* <IncomeAdd /> */}
+              {/* <IncomeAdd refetchContract={refetch} /> */}
+              <ContractIncomeCreateInput/>
               <UpdateItem contract={contract} />
               <DeleteItem />
             </div>

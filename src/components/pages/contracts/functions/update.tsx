@@ -71,7 +71,6 @@ export function UpdateItem({ contract }: { contract: Contract }) {
       >
         <PencilIcon size={20} className="text-primary" />
       </Button>
-
       <Dialog open={isUpdate} onOpenChange={setUpdate}>
         <DialogContent className="max-w-[48rem]">
           <DialogHeader>
@@ -87,12 +86,6 @@ export function UpdateItem({ contract }: { contract: Contract }) {
                   title="Miqdori"
                   form={form}
                   name="count"
-                  type="number"
-                />
-                <ItemForm
-                  title="to'langan"
-                  form={form}
-                  name="advancePayment"
                   type="number"
                 />
                 <SearchService form={form} service={service} title="Xizmat" />

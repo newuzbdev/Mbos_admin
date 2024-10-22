@@ -38,7 +38,7 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
     const { ...contractsData } = {
       ...data,
       count: Number(data.count),
-      advancePayment: Number(data.advancePayment),
+      advancePayment: 0,
       user_id: Number(clientsId) || Number(data?.user_id),
       tolash_sana: new Date(),
       // payment_method: data.payment_method,
@@ -73,13 +73,6 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
       >
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <ItemForm title="Miqdori" form={form} name="count" type="number" />
-          <ItemForm
-            title="Oldindan To'lov"
-            form={form}
-            name="advancePayment"
-            type="number"
-          />
-
           <SearchService
             form={form}
             service={service}
@@ -124,7 +117,7 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
             form={form}
             name="texnik_muddati"
           />
-           <ItemForm
+          <ItemForm
             title="To'lash sanasi"
             type="date"
             form={form}
