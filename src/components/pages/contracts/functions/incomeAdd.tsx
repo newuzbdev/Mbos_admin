@@ -11,6 +11,7 @@ import { Contract } from "@/types/contract";
 import { useGetClient } from "@/hooks/useClients";
 import { useParams } from "react-router-dom";
 import { Plus } from "lucide-react";
+import { useState } from "react";
 
 interface ContractsCreateInputProps {
   closeDialog?: () => void;
@@ -19,11 +20,12 @@ interface ContractsCreateInputProps {
 const ContractIncomeCreateInput = ({
   closeDialog,
 }: ContractsCreateInputProps) => {
+  const [isOpen, setIsOpen] = useState(false);
   const { mutate: updateContract } = useContractUpdate();
   const { clientsId } = useParams<{ clientsId: string }>();
   const { refetch: refetchClients } = useGetClient(clientsId || "");
   const { contractId } = useParams<{ contractId: string }>();
-  const { data: contractDetails } = useGetContract(contractId || "");
+  const { data: contractDetails, refetch: refetchContract } = useGetContract(contractId || "");
   const form = useForm<Contract>({
     resolver: zodResolver(FormSchema),
   });
@@ -38,16 +40,17 @@ const ContractIncomeCreateInput = ({
       advancePayment: updatedAdvancePayment,
     };
     updateContract(
-
       { id: contractId!, ...contractsData },
       {
         onSuccess: () => {
           refetchClients();
+          refetchContract();
           form.reset();
           toast({
             title: "Shartnoma muvaffaqiyatli yangilandi.",
             variant: "success",
           });
+          setIsOpen(false);
           closeDialog?.();
         },
         onError: (error) => {
@@ -59,11 +62,12 @@ const ContractIncomeCreateInput = ({
         },
       }
     );
+  }
 
-  }  return (
-    <Dialog>
+  return (
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button className="flex items-center space-x-2 text-white bg-primary">
+        <Button className="flex items-center space-x-2 text-white bg-primary" onClick={() => setIsOpen(true)}>
           <Plus className="w-4 h-4" />
         </Button>
       </DialogTrigger>
