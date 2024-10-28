@@ -18,6 +18,7 @@ export enum EnumIncamIsPaid {
 export type Income = {
   id: string;
   user_id: number;
+  F_I_O: string;
   amount: number;
   shartnoma: Contract;
   confirm_payment: EnumIncamIsPaid;

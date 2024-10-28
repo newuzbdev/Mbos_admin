@@ -7,13 +7,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
-import { PhoneInput } from "@/components/phone-input"; // Import PhoneInput
+import { PhoneInput } from "@/components/phone-input";
 import { toast } from "@/hooks/use-toast";
 import { useClientsUpdate, useGetClient } from "@/hooks/useClients";
 import { Clients } from "@/types/clients";
 import { PencilIcon } from "lucide-react";
 import { useState } from "react";
-import { useForm, Controller } from "react-hook-form"; // Import Controller
+import { useForm, Controller } from "react-hook-form"; 
 
 export function UpdateItem({ clients }: { clients: Clients }) {
   const { mutate } = useClientsUpdate();
@@ -34,11 +34,8 @@ export function UpdateItem({ clients }: { clients: Clients }) {
       id: clients.id,
       F_I_O: item.F_I_O,
       INN_number: item.INN_number,
-      phone: parseInt(phoneNumber, 10), // Ensure phone number is formatted correctly
+      phone: parseInt(phoneNumber, 10), 
       adress: item.adress,
-      
-      // whoCreated: clients.whoCreated,
-      // whoUpdated: clients.whoUpdated,
     };
 
     mutate(dataToSend, {

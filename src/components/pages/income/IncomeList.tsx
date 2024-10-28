@@ -41,11 +41,11 @@ const payment_methods = [
   { name: "other", value: "boshka" },
 ];
 
-const confirm_payment = [
-  { name: "paid", value: "To'landi" },
-  { name: "no_paid", value: "To'lanmagan" },
-  { name: "confirm_payment", value: "Tasdiqlangan" },
-];
+// const confirm_payment = [
+//   { name: "paid", value: "To'landi" },
+//   { name: "no_paid", value: "To'lanmagan" },
+//   { name: "confirm_payment", value: "Jarayonda" },
+// ];
 const makeColumns = (
   setIncomeToEdit: (p: Income) => void,
   setIncomeToDelete: (p: Income) => void
@@ -82,28 +82,42 @@ const makeColumns = (
   {
     accessorKey: "is_paid",
     header: "Holati",
-    cell: ({ row }) => (
-      <div
-        className={`cursor-pointer text-white flex justify-center rounded-lg py-1 ${
-          row.original.is_paid === "paid" ? "bg-primary" : "bg-red-500"
-        }`}
-      >
-        {row.original.is_paid === "paid" ? "kirim" : "chikim"}
-      </div>
-    ),
+    cell: ({ row }) => {
+      const status = row.original.is_paid;
+      const statusLabel = status === "paid" 
+        ? "kirim" 
+        : status === "no_paid" 
+        ? "chikim" 
+        : "Jarayonda";
+      const statusColor = status === "paid" 
+        ? "bg-primary" 
+        : status === "no_paid" 
+        ? "bg-red-500" 
+        : "bg-yellow-500"; // optional color for "Jarayonda"
+  
+      return (
+        <div
+          className={`cursor-pointer text-white flex justify-center rounded-lg py-1 ${statusColor}`}
+        >
+          {statusLabel}
+        </div>
+      );
+    },
   },
-
-  {
-    accessorKey: "confirm_payment",
-    header: "Tolovni tasdiqlash",
-    cell: ({ row }) => (
-      <div className="cursor-pointer">
-        {confirm_payment.map(
-          (el) => el.name === row.original.confirm_payment && el.value
-        )}
-      </div>
-    ),
-  },
+  
+  // {
+  //   accessorKey: "is_paid",
+  //   header: "Holati",
+  //   cell: ({ row }) => (
+  //     <div
+  //       className={`cursor-pointer text-white flex justify-center rounded-lg py-1 ${
+  //         row.original.is_paid === "paid" ? "bg-primary" : "bg-red-500"
+  //       }`}
+  //     >
+  //       {row.original.is_paid === "paid" ? "kirim" : "chikim"}
+  //     </div>
+  //   ),
+  // },
   {
     accessorKey: "description",
     header: "Izoh",
@@ -223,7 +237,6 @@ const IncomeList = () => {
         description: incomeToEdit.description,
         payment_method: incomeToEdit.payment_method,
         is_paid: incomeToEdit.is_paid,
-        confirm_payment: incomeToEdit.confirm_payment,
       });
     }
   };
@@ -287,7 +300,7 @@ const IncomeList = () => {
               <div className="grid gap-4">
                 <ItemUpdate
                   data={incomeToEdit}
-                  title="norx"
+                  title="narx"
                   setUpdate={setIncomeToEdit}
                   value={incomeToEdit.amount}
                   name="amount"
@@ -313,44 +326,45 @@ const IncomeList = () => {
                   data={incomeToEdit}
                   type="enum"
                   enums={[
-                    { value: "cash", name: "Naqt" },
-                    { value: "translation", name: "O'tkazma orqali" },
-                    { value: "online", name: "Online" },
-                    { value: "salary", name: "Oylik" },
-                    { value: "delivery", name: "Yetkazib berish" },
-                    { value: "other", name: "Boshqalar" },
+                    { value: "paid", name: "tushum" },
+                    { value: "no_paid", name: "chikim" },
                   ]}
-                  title="tolash usuli"
-                  setUpdate={setIncomeToEdit}
-                  value={incomeToEdit.payment_method}
-                  name="payment_method"
-                />
-
-                <ItemUpdate
-                  type="enum"
-                  enums={[
-                    { value: "paid", name: "tolangan" },
-                    { value: "no_paid", name: "tolanmagan" },
-                    { value: "confirm_payment", name: "To'lovni tasdiqlash" },
-                  ]}
-                  data={incomeToEdit}
-                  title="tolash holati"
+                  title="tushum yoki chikim"
                   setUpdate={setIncomeToEdit}
                   value={incomeToEdit.is_paid}
                   name="is_paid"
                 />
-                <ItemUpdate
-                  type="enum"
-                  enums={[
-                    { value: "paid", name: "tolangan" },
-                    { value: "no_paid", name: "tolanmagan" },
-                  ]}
-                  data={incomeToEdit}
-                  title="Tolovni tasdiqlash"
-                  setUpdate={setIncomeToEdit}
-                  value={incomeToEdit.confirm_payment}
-                  name="confirm_payment"
-                />
+
+                {incomeToEdit.is_paid === "paid" ? (
+                  <ItemUpdate
+                    data={incomeToEdit}
+                    type="enum"
+                    enums={[
+                      { value: "cash", name: "naxt" },
+                      { value: "translation", name: "otkazma" },
+                      { value: "online", name: "online" },
+                      { value: "other", name: "boshka" },
+                    ]}
+                    title="To'lash usuli"
+                    setUpdate={setIncomeToEdit}
+                    value={incomeToEdit.payment_method}
+                    name="payment_method"
+                  />
+                ) : (
+                  <ItemUpdate
+                    data={incomeToEdit}
+                    type="enum"
+                    enums={[
+                      { value: "salary", name: "ish haqi" },
+                      { value: "delivery", name: "yetkazib berish" },
+                      { value: "other", name: "boshka" },
+                    ]}
+                    title="To'lash usuli"
+                    setUpdate={setIncomeToEdit}
+                    value={incomeToEdit.payment_method}
+                    name="payment_method"
+                  />
+                )}
               </div>
               <DialogFooter className="mt-6">
                 <Button type="submit">Save changes</Button>
