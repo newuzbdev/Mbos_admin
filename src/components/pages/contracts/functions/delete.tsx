@@ -23,7 +23,7 @@ export function DeleteItem() {
   const handleDelete = () => {
     mutate(`${contractId}`, {
       onSuccess: async () => {
-        toast({ title: "contract ochirildi", variant: "success" });
+        toast({ title: "Shartnoma o'chirildi", variant: "success" });
         navigate("/contract");
       },
       onError: async () => {

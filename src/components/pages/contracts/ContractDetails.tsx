@@ -5,6 +5,7 @@ import {
   CalendarIcon,
   CreditCardIcon,
   FileTextIcon,
+  Plus,
   UserIcon,
 } from "lucide-react";
 import { formatNumber } from "@/components/formNumber";
@@ -12,12 +13,71 @@ import { DeleteItem } from "./functions/delete";
 import { UpdateItem } from "./functions/update";
 import { useGetGetAdmin } from "@/hooks/useAdmin";
 import ContractIncomeCreateInput from "./functions/incomeAdd";
-export default function ContractDetails() {
+import { ColumnDef } from "@tanstack/react-table";
+import DataTableWithOutSearching from "@/components/data-table-without-searching";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { useMonthlyUpdate } from "@/hooks/useMonthlyFee";
+import { toast } from "@/hooks/use-toast";
+import { ItemForm } from "@/components/Input-create";
+import { Form } from "@/components/ui/form";
+import { useForm } from "react-hook-form";
+
+interface ContractDetailsInputProps {
+  closeDialog?: () => void;
+}
+
+export default function ContractDetails({
+  closeDialog,
+}: ContractDetailsInputProps) {
   const { contractId } = useParams();
-  const { data: contractDetails, isLoading } = useGetContract(contractId);
+  const {
+    data: contractDetails,
+    isLoading,
+    refetch: refetchMonthlyFee,
+  } = useGetContract(contractId);
   const contract = contractDetails?.data?.data;
   const { data: craetedAdmin } = useGetGetAdmin(Number(contract?.whoCreated));
+  const [isOpen, setIsOpen] = useState(false);
+
   const { data: updatedAdmin } = useGetGetAdmin(Number(contract?.whoUpdated));
+  const { mutate: updateMonthlyFee } = useMonthlyUpdate();
+
+  const monthlyFee =
+    contract?.shartnoma_turi === "subscription_fee"
+      ? contract?.monthlyFee?.[0]
+      : null;
+
+  const form = useForm({
+    defaultValues: {
+      paid: "",
+    },
+  });
+
+  const handleSubmit = (data: { paid: string }) => {
+    if (monthlyFee) {
+      const dataToSend = {
+        id: monthlyFee.id,
+        paid: Number(data.paid),
+      };
+
+      updateMonthlyFee(dataToSend, {
+        onSuccess: () => {
+          toast({
+            title: "Oylik daromad qo'shild",
+            variant: "success",
+          });
+          refetchMonthlyFee();
+          form.reset();
+          setIsOpen(false);
+          closeDialog?.();
+        },
+        onError: () => {
+          toast({ title: "Xatolik yuz berdi", variant: "destructive" });
+        },
+      });
+    }
+  };
 
   if (isLoading) return <div>Yuklanmoqda...</div>;
 
@@ -31,6 +91,93 @@ export default function ContractDetails() {
     { name: "no_paid", value: "To'lanmagan" },
   ];
 
+  const makeMonthlyFeeColumns = (): ColumnDef<any>[] => [
+    {
+      header: "№",
+      cell: (c) => <div className="cursor-pointer">{c.row.index + 1}</div>,
+    },
+    {
+      header: "Umumiy qolgan to'lov",
+      cell: () => (
+        <div>
+          {monthlyFee ? formatNumber(monthlyFee.amount) + " s'om" : "N/A"}
+        </div>
+      ),
+    },
+    {
+      header: "To'langan",
+      cell: () => (
+        <div>
+          {monthlyFee ? formatNumber(monthlyFee.paid) + " s'om" : "N/A"}
+        </div>
+      ),
+    },
+    {
+      header: "Tolash sanasi",
+      cell: () => <div>{new Date(monthlyFee.date).toLocaleDateString()}</div>,
+    },
+    {
+      header: "Tolash holati",
+      cell: () => (
+        <div>
+          {monthlyFee?.amount === monthlyFee?.paid ? (
+            <span className="p-1 rounded-md bg-primary">To'langan</span>
+          ) : monthlyFee?.amount > monthlyFee?.paid ? (
+            <span className="p-1 bg-red-500 rounded-md">To'lanmagan</span>
+          ) : (
+            "N/A"
+          )}
+        </div>
+      ),
+    },
+    {
+      header: "To'lov qoshish",
+      cell: () => (
+        <>
+          <Button
+            onClick={() => setIsOpen(true)}
+            variant="ghost"
+            size="icon"
+          >
+            <Plus size={20} className="text-primary" />
+          </Button>
+          {isOpen && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+              <div className="bg-gray-800 rounded-lg p-6 w-[28rem]">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-lg font-semibold text-white">Pul tolash</h2>
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    className=""
+                  >
+                    ✕
+                  </button>
+                </div>
+                <Form {...form}>
+                  <form
+                    onSubmit={form.handleSubmit(handleSubmit)}
+                    className="h-auto space-y-5"
+                  >
+                    <ItemForm
+                      title="To'lash"
+                      form={form}
+                      name="paid"
+                      type="number"
+                    />
+                    <div className="flex justify-end">
+                      <Button type="submit" className="text-white">
+                        O'zgarishlarni saqlash
+                      </Button>
+                    </div>
+                  </form>
+                </Form>
+              </div>
+            </div>
+          )}
+        </>
+      ),
+    },
+  ];
   return (
     <div className="container p-0 mx-auto">
       <Card className="overflow-hidden">
@@ -39,10 +186,15 @@ export default function ContractDetails() {
             <CardTitle className="text-2xl font-bold text-white">
               Shartnoma malumotlari
             </CardTitle>
-            <div className="flex justify-end space-x-3">
-              <ContractIncomeCreateInput />
-              <UpdateItem contract={contract} />
-              <DeleteItem />
+
+            <div className="flex justify-between">
+              <div className="flex justify-end space-x-3">
+                {contract.shartnoma_turi === "one_bay" && (
+                  <ContractIncomeCreateInput />
+                )}
+                <UpdateItem contract={contract} />
+                <DeleteItem />
+              </div>
             </div>
           </div>
         </CardHeader>
@@ -120,7 +272,9 @@ export default function ContractDetails() {
               <DetailItem label="Miqdori" value={contract.count} />
               <DetailItem
                 label="Shartnoma davomiyligi"
-                value={new Date(contract.shartnoma_muddati).toLocaleDateString()}
+                value={new Date(
+                  contract.shartnoma_muddati
+                ).toLocaleDateString()}
               />
               <DetailItem
                 label="Texnik davomiyligi"
@@ -144,10 +298,17 @@ export default function ContractDetails() {
           </div>
         </CardContent>
       </Card>
+      <div className="my-8">
+        {contract.shartnoma_turi === "subscription_fee" && (
+          <DataTableWithOutSearching
+            columns={makeMonthlyFeeColumns()}
+            data={monthlyFee ? [monthlyFee] : []}
+          />
+        )}
+      </div>
     </div>
   );
 }
-
 function DetailSection({
   icon,
   title,

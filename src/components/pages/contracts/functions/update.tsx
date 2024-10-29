@@ -88,6 +88,13 @@ export function UpdateItem({ contract }: { contract: Contract }) {
                   name="count"
                   type="number"
                 />
+                <ItemForm
+                  title="Qolgan to'lov"
+                  form={form}
+                  name="remainingPayment"
+                  type="number"
+                />
+                
                 <SearchService form={form} service={service} title="Xizmat" />
                 <SearchClient form={form} client={user} title="Mijoz" />
 
@@ -111,7 +118,7 @@ export function UpdateItem({ contract }: { contract: Contract }) {
                   form={form}
                   name="shartnoma_turi"
                 />
-                <ItemForm title="sana" type="date" form={form} name="sana" />
+                <ItemForm title="Shartnoma sanasi" type="date" form={form} name="sana" />
                 <ItemForm
                   title="Shartnoma muddati"
                   type="date"

@@ -104,7 +104,7 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
             title="To'lov usuli "
           />
 
-          <ItemForm title="sana" type="date" form={form} name="sana" />
+          <ItemForm title="Shartnoma sanasi" type="date" form={form} name="sana" />
           <ItemForm
             title="Shartnoma muddati"
             type="date"
