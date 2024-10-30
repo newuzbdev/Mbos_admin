@@ -43,9 +43,9 @@ export default function ContractDetails({
   const { data: updatedAdmin } = useGetGetAdmin(Number(contract?.whoUpdated));
   const { mutate: updateMonthlyFee } = useMonthlyUpdate();
 
-  const monthlyFee =
+  const monthlyFees =
     contract?.shartnoma_turi === "subscription_fee"
-      ? contract?.monthlyFee?.[0]
+      ? contract?.monthlyFee
       : null;
 
   const form = useForm({
@@ -55,9 +55,9 @@ export default function ContractDetails({
   });
 
   const handleSubmit = (data: { paid: string }) => {
-    if (monthlyFee) {
+    if (monthlyFees) {
       const dataToSend = {
-        id: monthlyFee.id,
+        id: monthlyFees[0].id,
         paid: Number(data.paid),
       };
 
@@ -98,32 +98,38 @@ export default function ContractDetails({
     },
     {
       header: "Umumiy qolgan to'lov",
-      cell: () => (
+      cell: ({ row }) => (
         <div>
-          {monthlyFee ? formatNumber(monthlyFee.amount) + " s'om" : "N/A"}
+          {row.original ? formatNumber(row.original.amount) + " s'om" : "N/A"}
         </div>
       ),
     },
     {
       header: "To'langan",
-      cell: () => (
+      cell: ({ row }) => (
         <div>
-          {monthlyFee ? formatNumber(monthlyFee.paid) + " s'om" : "N/A"}
+          {row.original ? formatNumber(row.original.paid) + " s'om" : "N/A"}
         </div>
       ),
     },
     {
       header: "Tolash sanasi",
-      cell: () => <div>{new Date(monthlyFee.date).toLocaleDateString()}</div>,
+      cell: ({ row }) => (
+        <div>{new Date(row.original.date).toLocaleDateString()}</div>
+      ),
     },
     {
       header: "Tolash holati",
-      cell: () => (
+      cell: ({ row }) => (
         <div>
-          {monthlyFee?.amount === monthlyFee?.paid ? (
-            <span className="p-1 rounded-md bg-primary">To'langan</span>
-          ) : monthlyFee?.amount > monthlyFee?.paid ? (
-            <span className="p-1 bg-red-500 rounded-md">To'lanmagan</span>
+          {row.original?.amount === row.original?.paid ? (
+            <span className="p-1 text-white rounded-md bg-primary">
+              To'langan
+            </span>
+          ) : row.original?.amount > row.original?.paid ? (
+            <span className="p-1 text-white bg-red-500 rounded-md">
+              To'lanmagan
+            </span>
           ) : (
             "N/A"
           )}
@@ -134,24 +140,17 @@ export default function ContractDetails({
       header: "To'lov qoshish",
       cell: () => (
         <>
-          <Button
-            onClick={() => setIsOpen(true)}
-            variant="ghost"
-            size="icon"
-          >
+          <Button onClick={() => setIsOpen(true)} variant="ghost" size="icon">
             <Plus size={20} className="text-primary" />
           </Button>
           {isOpen && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-              <div className="bg-gray-800 rounded-lg p-6 w-[28rem]">
+              <div className="dark:bg-gray-800 bg-white rounded-lg p-6 w-[28rem]">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-lg font-semibold text-white">Pul tolash</h2>
-                  <button
-                    onClick={() => setIsOpen(false)}
-                    className=""
-                  >
-                    ✕
-                  </button>
+                  <h2 className="text-lg font-semibold text-white">
+                    Pul tolash
+                  </h2>
+                  <button onClick={() => setIsOpen(false)} className="hover:cursor-pointer">✕</button>
                 </div>
                 <Form {...form}>
                   <form
@@ -302,7 +301,7 @@ export default function ContractDetails({
         {contract.shartnoma_turi === "subscription_fee" && (
           <DataTableWithOutSearching
             columns={makeMonthlyFeeColumns()}
-            data={monthlyFee ? [monthlyFee] : []}
+            data={monthlyFees || []}
           />
         )}
       </div>
