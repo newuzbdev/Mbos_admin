@@ -50,3 +50,10 @@ export type Contract = {
   user_id: number;
   price: number;
 };
+
+export type MonthlyFee ={
+  id: number;
+  amount: string;
+  paid: number;
+  date: string;
+}

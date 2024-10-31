@@ -13,7 +13,7 @@ import { useClientsUpdate, useGetClient } from "@/hooks/useClients";
 import { Clients } from "@/types/clients";
 import { PencilIcon } from "lucide-react";
 import { useState } from "react";
-import { useForm, Controller } from "react-hook-form"; 
+import { useForm, Controller } from "react-hook-form";
 
 export function UpdateItem({ clients }: { clients: Clients }) {
   const { mutate } = useClientsUpdate();
@@ -26,21 +26,26 @@ export function UpdateItem({ clients }: { clients: Clients }) {
 
   const handleSubmit = (item: Clients) => {
     // Format phone number to remove non-numeric characters
-    const phoneNumber = typeof item.phone === 'string' 
-      ? (item.phone as string).replace(/\D/g, "") 
-      : item.phone.toString();
+    const phoneNumber =
+      typeof item.phone === "string"
+        ? (item.phone as string).replace(/\D/g, "")
+        : item.phone.toString();
 
     const dataToSend = {
       id: clients.id,
       F_I_O: item.F_I_O,
       INN_number: item.INN_number,
-      phone: parseInt(phoneNumber, 10), 
+      phone: parseInt(phoneNumber, 10),
       adress: item.adress,
+      balance: item.balance,
     };
 
     mutate(dataToSend, {
       onSuccess: () => {
-        toast({ title: "Mijoz ma'lumotlari o'zgartirildi", variant: "success" });
+        toast({
+          title: "Mijoz ma'lumotlari o'zgartirildi",
+          variant: "success",
+        });
         refetch();
         form.reset();
         setUpdate(false);
@@ -74,14 +79,23 @@ export function UpdateItem({ clients }: { clients: Clients }) {
             >
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <ItemForm title="Ismi" form={form} name="F_I_O" type="text" />
-                <ItemForm title="Inni raqami" form={form} name="INN_number" type="text" />
+                <ItemForm title="Balance" form={form} name="balance" type="number" />
+                <ItemForm
+                  title="Inni raqami"
+                  form={form}
+                  name="INN_number"
+                  type="text"
+                />
 
                 <Controller
                   name="phone"
                   control={form.control}
                   render={({ field }) => (
                     <div>
-                      <label htmlFor="phone" className="block mb-2 text-base font-bold text-gray-500">
+                      <label
+                        htmlFor="phone"
+                        className="block mb-2 text-base font-bold text-gray-500"
+                      >
                         Telefon raqami
                       </label>
                       <PhoneInput
@@ -94,7 +108,12 @@ export function UpdateItem({ clients }: { clients: Clients }) {
                   )}
                 />
 
-                <ItemForm title="Manzil" form={form} name="adress" type="text" />
+                <ItemForm
+                  title="Manzil"
+                  form={form}
+                  name="adress"
+                  type="text"
+                />
               </div>
               <div className="flex justify-end">
                 <Button type="submit" className="text-white">

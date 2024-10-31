@@ -1,11 +1,16 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ContactRoundIcon, PictureInPictureIcon, UserIcon } from "lucide-react";
+import {
+  ContactRoundIcon,
+  Landmark,
+  PictureInPictureIcon,
+  UserIcon,
+} from "lucide-react";
 import { useGetClient } from "@/hooks/useClients";
 import { DeleteItem } from "@/components/pages/clients/functions/clients-delete";
 import { UpdateItem } from "@/components/pages/clients/functions/clients-edit";
 import { Income } from "@/types/income";
-import { Clients } from "@/types/clients";
+import { BalanceHistory, Clients } from "@/types/clients";
 import DataTable from "@/components/data-table";
 import { ColumnDef } from "@tanstack/react-table";
 import { Contract } from "@/types/contract";
@@ -40,6 +45,33 @@ const makeColumns = (): ColumnDef<Income>[] => [
         {new Date(row.original.date).toLocaleDateString()}
       </div>
     ),
+  },
+  {
+    accessorKey: "is_paid",
+    header: "Holati",
+    cell: ({ row }) => {
+      const status = row.original.is_paid;
+      const statusLabel =
+        status === "paid"
+          ? "kirim"
+          : status === "no_paid"
+          ? "chikim"
+          : "Jarayonda";
+      const statusColor =
+        status === "paid"
+          ? "bg-primary"
+          : status === "no_paid"
+          ? "bg-red-500"
+          : "bg-yellow-500";
+
+      return (
+        <div
+          className={`cursor-pointer text-white flex justify-center rounded-lg py-1 ${statusColor}`}
+        >
+          {statusLabel}
+        </div>
+      );
+    },
   },
 ];
 
@@ -96,6 +128,52 @@ const makeColumnsShartnoma = (
   },
 ];
 
+const makeColumnsBalance = (): ColumnDef<BalanceHistory>[] => [
+  {
+    header: "№",
+    cell: (c) => <div className="cursor-pointer">{c.row.index + 1}</div>,
+  },
+  {
+    accessorKey: "amount",
+    header: "Narx",
+    cell: ({ row }) => <div>{formatNumber(row.original.amount)} s'om</div>,
+  },
+  {
+    accessorKey: "date",
+    header: "vaqt",
+    cell: ({ row }) => (
+      <div className="cursor-pointer">
+        {new Date(row.original.date).toLocaleDateString()}
+      </div>
+    ),
+  },
+  {
+    accessorKey: "purchase_status",
+    header: "Holati",
+    cell: ({ row }) => {
+      const status = row.original.purchase_status;
+      let statusLabel = "jarayonda";
+      let statusColor = "bg-yellow-500";
+
+      if (status === "paid") {
+        statusLabel = "kirim";
+        statusColor = "bg-primary";
+      } else if (status === "no_paid") {
+        statusLabel = "chikim";
+        statusColor = "bg-red-500";
+      }
+
+      return (
+        <div
+          className={`cursor-pointer text-white flex justify-center rounded-lg py-1 ${statusColor}`}
+        >
+          {statusLabel}
+        </div>
+      );
+    },
+  },
+];
+
 export default function ClientsDetails() {
   const { clientsId } = useParams();
   const { data: clientsDetails, isLoading } = useGetClient(clientsId);
@@ -148,46 +226,63 @@ export default function ClientsDetails() {
                 label="Kim o'zgartirdi"
                 value={updateAdmin?.data.data.user_name}
               />
+              <DetailItem label="Balance" value={clients.balance} />
               <DetailItem
                 label="Barcha qarzlari"
                 value={`${formatNumber(totalDebt)} s'om`}
               />
             </DetailSection>
-
             <div>
-              <div className="flex justify-between">
-                <p className="flex items-center gap-2 text-lg font-semibold mb-1.5">
-                  <ContactRoundIcon className="flex text-primary" />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800">
-                    daromat haqida ma'lumot
-                  </span>
-                </p>
-                <IncomeCreate />
-              </div>
-              <DataTable
-                data={{ pagination: {}, data: clients.income || [] }}
-                columns={makeColumns()}
-                search={false}
-                defaultPagination
-              />
+            <div className="flex justify-between">
+              <p className="flex items-center gap-2 text-lg font-semibold mb-1.5">
+                <ContactRoundIcon className="flex text-primary" />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800">
+                  daromat haqida ma'lumot
+                </span>
+              </p>
+              <IncomeCreate />
             </div>
-            <div className="col-span-2">
-              <div className="flex justify-between">
-                <p className="flex items-center gap-2 text-lg font-semibold mb-1.5">
-                  <PictureInPictureIcon className="text-primary" />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800">
-                    shartnoma haqida ma'lumot
-                  </span>
-                </p>
-                <ContractCreate />
-              </div>
-              <DataTable
-                data={{ pagination: {}, data: clients.shartnome || [] }}
-                columns={makeColumnsShartnoma(navigate)}
-                search={false}
-                defaultPagination
-              />
+            <DataTable
+              data={{ pagination: {}, data: clients.income || [] }}
+              columns={makeColumns()}
+              search={false}
+              defaultPagination
+            />
+          </div>
+          </div>
+        
+          <div className="col-span-2">
+            <div className="flex justify-between">
+              <p className="flex items-center gap-2 text-lg font-semibold mb-1.5">
+                <PictureInPictureIcon className="text-primary" />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800">
+                  shartnoma haqida ma'lumot
+                </span>
+              </p>
+              <ContractCreate />
             </div>
+            <DataTable
+              data={{ pagination: {}, data: clients.shartnome || [] }}
+              columns={makeColumnsShartnoma(navigate)}
+              search={false}
+              defaultPagination
+            />
+          </div>
+          <div className="col-span-2">
+            <div className="flex justify-between">
+              <p className="flex items-center gap-2 text-lg font-semibold mb-1.5">
+                <Landmark className="" />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800">
+                  Balance tarihi haqida ma'lumot
+                </span>
+              </p>
+            </div>
+            <DataTable
+              data={{ pagination: {}, data: clients?.balance_history || [] }}
+              columns={makeColumnsBalance()}
+              search={false}
+              defaultPagination
+            />
           </div>
         </CardContent>
       </Card>
@@ -195,7 +290,8 @@ export default function ClientsDetails() {
   );
 }
 
-function DetailSection({  icon,
+function DetailSection({
+  icon,
   title,
   children,
 }: {

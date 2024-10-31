@@ -40,7 +40,7 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
       count: Number(data.count),
       advancePayment: 0,
       user_id: Number(clientsId) || Number(data?.user_id),
-      tolash_sana: new Date(),
+      tolash_sana: data.tolash_sana,
       // payment_method: data.payment_method,
     };
 
