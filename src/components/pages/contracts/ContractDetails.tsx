@@ -23,6 +23,7 @@ import { ItemForm } from "@/components/Input-create";
 import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { MonthlyFee } from "@/types/contract";
+import { useClientsUpdate } from "@/hooks/useClients";
 import {
   Dialog,
   DialogContent,
@@ -43,6 +44,7 @@ export default function ContractDetails({
     isLoading,
     refetch: refetchMonthlyFee,
   } = useGetContract(contractId);
+  const { mutate: updateClient } = useClientsUpdate();
   const contract = contractDetails?.data?.data;
   const { data: craetedAdmin } = useGetGetAdmin(Number(contract?.whoCreated));
   const [isOpen, setIsOpen] = useState(false);
@@ -74,14 +76,16 @@ export default function ContractDetails({
     const paymentAmount = Number(data.paid);
     const userBalance = Number(contract?.user.balance);
 
+
     if (paymentAmount > userBalance) {
       toast({
         title: "Balance da Yetarli mablag' mavjud emas",
         description: "To'lovni amalga oshirish uchun mablag' yetarli emas",
         variant: "destructive",
       });
-      return;
+      return null;
     }
+
 
     if (selectedFeeId) {
       const dataToSend = {
@@ -89,6 +93,24 @@ export default function ContractDetails({
         paid: paymentAmount,
         update_date: data.update_date,
       };
+
+      const {
+        balance,
+        created_at,
+        updated_at,
+        isDeleted,
+        whoCreated,
+        whoUpdated,
+        ...user
+      } = contractDetails?.data?.data?.user;
+
+      updateClient({
+        ...user,
+        balance: (
+          +contractDetails?.data?.data.user.balance - paymentAmount
+        ).toString(),
+      });
+
 
       updateMonthlyFee(dataToSend, {
         onSuccess: () => {
@@ -427,7 +449,7 @@ export default function ContractDetails({
               <table className="w-full text-sm text-left">
                 <thead className="text-xs uppercase ">
                   <tr>
-                    <th className="px-6 py-3">ID</th>
+                 
                     <th className="px-6 py-3">Summasi</th>
                     <th className="px-6 py-3">To'langan Sanasi</th>
                     <th className="px-6 py-3">Kim qo'shdi</th>
@@ -437,7 +459,7 @@ export default function ContractDetails({
                   {selectedFee?.balance_history?.map(
                     (
                       history: {
-                        id: string;
+                       
                         amount: number;
                         date: string;
                         whoCreated: string;
@@ -448,7 +470,7 @@ export default function ContractDetails({
                         key={index}
                         className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                       >
-                        <td className="px-6 py-4">{history.id}</td>
+                        
                         <td className="px-6 py-4">
                           {formatNumber(history.amount)} so'm
                         </td>
