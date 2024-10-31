@@ -61,40 +61,13 @@ export default function ContractDetails({
       date: "",
     },
   });
-
-  // const handleSubmit = (data: { paid: string,date:string}) => {
-  //   if (selectedFeeId) {
-  //     const dataToSend = {
-  //       id: selectedFeeId,
-  //       paid: Number(data.paid),
-  //       date: data.date
-  //     };
-
-  //     updateMonthlyFee(dataToSend, {
-  //       onSuccess: () => {
-  //         toast({
-  //           title: "Oylik daromad qo'shild",
-  //           variant: "success",
-  //         });
-  //         refetchMonthlyFee();
-  //         form.reset();
-  //         setIsOpen(false);
-  //         setSelectedFeeId(null);
-  //         closeDialog?.();
-  //       },
-  //       onError: () => {
-  //         toast({ title: "Xatolik yuz berdi", variant: "destructive" });
-  //       },
-  //     });
-  //   }
-  // };
   const handleSubmit = (data: { paid: string; date: string }) => {
     const paymentAmount = Number(data.paid);
     const userBalance = Number(contract?.user.balance);
   
     if (paymentAmount > userBalance) {
       toast({
-        title: "Yetarli mablag' mavjud emas",
+        title: "Balance da Yetarli mablag' mavjud emas",
         description: "To'lovni amalga oshirish uchun mablag' yetarli emas",
         variant: "destructive",
       });
@@ -271,7 +244,7 @@ export default function ContractDetails({
                       type="number"
                     />
                     <ItemForm
-                      title="Sansi"
+                      title="Sanasi"
                       form={form}
                       name="date"
                       type="date"
