@@ -32,12 +32,12 @@ function IncomeDashboard() {
   return (
     <div className="p-6 mt-4 bg-white rounded-lg shadow-md dark:bg-gray-800">
       <h2 className="mb-6 text-3xl font-bold text-gray-800 dark:text-gray-200">
-        Daromad va Chikim
+        Daromad va Chiqim
       </h2>
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
         <Section title="Tushum" items={tushumItems} />
 
-        <Section title="Chikim" items={chikimItems} />
+        <Section title="Chiqim" items={chikimItems} />
       </div>
     </div>
   );

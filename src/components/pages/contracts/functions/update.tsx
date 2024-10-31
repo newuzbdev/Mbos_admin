@@ -39,6 +39,7 @@ export function UpdateItem({ contract }: { contract: Contract }) {
       price,
       shartnoma_id,
       service,
+      monthlyFee,
       ...contractData
     } = item;
 

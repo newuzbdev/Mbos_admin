@@ -55,7 +55,7 @@ const makeColumns = (): ColumnDef<Income>[] => [
         status === "paid"
           ? "kirim"
           : status === "no_paid"
-          ? "chikim"
+          ? "chiqim"
           : "Jarayonda";
       const statusColor =
         status === "paid"
@@ -140,7 +140,7 @@ const makeColumnsBalance = (): ColumnDef<BalanceHistory>[] => [
   },
   {
     accessorKey: "date",
-    header: "vaqt",
+    header: "To'lov qilingan kuni",
     cell: ({ row }) => (
       <div className="cursor-pointer">
         {new Date(row.original.date).toLocaleDateString()}
@@ -159,7 +159,7 @@ const makeColumnsBalance = (): ColumnDef<BalanceHistory>[] => [
         statusLabel = "kirim";
         statusColor = "bg-primary";
       } else if (status === "no_paid") {
-        statusLabel = "chikim";
+        statusLabel = "chiqim";
         statusColor = "bg-red-500";
       }
 
@@ -226,31 +226,34 @@ export default function ClientsDetails() {
                 label="Kim o'zgartirdi"
                 value={updateAdmin?.data.data.user_name}
               />
-              <DetailItem label="Balance" value={clients.balance} />
+              <DetailItem
+                label="Balance"
+                value={`${formatNumber(clients?.balance || 0)} so'm'`}
+              />
               <DetailItem
                 label="Barcha qarzlari"
                 value={`${formatNumber(totalDebt)} s'om`}
               />
             </DetailSection>
             <div>
-            <div className="flex justify-between">
-              <p className="flex items-center gap-2 text-lg font-semibold mb-1.5">
-                <ContactRoundIcon className="flex text-primary" />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800">
-                  daromat haqida ma'lumot
-                </span>
-              </p>
-              <IncomeCreate />
+              <div className="flex justify-between">
+                <p className="flex items-center gap-2 text-lg font-semibold mb-1.5">
+                  <ContactRoundIcon className="flex text-primary" />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800">
+                    daromat haqida ma'lumot
+                  </span>
+                </p>
+                <IncomeCreate />
+              </div>
+              <DataTable
+                data={{ pagination: {}, data: clients.income || [] }}
+                columns={makeColumns()}
+                search={false}
+                defaultPagination
+              />
             </div>
-            <DataTable
-              data={{ pagination: {}, data: clients.income || [] }}
-              columns={makeColumns()}
-              search={false}
-              defaultPagination
-            />
           </div>
-          </div>
-        
+
           <div className="col-span-2">
             <div className="flex justify-between">
               <p className="flex items-center gap-2 text-lg font-semibold mb-1.5">

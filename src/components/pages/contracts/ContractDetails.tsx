@@ -58,10 +58,11 @@ export default function ContractDetails({
   const form = useForm({
     defaultValues: {
       paid: "",
-      date: "",
+      update_date: "",
     },
   });
-  const handleSubmit = (data: { paid: string; date: string }) => {
+
+  const handleSubmit = (data: { paid: string; update_date: string }) => {
     const paymentAmount = Number(data.paid);
     const userBalance = Number(contract?.user.balance);
   
@@ -74,12 +75,11 @@ export default function ContractDetails({
       return;
     }
   
-    
     if (selectedFeeId) {
       const dataToSend = {
         id: selectedFeeId,
         paid: paymentAmount,
-        date: data.date,
+        update_date: data.update_date,
       };
   
       updateMonthlyFee(dataToSend, {
@@ -246,7 +246,7 @@ export default function ContractDetails({
                     <ItemForm
                       title="Sanasi"
                       form={form}
-                      name="date"
+                      name="update_date"
                       type="date"
                     />
                     <div className="flex justify-end">
@@ -319,7 +319,7 @@ export default function ContractDetails({
               />
                <DetailItem
                 label="Balance"
-                value={formatNumber(contract?.user.balance || "N/A")}
+                value={formatNumber(contract?.user?.balance || "N/A")}
               />
             </DetailSection>
             <DetailSection
@@ -395,7 +395,7 @@ export default function ContractDetails({
         )}
       </div>
     </div>
-  );
+  )
 }
 function DetailSection({
   icon,

@@ -40,7 +40,7 @@ export function ChartList() {
   };
 
   return (
-    <div className="h-full relative">
+    <div className="relative h-full">
       <ChartContainer config={chartConfig} className="w-full h-full">
         <BarChart accessibilityLayer data={displayedData} barCategoryGap={10}>
           <CartesianGrid vertical={false} />
@@ -56,7 +56,7 @@ export function ChartList() {
           <Bar dataKey="chikim" fill="#FF8A8A" radius={4} barSize={30} />
         </BarChart>
       </ChartContainer>
-      <div className="flex justify-between absolute bottom-0 w-full">
+      <div className="absolute bottom-0 flex justify-between w-full">
         <Button onClick={handlePrev} variant="ghost" disabled={offset === 0}>
           <ArrowLeft />
         </Button>

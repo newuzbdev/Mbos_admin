@@ -25,6 +25,7 @@ export enum EnumShartnomaPaid {
 }
 
 export type Contract = {
+  monthlyFee:MonthlyFee
   user: Clients;
   count: number;
   created_at: string;

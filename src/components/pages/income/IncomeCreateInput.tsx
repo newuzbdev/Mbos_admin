@@ -96,7 +96,7 @@ const IncomeCreateInput = ({ closeDialog }: IncomeCreateInputProps) => {
               { name: "confirm_payment", value: "Jarayonda" },
               { name: "no_paid", value: "Chiqim" },
             ]}
-            title="tushum yoki chikim"
+            title="tushum yoki chiqim"
           />
           {form.watch("is_paid") === "paid" ||
           form.watch("is_paid") === "confirm_payment" ? (
