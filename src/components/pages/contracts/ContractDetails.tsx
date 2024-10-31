@@ -16,13 +16,19 @@ import ContractIncomeCreateInput from "./functions/incomeAdd";
 import { ColumnDef } from "@tanstack/react-table";
 import DataTableWithOutSearching from "@/components/data-table-without-searching";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { Key, useState } from "react";
 import { useMonthlyUpdate } from "@/hooks/useMonthlyFee";
 import { toast } from "@/hooks/use-toast";
 import { ItemForm } from "@/components/Input-create";
 import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { MonthlyFee } from "@/types/contract";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface ContractDetailsInputProps {
   closeDialog?: () => void;
@@ -44,6 +50,8 @@ export default function ContractDetails({
 
   const { data: updatedAdmin } = useGetGetAdmin(Number(contract?.whoUpdated));
   const { mutate: updateMonthlyFee } = useMonthlyUpdate();
+  const [selectedFee, setSelectedFee] = useState<MonthlyFee | null>(null);
+  const [showBalanceHistory, setShowBalanceHistory] = useState(false);
 
   const monthlyFees: MonthlyFee[] =
     contract?.shartnoma_turi === "subscription_fee"
@@ -65,7 +73,7 @@ export default function ContractDetails({
   const handleSubmit = (data: { paid: string; update_date: string }) => {
     const paymentAmount = Number(data.paid);
     const userBalance = Number(contract?.user.balance);
-  
+
     if (paymentAmount > userBalance) {
       toast({
         title: "Balance da Yetarli mablag' mavjud emas",
@@ -74,14 +82,14 @@ export default function ContractDetails({
       });
       return;
     }
-  
+
     if (selectedFeeId) {
       const dataToSend = {
         id: selectedFeeId,
         paid: paymentAmount,
         update_date: data.update_date,
       };
-  
+
       updateMonthlyFee(dataToSend, {
         onSuccess: () => {
           toast({
@@ -103,7 +111,6 @@ export default function ContractDetails({
       });
     }
   };
-  
 
   if (isLoading) return <div>Yuklanmoqda...</div>;
 
@@ -122,10 +129,26 @@ export default function ContractDetails({
       header: "№",
       cell: (c) => <div className="cursor-pointer">{c.row.index + 1}</div>,
     },
+    // {
+    //   header: "Umumiy qolgan to'lov",
+    //   cell: ({ row }) => (
+    //     <div>
+    //       {row.original
+    //         ? formatNumber(Number(row.original.amount)) + " s'om"
+    //         : "N/A"}
+    //     </div>
+    //   ),
+    // },
     {
       header: "Umumiy qolgan to'lov",
       cell: ({ row }) => (
-        <div>
+        <div
+          className="cursor-pointer"
+          onClick={() => {
+            setSelectedFee(row.original);
+            setShowBalanceHistory(true);
+          }}
+        >
           {row.original
             ? formatNumber(Number(row.original.amount)) + " s'om"
             : "N/A"}
@@ -317,7 +340,7 @@ export default function ContractDetails({
                 label="Kim o'zgartirdi"
                 value={updatedAdmin?.data?.data?.user_name || "N/A"}
               />
-               <DetailItem
+              <DetailItem
                 label="Balance"
                 value={formatNumber(contract?.user?.balance || "N/A")}
               />
@@ -394,9 +417,58 @@ export default function ContractDetails({
           />
         )}
       </div>
+      <>
+        <Dialog open={showBalanceHistory} onOpenChange={setShowBalanceHistory}>
+          <DialogContent className="max-w-[1200px]">
+            <DialogHeader>
+              <DialogTitle>Balance Tarixi</DialogTitle>
+            </DialogHeader>
+            <div className="relative overflow-x-auto">
+              <table className="w-full text-sm text-left">
+                <thead className="text-xs uppercase ">
+                  <tr>
+                    <th className="px-6 py-3">ID</th>
+                    <th className="px-6 py-3">Summasi</th>
+                    <th className="px-6 py-3">To'langan Sanasi</th>
+                    <th className="px-6 py-3">Kim qo'shdi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {selectedFee?.balance_history?.map(
+                    (
+                      history: {
+                        id: string;
+                        amount: number;
+                        date: string;
+                        whoCreated: string;
+                      },
+                      index: Key | null | undefined
+                    ) => (
+                      <tr
+                        key={index}
+                        className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                      >
+                        <td className="px-6 py-4">{history.id}</td>
+                        <td className="px-6 py-4">
+                          {formatNumber(history.amount)} so'm
+                        </td>
+                        <td className="px-6 py-4">
+                          {new Date(history.date).toLocaleDateString()}
+                        </td>
+                        <td className="px-6 py-4">{craetedAdmin?.data.data.user_name}</td>
+                      </tr>
+                    )
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </DialogContent>
+        </Dialog>
+      </>
     </div>
-  )
+  );
 }
+
 function DetailSection({
   icon,
   title,
