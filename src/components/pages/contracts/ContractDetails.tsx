@@ -23,6 +23,7 @@ import { ItemForm } from "@/components/Input-create";
 import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { MonthlyFee } from "@/types/contract";
+import { useClientsUpdate } from "@/hooks/useClients";
 
 interface ContractDetailsInputProps {
   closeDialog?: () => void;
@@ -37,6 +38,7 @@ export default function ContractDetails({
     isLoading,
     refetch: refetchMonthlyFee,
   } = useGetContract(contractId);
+  const { mutate: updateClient } = useClientsUpdate();
   const contract = contractDetails?.data?.data;
   const { data: craetedAdmin } = useGetGetAdmin(Number(contract?.whoCreated));
   const [isOpen, setIsOpen] = useState(false);
@@ -65,23 +67,40 @@ export default function ContractDetails({
   const handleSubmit = (data: { paid: string; update_date: string }) => {
     const paymentAmount = Number(data.paid);
     const userBalance = Number(contract?.user.balance);
-  
+
     if (paymentAmount > userBalance) {
       toast({
         title: "Balance da Yetarli mablag' mavjud emas",
         description: "To'lovni amalga oshirish uchun mablag' yetarli emas",
         variant: "destructive",
       });
-      return;
+      return null;
     }
-  
+
     if (selectedFeeId) {
       const dataToSend = {
         id: selectedFeeId,
         paid: paymentAmount,
         update_date: data.update_date,
       };
-  
+
+      const {
+        balance,
+        created_at,
+        updated_at,
+        isDeleted,
+        whoCreated,
+        whoUpdated,
+        ...user
+      } = contractDetails?.data?.data?.user;
+
+      updateClient({
+        ...user,
+        balance: (
+          +contractDetails?.data?.data.user.balance - paymentAmount
+        ).toString(),
+      });
+
       updateMonthlyFee(dataToSend, {
         onSuccess: () => {
           toast({
@@ -103,7 +122,6 @@ export default function ContractDetails({
       });
     }
   };
-  
 
   if (isLoading) return <div>Yuklanmoqda...</div>;
 
@@ -317,7 +335,7 @@ export default function ContractDetails({
                 label="Kim o'zgartirdi"
                 value={updatedAdmin?.data?.data?.user_name || "N/A"}
               />
-               <DetailItem
+              <DetailItem
                 label="Balance"
                 value={formatNumber(contract?.user?.balance || "N/A")}
               />
@@ -395,7 +413,7 @@ export default function ContractDetails({
         )}
       </div>
     </div>
-  )
+  );
 }
 function DetailSection({
   icon,
