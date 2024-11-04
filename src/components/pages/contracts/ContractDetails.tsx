@@ -5,6 +5,7 @@ import {
   CalendarIcon,
   CreditCardIcon,
   FileTextIcon,
+  PencilIcon,
   Plus,
   UserIcon,
 } from "lucide-react";
@@ -49,6 +50,7 @@ export default function ContractDetails({
   const { data: craetedAdmin } = useGetGetAdmin(Number(contract?.whoCreated));
   const [isOpen, setIsOpen] = useState(false);
   const [selectedFeeId, setSelectedFeeId] = useState<number | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
 
   const { data: updatedAdmin } = useGetGetAdmin(Number(contract?.whoUpdated));
   const { mutate: updateMonthlyFee } = useMonthlyUpdate();
@@ -69,15 +71,20 @@ export default function ContractDetails({
     defaultValues: {
       paid: "",
       update_date: "",
+      amount: "",
     },
   });
 
-  const handleSubmit = (data: { paid: string; update_date: string }) => {
+  const handleSubmit = (data: {
+    paid: string;
+    update_date: string;
+    amount: string;
+  }) => {
     const paymentAmount = Number(data.paid);
+    const updatedAmount = Number(data.amount);
     const userBalance = Number(contract?.user.balance);
 
-
-    if (paymentAmount > userBalance) {
+    if (!isEditing && paymentAmount > userBalance) {
       toast({
         title: "Balance da Yetarli mablag' mavjud emas",
         description: "To'lovni amalga oshirish uchun mablag' yetarli emas",
@@ -86,12 +93,12 @@ export default function ContractDetails({
       return null;
     }
 
-
     if (selectedFeeId) {
       const dataToSend = {
         id: selectedFeeId,
-        paid: paymentAmount,
-        update_date: data.update_date,
+        paid: isEditing ? undefined : paymentAmount,
+        update_date: isEditing ? undefined : data.update_date,
+        amount: isEditing ? updatedAmount : undefined,
       };
 
       const {
@@ -104,24 +111,28 @@ export default function ContractDetails({
         ...user
       } = contractDetails?.data?.data?.user;
 
-      updateClient({
-        ...user,
-        balance: (
-          +contractDetails?.data?.data.user.balance - paymentAmount
-        ).toString(),
-      });
-
+      if (!isEditing) {
+        updateClient({
+          ...user,
+          balance: (
+            +contractDetails?.data?.data.user.balance - paymentAmount
+          ).toString(),
+        });
+      }
 
       updateMonthlyFee(dataToSend, {
         onSuccess: () => {
           toast({
-            title: "Oylik daromad qo'shildi",
+            title: isEditing
+              ? "Muvaffaqiyatli tahrirlandi"
+              : "Oylik daromad qo'shildi",
             variant: "success",
           });
           refetchMonthlyFee();
           form.reset();
           setIsOpen(false);
           setSelectedFeeId(null);
+          setIsEditing(false);
           closeDialog?.();
         },
         onError: () => {
@@ -151,16 +162,6 @@ export default function ContractDetails({
       header: "№",
       cell: (c) => <div className="cursor-pointer">{c.row.index + 1}</div>,
     },
-    // {
-    //   header: "Umumiy qolgan to'lov",
-    //   cell: ({ row }) => (
-    //     <div>
-    //       {row.original
-    //         ? formatNumber(Number(row.original.amount)) + " s'om"
-    //         : "N/A"}
-    //     </div>
-    //   ),
-    // },
     {
       header: "Umumiy qolgan to'lov",
       cell: ({ row }) => (
@@ -253,19 +254,21 @@ export default function ContractDetails({
             onClick={() => {
               setSelectedFeeId(row.original.id);
               setIsOpen(true);
-              form.setValue("paid", row.original.amount);
+              setIsEditing(false);
+              form.setValue("paid", (Number(row.original.amount) - Number(row.original.paid)).toString());
+              form.setValue("update_date", "");
             }}
             variant="ghost"
             size="icon"
           >
             <Plus size={20} className="text-primary" />
           </Button>
-          {isOpen && selectedFeeId === row.original.id && (
+          {isOpen && selectedFeeId === row.original.id && !isEditing && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-20">
               <div className="dark:bg-gray-800 bg-white rounded-lg p-6 w-[28rem]">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-lg font-semibold text-white">
-                    Pul tolash
+                    To'lov qo'shish
                   </h2>
                   <button
                     onClick={() => {
@@ -293,6 +296,64 @@ export default function ContractDetails({
                       form={form}
                       name="update_date"
                       type="date"
+                    />
+                    <div className="flex justify-end">
+                      <Button type="submit" className="text-white">
+                        O'zgarishlarni saqlash
+                      </Button>
+                    </div>
+                  </form>
+                </Form>
+              </div>
+            </div>
+          )}
+        </>
+      ),
+    },
+    {
+      header: "Umumiy To'lov Tahrirlash",
+      cell: ({ row }) => (
+        <>
+          <Button
+            onClick={() => {
+              setSelectedFeeId(row.original.id);
+              setIsOpen(true);
+              setIsEditing(true);
+              form.setValue("amount", row.original.amount);
+            }}
+            variant="ghost"
+            size="icon"
+          >
+            <PencilIcon size={20} className="text-primary" />
+          </Button>
+          {isOpen && selectedFeeId === row.original.id && isEditing && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-20">
+              <div className="dark:bg-gray-800 bg-white rounded-lg p-6 w-[28rem]">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-lg font-semibold text-white">
+                    Tahrirlash
+                  </h2>
+                  <button
+                    onClick={() => {
+                      setIsOpen(false);
+                      setSelectedFeeId(null);
+                      setIsEditing(false);
+                    }}
+                    className="hover:cursor-pointer"
+                  >
+                    ✕
+                  </button>
+                </div>
+                <Form {...form}>
+                  <form
+                    onSubmit={form.handleSubmit(handleSubmit)}
+                    className="h-auto space-y-5"
+                  >
+                    <ItemForm
+                      title="Tahrirlash"
+                      form={form}
+                      name="amount"
+                      type="number"
                     />
                     <div className="flex justify-end">
                       <Button type="submit" className="text-white">
@@ -449,7 +510,6 @@ export default function ContractDetails({
               <table className="w-full text-sm text-left">
                 <thead className="text-xs uppercase ">
                   <tr>
-                 
                     <th className="px-6 py-3">Summasi</th>
                     <th className="px-6 py-3">To'langan Sanasi</th>
                     <th className="px-6 py-3">Kim qo'shdi</th>
@@ -459,7 +519,6 @@ export default function ContractDetails({
                   {selectedFee?.balance_history?.map(
                     (
                       history: {
-                       
                         amount: number;
                         date: string;
                         whoCreated: string;
@@ -470,14 +529,15 @@ export default function ContractDetails({
                         key={index}
                         className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                       >
-                        
                         <td className="px-6 py-4">
                           {formatNumber(history.amount)} so'm
                         </td>
                         <td className="px-6 py-4">
                           {new Date(history.date).toLocaleDateString()}
                         </td>
-                        <td className="px-6 py-4">{craetedAdmin?.data.data.user_name}</td>
+                        <td className="px-6 py-4">
+                          {craetedAdmin?.data.data.user_name}
+                        </td>
                       </tr>
                     )
                   )}
