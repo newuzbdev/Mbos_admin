@@ -21,7 +21,7 @@ import { Key, useState } from "react";
 import { useMonthlyUpdate } from "@/hooks/useMonthlyFee";
 import { toast } from "@/hooks/use-toast";
 import { ItemForm } from "@/components/Input-create";
-import { Form } from "@/components/ui/form";
+import { Form, } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { MonthlyFee } from "@/types/contract";
 import { useClientsUpdate } from "@/hooks/useClients";
@@ -72,6 +72,7 @@ export default function ContractDetails({
       paid: "",
       update_date: "",
       amount: "",
+      commit: "",
     },
   });
 
@@ -79,6 +80,7 @@ export default function ContractDetails({
     paid: string;
     update_date: string;
     amount: string;
+    commit: string | null;
   }) => {
     const paymentAmount = Number(data.paid);
     const updatedAmount = Number(data.amount);
@@ -99,6 +101,7 @@ export default function ContractDetails({
         paid: isEditing ? undefined : paymentAmount,
         update_date: isEditing ? undefined : data.update_date,
         amount: isEditing ? updatedAmount : undefined,
+        commit: isEditing ? data.commit : undefined,
       };
 
       const {
@@ -255,7 +258,12 @@ export default function ContractDetails({
               setSelectedFeeId(row.original.id);
               setIsOpen(true);
               setIsEditing(false);
-              form.setValue("paid", (Number(row.original.amount) - Number(row.original.paid)).toString());
+              form.setValue(
+                "paid",
+                (
+                  Number(row.original.amount) - Number(row.original.paid)
+                ).toString()
+              );
               form.setValue("update_date", "");
             }}
             variant="ghost"
@@ -310,6 +318,7 @@ export default function ContractDetails({
         </>
       ),
     },
+
     {
       header: "Umumiy To'lov Tahrirlash",
       cell: ({ row }) => (
@@ -355,6 +364,13 @@ export default function ContractDetails({
                       name="amount"
                       type="number"
                     />
+
+                    <ItemForm
+                      title="Ozgartish sababi"
+                      form={form}
+                      name="commit"
+                      type="text"
+                    />
                     <div className="flex justify-end">
                       <Button type="submit" className="text-white">
                         O'zgarishlarni saqlash
@@ -366,6 +382,13 @@ export default function ContractDetails({
             </div>
           )}
         </>
+      ),
+    },
+
+    {
+      header: "O'zgartirish sababi",
+      cell: ({ row }) => (
+        <div>{row.original.commit || "Sabab ko'rsatilmagan"}</div>
       ),
     },
   ];

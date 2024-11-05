@@ -18,7 +18,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useState } from "react";
-import { ArrowDownIcon, ArrowLeft, ArrowRight, ArrowUpIcon } from "lucide-react";
+import {
+  ArrowDownIcon,
+  ArrowLeft,
+  ArrowRight,
+  ArrowUpIcon,
+} from "lucide-react";
 import ColumnFilter from "@/components/column-filtering";
 import { Button } from "./ui/button";
 interface DataTableProps<TData, TValue> {
@@ -134,27 +139,31 @@ export default function DataTableWithOutSearching<TData, TValue>({
             </TableBody>
           </Table>
         </div>
-        <div className="flex items-center justify-end py-4 space-x-2">
-          <Button
-          className="text-white bg-primary"
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-             <ArrowLeft/>
-          
-          </Button>
-          <Button
-          className="text-white bg-primary"
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            <ArrowRight />
-          </Button>
-        </div>
+        {/* <div className="flex items-center justify-end py-4 space-x-2"> */}
+          <div className="flex items-center justify-end py-4 space-x-2">
+            <Button
+              className="text-white bg-primary"
+              variant="outline"
+              size="sm"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              <ArrowLeft />
+            </Button>
+            <div className="flex justify-center flex-1 text-base text-black text-muted-foreground dark:text-white">
+              {table.getFilteredRowModel().rows.length} tasi mavjud
+            </div>
+            <Button
+              className="p-3 text-white bg-primary"
+              variant="outline"
+              size="sm"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              <ArrowRight />
+            </Button>
+          </div>
+        {/* </div> */}
       </div>
     </>
   );
