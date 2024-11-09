@@ -48,6 +48,7 @@ export function UpdateItem({ contract }: { contract: Contract }) {
       advancePayment: +item.advancePayment,
       count: +item.count,
     };
+    
 
     mutate(dataToSend as any, {
       onSuccess: () => {

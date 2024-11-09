@@ -21,7 +21,7 @@ import { Key, useState } from "react";
 import { useMonthlyUpdate } from "@/hooks/useMonthlyFee";
 import { toast } from "@/hooks/use-toast";
 import { ItemForm } from "@/components/Input-create";
-import { Form, } from "@/components/ui/form";
+import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { MonthlyFee } from "@/types/contract";
 import { useClientsUpdate } from "@/hooks/useClients";
@@ -61,11 +61,21 @@ export default function ContractDetails({
     contract?.shartnoma_turi === "subscription_fee"
       ? contract?.monthlyFee
       : null;
-
+      
   const totalAmount =
-    monthlyFees?.reduce((sum, fee) => sum + Number(fee.amount), 0) || 0;
+    contract?.shartnoma_turi === "subscription_fee"
+      ? monthlyFees?.reduce((sum, fee) => sum + Number(fee.amount), 0) || 0
+      : Number(contract?.service?.price * contract?.count) || 0;
+
   const totalPaid =
-    monthlyFees?.reduce((sum, fee) => sum + Number(fee.paid), 0) || 0;
+    contract?.shartnoma_turi === "subscription_fee"
+      ? monthlyFees?.reduce((sum, fee) => sum + Number(fee.paid), 0) || 0
+      : Number(contract?.advancePayment) || 0;
+
+  // const totalAmount =
+  //   monthlyFees?.reduce((sum, fee) => sum + Number(fee.amount), 0) || 0;
+  // const totalPaid =
+  //   monthlyFees?.reduce((sum, fee) => sum + Number(fee.paid), 0) || 0;
 
   const form = useForm({
     defaultValues: {
@@ -94,7 +104,15 @@ export default function ContractDetails({
       });
       return null;
     }
-
+    if (paymentAmount > userBalance) {
+      toast({
+        title: "Balance da Yetarli mablag' mavjud emas",
+        description: "To'lovni amalga oshirish uchun mablag' yetarli emas",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     if (selectedFeeId) {
       const dataToSend = {
         id: selectedFeeId,
@@ -122,6 +140,17 @@ export default function ContractDetails({
           ).toString(),
         });
       }
+      if (contract.shartnoma_turi === "one_bay") {
+        const remainingAmount = totalAmount - totalPaid;
+        if (paymentAmount > remainingAmount) {
+          toast({
+            title: "To'lov miqdori qolgan summadan oshib ketdi",
+            variant: "destructive",
+          });
+          return;
+        }
+      }
+      
 
       updateMonthlyFee(dataToSend, {
         onSuccess: () => {
