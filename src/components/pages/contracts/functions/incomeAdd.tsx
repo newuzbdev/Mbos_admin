@@ -3,71 +3,77 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { toast } from "@/hooks/use-toast";
 import { ItemForm } from "@/components/Input-create";
 import { FormSchema } from "@/components/validate";
-import { useContractUpdate, useGetContract } from "@/hooks/useContract";
 import { Contract } from "@/types/contract";
-import { useGetClient } from "@/hooks/useClients";
 import { useParams } from "react-router-dom";
 import { Plus } from "lucide-react";
 import { useState } from "react";
+import { useContractUpdate, useGetContract } from "@/hooks/useContract";
+import { useClientsUpdate } from "@/hooks/useClients";
+import { toast } from "@/hooks/use-toast";
 
-interface ContractsCreateInputProps {
-  closeDialog?: () => void;
-}
-
-const ContractIncomeCreateInput = ({
-  closeDialog,
-}: ContractsCreateInputProps) => {
+const ContractIncomeCreateInput = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { mutate: updateContract } = useContractUpdate();
-  const { clientsId } = useParams<{ clientsId: string }>();
-  const { refetch: refetchClients } = useGetClient(clientsId || "");
   const { contractId } = useParams<{ contractId: string }>();
-  const { data: contractDetails, refetch: refetchContract } = useGetContract(contractId || "");
+  const { data: contractDetails } = useGetContract(contractId || "");
+  const { mutate: updateClient } = useClientsUpdate();
+  const { mutate: updateContract } = useContractUpdate();
+  const { refetch } = useGetContract(contractId);
   const form = useForm<Contract>({
     resolver: zodResolver(FormSchema),
   });
 
-  const existingAdvancePayment =
-    Number(contractDetails?.data?.data?.advancePayment) || 0;
+  const onSubmit = (data: Contract) => {
+    const {
+      created_at,
+      updated_at,
+      isDeleted,
+      whoCreated,
+      whoUpdated,
+      ...userBalance
+    } = contractDetails?.data?.data.user;
+    if (+userBalance.balance < data.advancePayment) {
+      toast({
+        title: "Balance da Yetarli mablag' mavjud emas",
+        description: "To'lovni amalga oshirish uchun mablag' yetarli emas",
+        variant: "destructive",
+      });
+      return null;
+    }
 
-  function onSubmit(data: Contract) {
-    const newAdvancePayment = Number(data.advancePayment);
-    const updatedAdvancePayment = existingAdvancePayment + newAdvancePayment;
-    const contractsData = {
-      advancePayment: updatedAdvancePayment,
-    };
+    updateClient({
+      ...userBalance,
+      balance: (+userBalance.balance - +data.advancePayment).toString(),
+    });
+
     updateContract(
-      { id: contractId!, ...contractsData },
+      {
+        ...data,
+        id: contractId,
+        advancePayment:
+          +contractDetails?.data.data.advancePayment + +data.advancePayment,
+      },
       {
         onSuccess: () => {
-          refetchClients();
-          refetchContract();
-          form.reset();
-          toast({
-            title: "Shartnoma muvaffaqiyatli yangilandi.",
-            variant: "success",
-          });
+          refetch();
           setIsOpen(false);
-          closeDialog?.();
-        },
-        onError: (error) => {
           toast({
-            title: "Shartnomani yangilashda xatolik.",
-            variant: "destructive",
-            description: error.message,
+            title: "Muvaffaqiyatli tahrirlandi",
+            variant: "success",
           });
         },
       }
     );
-  }
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button className="flex items-center space-x-2 text-white bg-primary" onClick={() => setIsOpen(true)}>
+        <Button
+          className="flex items-center space-x-2 text-white bg-primary"
+          onClick={() => setIsOpen(true)}
+        >
           <Plus className="w-4 h-4" />
         </Button>
       </DialogTrigger>

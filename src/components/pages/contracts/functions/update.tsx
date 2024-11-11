@@ -48,7 +48,6 @@ export function UpdateItem({ contract }: { contract: Contract }) {
       advancePayment: +item.advancePayment,
       count: +item.count,
     };
-    
 
     mutate(dataToSend as any, {
       onSuccess: () => {
@@ -96,7 +95,7 @@ export function UpdateItem({ contract }: { contract: Contract }) {
                   name="remainingPayment"
                   type="number"
                 />
-                
+
                 <SearchService form={form} service={service} title="Xizmat" />
                 <SearchClient form={form} client={user} title="Mijoz" />
 
@@ -120,7 +119,12 @@ export function UpdateItem({ contract }: { contract: Contract }) {
                   form={form}
                   name="shartnoma_turi"
                 />
-                <ItemForm title="Shartnoma sanasi" type="date" form={form} name="sana" />
+                <ItemForm
+                  title="Shartnoma sanasi"
+                  type="date"
+                  form={form}
+                  name="sana"
+                />
                 <ItemForm
                   title="Shartnoma muddati"
                   type="date"

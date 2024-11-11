@@ -61,7 +61,7 @@ export default function ContractDetails({
     contract?.shartnoma_turi === "subscription_fee"
       ? contract?.monthlyFee
       : null;
-      
+
   const totalAmount =
     contract?.shartnoma_turi === "subscription_fee"
       ? monthlyFees?.reduce((sum, fee) => sum + Number(fee.amount), 0) || 0
@@ -112,7 +112,7 @@ export default function ContractDetails({
       });
       return;
     }
-    
+
     if (selectedFeeId) {
       const dataToSend = {
         id: selectedFeeId,
@@ -150,7 +150,6 @@ export default function ContractDetails({
           return;
         }
       }
-      
 
       updateMonthlyFee(dataToSend, {
         onSuccess: () => {
