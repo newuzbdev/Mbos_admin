@@ -15,6 +15,7 @@ const purchase_status = [
   { name: "no_paid", value: "To'lanmagan" },
 ];
 
+
 const makeColumns = (
   navigate: (path: string) => void
 ): ColumnDef<Contract>[] => [
@@ -115,6 +116,7 @@ const ContractList = () => {
   const limit = Number(searchParams.get("limit") ?? 10);
   const search = searchParams.get("search") || "";
   const filter = searchParams.get("filter") as "ASC" | "DESC" | undefined;
+  
 
   const {
     data: contract,
@@ -138,7 +140,7 @@ const ContractList = () => {
       <div className="p-4 border rounded-md">
         <DataTable
           filter
-          title="Mijoz nomi yoki telefon raqami bo'yicha qidiring"
+          title="Mijoz inni raqami bo'yicha izlang"
           columns={makeColumns(navigate)}
           data={contract?.data || []}
         />

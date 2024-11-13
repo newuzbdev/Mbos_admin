@@ -183,10 +183,13 @@ export default function ContractDetails({
     { name: "subscription_fee", value: "Oylik to'lov" },
   ];
 
-  const purchase_status = [
-    { name: "paid", value: "To'landi" },
-    { name: "no_paid", value: "To'lanmagan" },
-  ];
+  // const purchase_status = [
+  //   { name: "paid", value: "To'landi" },
+  //   { name: "no_paid", value: "To'lanmagan" },
+  // ];
+  const isPaidInFull = contract.shartnoma_turi === "subscription_fee" 
+  ? totalAmount === totalPaid
+  : totalPaid >= totalAmount;
 
   const makeMonthlyFeeColumns = (): ColumnDef<MonthlyFee>[] => [
     {
@@ -416,7 +419,7 @@ export default function ContractDetails({
     {
       header: "O'zgartirish sababi",
       cell: ({ row }) => (
-        <div>{row.original.commit || "Sabab ko'rsatilmagan"}</div>
+        <div>{row.original.commit || ""}</div>
       ),
     },
   ];
@@ -503,9 +506,7 @@ export default function ContractDetails({
               <DetailItem
                 label="Xarid holati"
                 value={
-                  purchase_status.find(
-                    (el) => el.name === contract.purchase_status
-                  )?.value || "N/A"
+                  isPaidInFull ? "To'landi" : "To'lanmagan"
                 }
               />
             </DetailSection>
