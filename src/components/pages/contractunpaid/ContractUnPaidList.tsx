@@ -108,7 +108,7 @@ const makeColumns = (
   },
 ];
 
-const ContractList = () => {
+const ContractUnPaidList = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const page = Number(searchParams.get("page") ?? 1);
@@ -125,6 +125,7 @@ const ContractList = () => {
     limit,
     search,
     filter,
+    isPaid: "no_paid",
   });
 
   useEffect(() => {
@@ -146,4 +147,4 @@ const ContractList = () => {
     </div>
   );
 };
-export default ContractList;
+export default ContractUnPaidList;

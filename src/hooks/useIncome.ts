@@ -3,6 +3,7 @@ import {
   addIncome,
   deleteIncome,
   getIncome,
+  getIncomeProfit,
   updateIncome,
 } from "@/services/income";
 import {  IParams } from "@/types/income.ts";
@@ -16,6 +17,12 @@ export const useGetIncome = (params: IParams) => {
   return useQuery({
     queryKey: ["income"],
     queryFn: () => getIncome(params),
+  });
+};
+export const useGetIncomeProfit = (params: IParams) => {
+  return useQuery({
+    queryKey: ["incomeProfit"],
+    queryFn: () => getIncomeProfit(params),
   });
 };
 

@@ -1,3 +1,5 @@
+
+import  { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -17,6 +19,7 @@ interface IncomeCreateInputProps {
 }
 
 const IncomeCreateInput = ({ closeDialog }: IncomeCreateInputProps) => {
+  const [loading, setLoading] = useState(false);
   const { mutate: addIncome } = useAddIncome();
   const { data: user } = useGetClients({ limit: 999 });
   const location = useLocation();
@@ -29,7 +32,8 @@ const IncomeCreateInput = ({ closeDialog }: IncomeCreateInputProps) => {
     resolver: zodResolver(FormSchema),
   });
 
-  const onSubmit = (data: z.infer<typeof FormSchema>) => {
+  const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+    setLoading(true); 
     const incomeData = {
       ...data,
       amount: +data.amount,
@@ -53,6 +57,9 @@ const IncomeCreateInput = ({ closeDialog }: IncomeCreateInputProps) => {
           variant: "destructive",
           description: error.message,
         });
+      },
+      onSettled: () => {
+        setLoading(false); 
       },
     });
   };
@@ -128,12 +135,16 @@ const IncomeCreateInput = ({ closeDialog }: IncomeCreateInputProps) => {
         </div>
         <Button
           type="submit"
-          className="px-6 py-2 text-white transition duration-200 rounded-md bg-primary"
+          disabled={loading} 
+          className={`px-6 py-2 text-white transition duration-200 rounded-md ${
+            loading ? "bg-gray-400 cursor-not-allowed" : "bg-primary"
+          }`}
         >
-          Qo'shish
+          {loading ? "Saqlanmoqda..." : "Qo'shish"}
         </Button>
       </form>
     </Form>
   );
 };
+
 export default IncomeCreateInput;

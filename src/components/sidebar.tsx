@@ -9,6 +9,8 @@ import {
   CreditCard,
   Orbit,
   Box,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -19,6 +21,8 @@ type SidebarProps = {
 
 const Sidebar: React.FC<SidebarProps> = () => {
   const [isMinimized, setIsMinimized] = useState(false);
+  const [isContractOpen, setIsContractOpen] = useState(false);
+  const [isIncomeOpen, setIsIncomeOpen] = useState(false);
   const location = useLocation();
   const path = location.pathname;
 
@@ -29,7 +33,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
   const getLinkClassName = (linkPath: string) =>
     `flex items-center p-2 rounded-xl hover:bg-primary hover:text-white py-2 ${
       path === linkPath
-        ? "bg-primary text-white text-sm"
+        ? "bg-primary text-white text-lg"
         : "text-primary text-lg"
     }`;
 
@@ -66,22 +70,131 @@ const Sidebar: React.FC<SidebarProps> = () => {
               {!isMinimized && <span className="text-lg">Mijozlar</span>}
             </Link>
           </li>
-          <Link to="/contract" className={getLinkClassName("/contract")}>
-            <ClipboardList className="w-10 h-5" />
-            {!isMinimized && <span className="text-lg">Shartnomalar</span>}
-          </Link>
-          <Link to="/income" className={getLinkClassName("/income")}>
-            <CreditCard className="w-10 h-5" />
-            {!isMinimized && <span className="text-lg">Daromat</span>}
-          </Link>
-          <Link to="/service" className={getLinkClassName("/service")}>
-            <Orbit className="w-10 h-5" />
-            {!isMinimized && <span className="text-lg">Xizmatlar</span>}
-          </Link>
-          <Link to="/product" className={getLinkClassName("/product")}>
-            <Box className="w-10 h-5" />
-            {!isMinimized && <span className="text-lg">Productlar</span>}
-          </Link>
+
+          <li>
+            <div
+              className={cn(
+                "flex items-center p-2 rounded-xl cursor-pointer",
+                "text-white"
+              )}
+              onClick={() => setIsContractOpen(!isContractOpen)}
+            >
+              <ClipboardList className="w-10 h-5 text-primary" />
+              {!isMinimized && (
+                <div className="flex items-center justify-between flex-1">
+                  <span className="text-lg text-primary">Shartnomalar</span>
+                  {isContractOpen ? (
+                    <ChevronUp className="w-6 h-6 text-primary" />
+                  ) : (
+                    <ChevronDown className="w-6 h-6 text-primary" />
+                  )}
+                </div>
+              )}
+            </div>
+            {isContractOpen && (
+              <ul
+                className={cn(
+                  "pl-4 space-y-2 ",
+                  "transition-opacity duration-700 ease-in-out",
+                  isContractOpen ? "opacity-100" : "opacity-0"
+                )}
+              >
+                <li>
+                  <Link
+                    to="/contract"
+                    className={getLinkClassName("/contract")}
+                  >
+                    Barcha shartnomalar
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/contract/unpaid"
+                    className={getLinkClassName("/contract/unpaid")}
+                  >
+                    To'lanmaganlar
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/contract/paid"
+                    className={getLinkClassName("/contract/paid")}
+                  >
+                    To'langanlar
+                  </Link>
+                </li>
+              </ul>
+            )}
+          </li>
+
+          <li>
+            <div
+              className={cn(
+                "flex items-center p-2 rounded-xl cursor-pointer",
+                "text-white"
+              )}
+              onClick={() => setIsIncomeOpen(!isIncomeOpen)}
+            >
+              <CreditCard className="w-10 h-5 text-primary" />
+              {!isMinimized && (
+                <div className="flex items-center justify-between flex-1">
+                  <span className="text-lg text-primary">Daromat</span>
+                  {isIncomeOpen ? (
+                    <ChevronUp className="w-6 h-6 text-primary" />
+                  ) : (
+                    <ChevronDown className="w-6 h-6 text-primary" />
+                  )}
+                </div>
+              )}
+            </div>
+            {isIncomeOpen && (
+              <ul
+                className={cn(
+                  "pl-4 space-y-2 ",
+                  "transition-opacity duration-700 ease-in-out",
+                  isIncomeOpen ? "opacity-100" : "opacity-0"
+                )}
+              >
+                <li>
+                  <Link
+                    to="/income"
+                    className={getLinkClassName("/income")}
+                  >
+                    Barchasi
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/income/profit"
+                    className={getLinkClassName("/income/profit")}
+                  >
+                    Kirim
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/income/moneyspend"
+                    className={getLinkClassName("/income/moneyspend")}
+                  >
+                    Chiqim
+                  </Link>
+                </li>
+              </ul>
+            )}
+          </li>
+
+          <li>
+            <Link to="/service" className={getLinkClassName("/service")}>
+              <Orbit className="w-10 h-5" />
+              {!isMinimized && <span className="text-lg">Xizmatlar</span>}
+            </Link>
+          </li>
+          <li>
+            <Link to="/product" className={getLinkClassName("/product")}>
+              <Box className="w-10 h-5" />
+              {!isMinimized && <span className="text-lg">Productlar</span>}
+            </Link>
+          </li>
         </ul>
       </div>
     </>
@@ -91,7 +204,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
     <>
       <aside
         className={cn(
-          `relative hidden h-screen flex-none border-r transition-[width] duration-100 md:block`,
+          `relative hidden h-screen flex-none border-r transition-all duration-500 ease-in-out md:block`,
           !isMinimized ? "w-72" : "w-[70px]"
         )}
       >

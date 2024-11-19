@@ -38,7 +38,6 @@ axiosPrivate.interceptors.response.use(
           if (res.data && res.data.data) {
             localStorage.setItem("accessToken", res.data.data.accessToken);
             localStorage.setItem("refreshToken", res.data.data.refreshToken);
-            console.log("New access token stored:", res.data.data.accessToken);
           } else {
             console.error(
               "Invalid response structure for refresh token:",

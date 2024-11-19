@@ -31,6 +31,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface ContractDetailsInputProps {
   closeDialog?: () => void;
@@ -71,11 +73,6 @@ export default function ContractDetails({
     contract?.shartnoma_turi === "subscription_fee"
       ? monthlyFees?.reduce((sum, fee) => sum + Number(fee.paid), 0) || 0
       : Number(contract?.advancePayment) || 0;
-
-  // const totalAmount =
-  //   monthlyFees?.reduce((sum, fee) => sum + Number(fee.amount), 0) || 0;
-  // const totalPaid =
-  //   monthlyFees?.reduce((sum, fee) => sum + Number(fee.paid), 0) || 0;
 
   const form = useForm({
     defaultValues: {
@@ -183,13 +180,10 @@ export default function ContractDetails({
     { name: "subscription_fee", value: "Oylik to'lov" },
   ];
 
-  // const purchase_status = [
-  //   { name: "paid", value: "To'landi" },
-  //   { name: "no_paid", value: "To'lanmagan" },
-  // ];
-  const isPaidInFull = contract.shartnoma_turi === "subscription_fee" 
-  ? totalAmount === totalPaid
-  : totalPaid >= totalAmount;
+  // const isPaidInFull =
+  //   contract.shartnoma_turi === "subscription_fee"
+  //     ? totalAmount === totalPaid
+  //     : totalPaid >= totalAmount;
 
   const makeMonthlyFeeColumns = (): ColumnDef<MonthlyFee>[] => [
     {
@@ -324,18 +318,26 @@ export default function ContractDetails({
                     onSubmit={form.handleSubmit(handleSubmit)}
                     className="h-auto space-y-5"
                   >
-                    <ItemForm
-                      title="To'lash"
-                      form={form}
-                      name="paid"
-                      type="number"
-                    />
-                    <ItemForm
-                      title="Sanasi"
-                      form={form}
-                      name="update_date"
-                      type="date"
-                    />
+                    <div>
+                      <Label className="text-lg">To'lash</Label>
+                      <Input
+                        type="number"
+                        id="paid"
+                        defaultValue={
+                          Number(row.original.amount) -
+                          Number(row.original.paid)
+                        }
+                        {...form.register("paid")}
+                      />
+                    </div>
+                    <div>
+                      <Label className="mt-3 text-lg">To'lash Sanasi</Label>
+                      <Input
+                        type="date"
+                        id="update_date"
+                        {...form.register("update_date")}
+                      />
+                    </div>
                     <div className="flex justify-end">
                       <Button type="submit" className="text-white">
                         O'zgarishlarni saqlash
@@ -396,12 +398,21 @@ export default function ContractDetails({
                       type="number"
                     />
 
-                    <ItemForm
+                    {/* <ItemForm
                       title="Ozgartish sababi"
                       form={form}
                       name="commit"
                       type="text"
-                    />
+                    /> */}
+
+                    <div>
+                      <Label className="text-lg">O'zgartirish sababi</Label>
+                      <Input
+                        type="text"
+                        {...form.register("commit")}
+                        placeholder="O'zgartirish sababini kiriting"
+                      />
+                    </div>
                     <div className="flex justify-end">
                       <Button type="submit" className="text-white">
                         O'zgarishlarni saqlash
@@ -418,9 +429,7 @@ export default function ContractDetails({
 
     {
       header: "O'zgartirish sababi",
-      cell: ({ row }) => (
-        <div>{row.original.commit || ""}</div>
-      ),
+      cell: ({ row }) => <div>{row.original.commit || ""}</div>,
     },
   ];
   return (
@@ -506,7 +515,9 @@ export default function ContractDetails({
               <DetailItem
                 label="Xarid holati"
                 value={
-                  isPaidInFull ? "To'landi" : "To'lanmagan"
+                  contract.purchase_status === "paid"
+                    ? "To'landi"
+                    : "To'lanmagan"
                 }
               />
             </DetailSection>
@@ -537,7 +548,7 @@ export default function ContractDetails({
                 value={new Date(contract.sana).toLocaleDateString()}
               />
               <DetailItem
-                label="To'lav sanasi"
+                label="To'lov sanasi"
                 value={new Date(contract.tolash_sana).toLocaleDateString()}
               />
             </DetailSection>

@@ -44,7 +44,6 @@ export default function Login() {
 
   useEffect(() => {
     if (isSuccess && data) {
-      console.log("Login Success: ", data);
       localStorage.setItem("accessToken", data.data.accessToken);
       localStorage.setItem("refreshToken", data.data.refreshToken);
       const to = searchParams.get("to");

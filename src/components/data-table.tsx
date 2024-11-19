@@ -82,7 +82,7 @@ export default function DataTable<TData, TValue>({
                 })
               }
             >
-              <ArrowDownNarrowWide className="text-white"/>
+              <ArrowDownNarrowWide className="text-white" />
             </Button>
           )}
         </div>
@@ -158,7 +158,7 @@ export default function DataTable<TData, TValue>({
                     colSpan={columns.length}
                     className="h-24 text-center"
                   >
-                    No results.
+                    Natija yoʻq
                   </TableCell>
                 </TableRow>
               )}

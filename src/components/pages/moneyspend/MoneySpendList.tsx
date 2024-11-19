@@ -20,7 +20,7 @@ import {
 import { toast } from "@/hooks/use-toast";
 import DataTable from "@/components/data-table";
 import { Income } from "@/types/income.ts";
-import IncomeDashboard from "./incomedashboard";
+import IncomeDashboard from "@/components/pages/income/incomedashboard";
 import { useSearchParams } from "react-router-dom";
 import { formatNumber } from "@/components/formNumber";
 import {
@@ -41,11 +41,6 @@ const payment_methods = [
   { name: "other", value: "boshka" },
 ];
 
-// const confirm_payment = [
-//   { name: "paid", value: "To'landi" },
-//   { name: "no_paid", value: "To'lanmagan" },
-//   { name: "confirm_payment", value: "Jarayonda" },
-// ];
 const makeColumns = (
   setIncomeToEdit: (p: Income) => void,
   setIncomeToDelete: (p: Income) => void
@@ -84,17 +79,19 @@ const makeColumns = (
     header: "Holati",
     cell: ({ row }) => {
       const status = row.original.is_paid;
-      const statusLabel = status === "paid" 
-        ? "kirim" 
-        : status === "no_paid" 
-        ? "chikim" 
-        : "Jarayonda";
-      const statusColor = status === "paid" 
-        ? "bg-primary" 
-        : status === "no_paid" 
-        ? "bg-red-500" 
-        : "bg-yellow-500";
-  
+      const statusLabel =
+        status === "paid"
+          ? "kirim"
+          : status === "no_paid"
+          ? "chikim"
+          : "Jarayonda";
+      const statusColor =
+        status === "paid"
+          ? "bg-primary"
+          : status === "no_paid"
+          ? "bg-red-500"
+          : "bg-yellow-500";
+
       return (
         <div
           className={`cursor-pointer text-white flex justify-center rounded-lg py-1 ${statusColor}`}
@@ -104,20 +101,7 @@ const makeColumns = (
       );
     },
   },
-  
-  // {
-  //   accessorKey: "is_paid",
-  //   header: "Holati",
-  //   cell: ({ row }) => (
-  //     <div
-  //       className={`cursor-pointer text-white flex justify-center rounded-lg py-1 ${
-  //         row.original.is_paid === "paid" ? "bg-primary" : "bg-red-500"
-  //       }`}
-  //     >
-  //       {row.original.is_paid === "paid" ? "kirim" : "chikim"}
-  //     </div>
-  //   ),
-  // },
+
   {
     accessorKey: "description",
     header: "Izoh",
@@ -158,7 +142,7 @@ const makeColumns = (
   },
 ];
 
-const IncomeList = () => {
+const MoneySpendLIst = () => {
   const [incomeToDelete, setIncomeToDelete] = useState<Income | undefined>();
   const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
   const [incomeToEdit, setIncomeToEdit] = useState<Income | undefined>();
@@ -173,7 +157,7 @@ const IncomeList = () => {
     data: income = { data: { data: [] } },
     refetch,
     isLoading,
-  } = useGetIncome({ page, limit, search });
+  } = useGetIncome({ page, limit, search, isPaid: "no_paid" });
   const {
     mutate: updateIncome,
     isSuccess: isUpdateSuccess,
@@ -376,4 +360,4 @@ const IncomeList = () => {
     </div>
   );
 };
-export default IncomeList;
+export default MoneySpendLIst;

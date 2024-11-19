@@ -99,7 +99,7 @@ export function UpdateItem({ contract }: { contract: Contract }) {
                 <SearchService form={form} service={service} title="Xizmat" />
                 <SearchClient form={form} client={user} title="Mijoz" />
 
-                <ItemForm
+                {/* <ItemForm
                   enums={[
                     { name: "paid", value: "To'langan" },
                     { name: "no_paid", value: "To'lanmagan" },
@@ -108,8 +108,8 @@ export function UpdateItem({ contract }: { contract: Contract }) {
                   type="enum"
                   form={form}
                   name="purchase_status"
-                />
-                <ItemForm
+                /> */}
+                {/* <ItemForm
                   enums={[
                     { name: "subscription_fee", value: "Oylik tolov" },
                     { name: "one_bay", value: "Bir martalik tolov" },
@@ -118,7 +118,7 @@ export function UpdateItem({ contract }: { contract: Contract }) {
                   type="enum"
                   form={form}
                   name="shartnoma_turi"
-                />
+                /> */}
                 <ItemForm
                   title="Shartnoma sanasi"
                   type="date"

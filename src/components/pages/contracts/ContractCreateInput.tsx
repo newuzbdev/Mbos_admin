@@ -13,12 +13,14 @@ import { SearchService } from "./functions/searchService";
 import { EnumServiceType } from "@/types/service";
 import { SearchClient } from "./functions/searchClient";
 import { useLocation, useParams } from "react-router-dom";
+import { useState } from "react";
 
 interface ContractsCreateInputProps {
   closeDialog?: () => void;
 }
 
 const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
+  const [loading, setLoading] = useState(false);
   const { mutate: addContract } = useAddContract();
   const { data: user } = useGetClients({ limit: 999 });
   const { clientsId } = useParams<{ clientsId: string }>();
@@ -35,13 +37,13 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
   const location = useLocation();
 
   function onSubmit(data: Contract) {
+    setLoading(true);
     const { ...contractsData } = {
       ...data,
       count: Number(data.count),
       advancePayment: 0,
       user_id: Number(clientsId) || Number(data?.user_id),
       tolash_sana: data.tolash_sana,
-      // payment_method: data.payment_method,
     };
 
     addContract(contractsData as Contract, {
@@ -61,6 +63,9 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
           variant: "destructive",
           description: error.message,
         });
+      },
+      onSettled: () => {
+        setLoading(false);
       },
     });
   }
@@ -104,7 +109,12 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
             title="To'lov usuli "
           />
 
-          <ItemForm title="Shartnoma sanasi" type="date" form={form} name="sana" />
+          <ItemForm
+            title="Shartnoma sanasi"
+            type="date"
+            form={form}
+            name="sana"
+          />
           <ItemForm
             title="Shartnoma muddati"
             type="date"
@@ -126,9 +136,12 @@ const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
         </div>
         <Button
           type="submit"
-          className="px-6 py-2 text-white transition duration-200 rounded-md bg-primary"
+          disabled={loading}
+          className={`px-6 py-2 text-white transition duration-200 rounded-md ${
+            loading ? "bg-gray-400 cursor-not-allowed" : "bg-primary"
+          }`}
         >
-          Qo'shish
+          {loading ? "Saqlanmoqda..." : "Qo'shish"}
         </Button>
       </form>
     </Form>

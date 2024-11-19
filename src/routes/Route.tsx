@@ -5,6 +5,7 @@ import Notfound from "@/pages/Notfound";
 import Contract from "@/pages/Contract";
 import Service from "@/pages/Service";
 import Clients from "@/pages/Clients";
+
 import {
   createBrowserRouter,
   LoaderFunctionArgs,
@@ -18,6 +19,10 @@ import ContractDetails from "@/components/pages/contracts/ContractDetails";
 import ServiceDetails from "@/components/pages/service/ServiceDetails";
 import ClientsDetailts from "@/components/pages/clients/ClientsDetailts";
 import Product from "@/pages/Product";
+import ContractPaid from "@/pages/ContractPaid";
+import ContractUnpaid from "@/pages/ContractUnpaid";
+import IncomeProfit from "@/pages/IncomeProfit";
+import MoneySpend from "@/pages/MoneySpend";
 export function useLogin() {
   return useMutation({
     mutationFn: (data: LoginData) => login(data),
@@ -59,6 +64,14 @@ export const router = createBrowserRouter([
         element: <Contract />,
       },
       {
+        path: "/contract/paid",
+        element: <ContractPaid />,
+      },
+      {
+        path: "/contract/unpaid",
+        element: <ContractUnpaid />,
+      },
+      {
         path: "/service",
         element: <Service />,
       },
@@ -85,6 +98,14 @@ export const router = createBrowserRouter([
       {
         path: "/income",
         element: <Income />,
+      },
+      {
+        path: "/income/profit",
+        element: <IncomeProfit />,
+      },
+      {
+        path: "/income/moneyspend",
+        element: <MoneySpend />,
       },
     ],
   },
