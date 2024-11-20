@@ -8,12 +8,14 @@ export type Clients = {
   adress: string;
   INN_number: string
   shartnome?: Contract[];
+  shartnoma?: Contract[];
   balance?: number;
   balance_history?: BalanceHistory[];
   income?: Income[];
 };
 export type BalanceHistory = {
   balance: number;
+  commit?: string;
   id: number;
   amount: number;
   date: string;

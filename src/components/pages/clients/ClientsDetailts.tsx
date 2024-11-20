@@ -148,6 +148,13 @@ const makeColumnsBalance = (): ColumnDef<BalanceHistory>[] => [
     ),
   },
   {
+    accessorKey: "commit",
+    header: "Izoh",
+    cell: ({ row }) => (
+      <div className="cursor-pointer">{row.original.commit}</div>
+    ),
+  },
+  {
     accessorKey: "purchase_status",
     header: "Holati",
     cell: ({ row }) => {
@@ -265,7 +272,7 @@ export default function ClientsDetails() {
               <ContractCreate />
             </div>
             <DataTable
-              data={{ pagination: {}, data: clients.shartnome || [] }}
+              data={{ pagination: {}, data: clients.shartnoma || [] }}
               columns={makeColumnsShartnoma(navigate)}
               search={false}
               defaultPagination

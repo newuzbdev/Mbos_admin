@@ -2,6 +2,17 @@ import { useParams } from "react-router-dom";
 import { useGetContract } from "@/hooks/useContract";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
   CalendarIcon,
   CreditCardIcon,
   FileTextIcon,
@@ -33,6 +44,8 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useMutation } from "@tanstack/react-query";
+import { completeContract } from "@/services/contract";
 
 interface ContractDetailsInputProps {
   closeDialog?: () => void;
@@ -53,6 +66,7 @@ export default function ContractDetails({
   const [isOpen, setIsOpen] = useState(false);
   const [selectedFeeId, setSelectedFeeId] = useState<number | null>(null);
   const [isEditing, setIsEditing] = useState(false);
+  // const isContractCompleted = contract?.enabled === 1;
 
   const { data: updatedAdmin } = useGetGetAdmin(Number(contract?.whoUpdated));
   const { mutate: updateMonthlyFee } = useMonthlyUpdate();
@@ -64,6 +78,24 @@ export default function ContractDetails({
       ? contract?.monthlyFee
       : null;
 
+  const [showPaidOnly, setShowPaidOnly] = useState<"all" | "paid" | "no_paid">(
+    "all"
+  );
+
+  const filteredMonthlyFees =
+    showPaidOnly === "all"
+      ? monthlyFees
+      : monthlyFees?.filter((fee) =>
+          showPaidOnly === "paid"
+            ? fee.purchase_status === "paid"
+            : fee.purchase_status === "no_paid"
+        );
+
+  const toggleFilter = () => {
+    if (showPaidOnly === "all") setShowPaidOnly("paid");
+    else if (showPaidOnly === "paid") setShowPaidOnly("no_paid");
+    else setShowPaidOnly("all");
+  };
   const totalAmount =
     contract?.shartnoma_turi === "subscription_fee"
       ? monthlyFees?.reduce((sum, fee) => sum + Number(fee.amount), 0) || 0
@@ -82,7 +114,31 @@ export default function ContractDetails({
       commit: "",
     },
   });
+  const { mutate: completeContractMutation } = useMutation({
+    mutationFn: completeContract,
+    onSuccess: () => {
+      toast({
+        title: "Shartnoma muvaffaqiyatli yakunlandi",
+        variant: "success",
+      });
+      refetchMonthlyFee();
+    },
+    onError: () => {
+      toast({
+        title: "Xatolik yuz berdi",
+        variant: "destructive",
+      });
+    },
+  });
 
+  const handleCompleteContract = () => {
+    if (contractId) {
+      completeContractMutation(contractId);
+    }
+  };
+  if (isLoading || !contract) {
+    return <div>Yuklanmoqda...</div>;
+  }
   const handleSubmit = (data: {
     paid: string;
     update_date: string;
@@ -179,11 +235,6 @@ export default function ContractDetails({
     { name: "one_bay", value: "Birmartalik to'lov" },
     { name: "subscription_fee", value: "Oylik to'lov" },
   ];
-
-  // const isPaidInFull =
-  //   contract.shartnoma_turi === "subscription_fee"
-  //     ? totalAmount === totalPaid
-  //     : totalPaid >= totalAmount;
 
   const makeMonthlyFeeColumns = (): ColumnDef<MonthlyFee>[] => [
     {
@@ -283,6 +334,8 @@ export default function ContractDetails({
               setSelectedFeeId(row.original.id);
               setIsOpen(true);
               setIsEditing(false);
+
+
               form.setValue(
                 "paid",
                 (
@@ -293,6 +346,9 @@ export default function ContractDetails({
             }}
             variant="ghost"
             size="icon"
+            disabled={contract.enabled === 1}
+
+            
           >
             <Plus size={20} className="text-primary" />
           </Button>
@@ -328,6 +384,7 @@ export default function ContractDetails({
                           Number(row.original.paid)
                         }
                         {...form.register("paid")}
+                        className="dark:border-white"
                       />
                     </div>
                     <div>
@@ -336,6 +393,7 @@ export default function ContractDetails({
                         type="date"
                         id="update_date"
                         {...form.register("update_date")}
+                        className="dark:border-white"
                       />
                     </div>
                     <div className="flex justify-end">
@@ -365,6 +423,8 @@ export default function ContractDetails({
             }}
             variant="ghost"
             size="icon"
+            disabled={contract.enabled === 1}
+
           >
             <PencilIcon size={20} className="text-primary" />
           </Button>
@@ -386,8 +446,10 @@ export default function ContractDetails({
                     ✕
                   </button>
                 </div>
+
                 <Form {...form}>
                   <form
+                    key={selectedFeeId}
                     onSubmit={form.handleSubmit(handleSubmit)}
                     className="h-auto space-y-5"
                   >
@@ -398,21 +460,13 @@ export default function ContractDetails({
                       type="number"
                     />
 
-                    {/* <ItemForm
+                    <ItemForm
                       title="Ozgartish sababi"
                       form={form}
                       name="commit"
                       type="text"
-                    /> */}
+                    />
 
-                    <div>
-                      <Label className="text-lg">O'zgartirish sababi</Label>
-                      <Input
-                        type="text"
-                        {...form.register("commit")}
-                        placeholder="O'zgartirish sababini kiriting"
-                      />
-                    </div>
                     <div className="flex justify-end">
                       <Button type="submit" className="text-white">
                         O'zgarishlarni saqlash
@@ -448,6 +502,44 @@ export default function ContractDetails({
                 )}
                 <UpdateItem contract={contract} />
                 <DeleteItem />
+                {            
+              }
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button
+                      className="text-white"
+                      disabled={contract?.enabled === 1}
+                    >
+                      {contract?.enabled === 1
+                        ? "Yakunlangan"
+                        : "Shartnomani yakunlash"}
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        Ishonchingiz komilmi ?
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Siz rostdan ham ushbu shartnomani tugatmoqchisimiz?
+                        Agarda shartnomani tugatsangiz bu shartnoma bo’yicha
+                        boshqa hech qanday amal bajara olmaysiz.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Bekor qilinsin</AlertDialogCancel>
+                      <AlertDialogAction
+                        className="text-white"
+                        onClick={handleCompleteContract}
+                        disabled={contract.enabled === 1}
+                      >
+                        {contract.enabled === 1
+                          ? "Yakunlangan"
+                          : "Shartnomani yakunlash"}
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </div>
             </div>
           </div>
@@ -548,7 +640,7 @@ export default function ContractDetails({
                 value={new Date(contract.sana).toLocaleDateString()}
               />
               <DetailItem
-                label="To'lov sanasi"
+                label="To'lash sanasi"
                 value={new Date(contract.tolash_sana).toLocaleDateString()}
               />
             </DetailSection>
@@ -556,10 +648,17 @@ export default function ContractDetails({
         </CardContent>
       </Card>
       <div className="my-8">
+        <Button onClick={toggleFilter} className="mb-4 text-white">
+          {showPaidOnly === "all"
+            ? "Hammasi"
+            : showPaidOnly === "paid"
+            ? "To'langanlar"
+            : "To'lanmaganlar"}
+        </Button>
         {contract.shartnoma_turi === "subscription_fee" && (
           <DataTableWithOutSearching
             columns={makeMonthlyFeeColumns()}
-            data={monthlyFees || []}
+            data={filteredMonthlyFees || []}
           />
         )}
       </div>

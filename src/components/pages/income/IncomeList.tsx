@@ -41,11 +41,6 @@ const payment_methods = [
   { name: "other", value: "boshka" },
 ];
 
-// const confirm_payment = [
-//   { name: "paid", value: "To'landi" },
-//   { name: "no_paid", value: "To'lanmagan" },
-//   { name: "confirm_payment", value: "Jarayonda" },
-// ];
 const makeColumns = (
   setIncomeToEdit: (p: Income) => void,
   setIncomeToDelete: (p: Income) => void
@@ -84,17 +79,19 @@ const makeColumns = (
     header: "Holati",
     cell: ({ row }) => {
       const status = row.original.is_paid;
-      const statusLabel = status === "paid" 
-        ? "kirim" 
-        : status === "no_paid" 
-        ? "chikim" 
-        : "Jarayonda";
-      const statusColor = status === "paid" 
-        ? "bg-primary" 
-        : status === "no_paid" 
-        ? "bg-red-500" 
-        : "bg-yellow-500";
-  
+      const statusLabel =
+        status === "paid"
+          ? "kirim"
+          : status === "no_paid"
+          ? "chikim"
+          : "Jarayonda";
+      const statusColor =
+        status === "paid"
+          ? "bg-primary"
+          : status === "no_paid"
+          ? "bg-red-500"
+          : "bg-yellow-500";
+
       return (
         <div
           className={`cursor-pointer text-white flex justify-center rounded-lg py-1 ${statusColor}`}
@@ -104,20 +101,7 @@ const makeColumns = (
       );
     },
   },
-  
-  // {
-  //   accessorKey: "is_paid",
-  //   header: "Holati",
-  //   cell: ({ row }) => (
-  //     <div
-  //       className={`cursor-pointer text-white flex justify-center rounded-lg py-1 ${
-  //         row.original.is_paid === "paid" ? "bg-primary" : "bg-red-500"
-  //       }`}
-  //     >
-  //       {row.original.is_paid === "paid" ? "kirim" : "chikim"}
-  //     </div>
-  //   ),
-  // },
+
   {
     accessorKey: "description",
     header: "Izoh",
@@ -168,12 +152,13 @@ const IncomeList = () => {
   const page = Number(searchParams.get("page") ?? 1);
   const limit = Number(searchParams.get("limit") ?? 10);
   const search = searchParams.get("search") ?? "";
+  const [filter, setFilter] = useState<"ASC" | "DESC">("ASC");
 
   const {
     data: income = { data: { data: [] } },
     refetch,
     isLoading,
-  } = useGetIncome({ page, limit, search });
+  } = useGetIncome({ page, limit, search, filter });
   const {
     mutate: updateIncome,
     isSuccess: isUpdateSuccess,
@@ -182,7 +167,7 @@ const IncomeList = () => {
 
   useEffect(() => {
     refetch();
-  }, [page, limit, search, refetch]);
+  }, [page, limit, search, filter, refetch]);
 
   useEffect(() => {
     if (isUpdateSuccess) {
@@ -257,6 +242,12 @@ const IncomeList = () => {
     <div className="w-full">
       <div className="p-4 border rounded-md">
         <IncomeDashboard />
+        <div className="flex items-center justify-between mt-5">
+          <div></div>
+          <Button onClick={() => setFilter(filter === "ASC" ? "DESC" : "ASC")} className="text-white">
+            Sana bo'yicha tartiblash {filter === "ASC" ? "↑" : "↓"}
+          </Button>
+        </div>
         <DataTable
           title="Foydalanuvchi ismi boyicha qidiring"
           columns={makeColumns(setIncomeToEdit, setIncomeToDelete)}

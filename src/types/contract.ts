@@ -53,6 +53,7 @@ export type Contract = {
 };
 
 export type MonthlyFee ={
+  purchase_status: string;
   balance_history: any
   commit: string;
   id: number;
