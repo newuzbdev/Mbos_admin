@@ -11,6 +11,7 @@ import {
   Box,
   ChevronDown,
   ChevronUp,
+  Database,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -156,10 +157,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
                 )}
               >
                 <li>
-                  <Link
-                    to="/income"
-                    className={getLinkClassName("/income")}
-                  >
+                  <Link to="/income" className={getLinkClassName("/income")}>
                     Barchasi
                   </Link>
                 </li>
@@ -193,6 +191,12 @@ const Sidebar: React.FC<SidebarProps> = () => {
             <Link to="/product" className={getLinkClassName("/product")}>
               <Box className="w-10 h-5" />
               {!isMinimized && <span className="text-lg">Productlar</span>}
+            </Link>
+          </li>
+          <li>
+            <Link to="/serverdata" className={getLinkClassName("/serverdata")}>
+              <Database className="w-10 h-5" />
+              {!isMinimized && <span className="text-lg">Server Ma'lumotlari</span>}
             </Link>
           </li>
         </ul>
