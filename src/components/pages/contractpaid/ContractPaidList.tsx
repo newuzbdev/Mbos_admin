@@ -30,7 +30,7 @@ const makeColumns = (
         className="underline cursor-pointer text-primary"
         onClick={() => navigate(`/contract/${row.original.id}`)}
       >
-        {row.original.user.F_I_O}
+        {row.original.user.F_I_O || "N/A"}
       </div>
     ),
   },

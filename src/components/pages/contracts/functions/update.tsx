@@ -29,11 +29,11 @@ import { useContractUpdate, useGetContract } from "@/hooks/useContract";
 import { useGetServices } from "@/hooks/useService";
 import { Contract } from "@/types/contract";
 import { Clients } from "@/types/clients";
-import { PencilIcon, RefreshCw } from "lucide-react";
+// import { PencilIcon, RefreshCw } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { IService } from "@/types/service";
-import axiosPrivate from "@/config/api";
+// import axiosPrivate from "@/config/api";
 
 export function UpdateItem({ contract }: { contract: Contract }) {
   const { mutate } = useContractUpdate();
@@ -97,19 +97,19 @@ export function UpdateItem({ contract }: { contract: Contract }) {
     });
   };
 
-  const handleResetPayments = async () => {
-    try {
-      await axiosPrivate.post(`/shartnoma/${contract.id}`);
-      toast({ title: "To'lovlar qayta shakllantirildi", variant: "success" });
-      refetch();
-    } catch (error) {
-      toast({ title: "Xatolik yuz berdi", variant: "destructive" });
-    }
-  };
+  // const handleResetPayments = async () => {
+  //   try {
+  //     await axiosPrivate.post(`/shartnoma/${contract.id}`);
+  //     toast({ title: "To'lovlar qayta shakllantirildi", variant: "success" });
+  //     refetch();
+  //   } catch (error) {
+  //     toast({ title: "Xatolik yuz berdi", variant: "destructive" });
+  //   }
+  // };
 
   return (
     <>
-      <div className="flex gap-2">
+      {/* <div className="flex gap-2">
         <Button
           aria-label="Edit product"
           onClick={() => setUpdate(true)}
@@ -126,7 +126,7 @@ export function UpdateItem({ contract }: { contract: Contract }) {
         >
           <RefreshCw size={20} className="text-primary" />
         </Button>
-      </div>
+      </div> */}
       <Dialog open={isUpdate} onOpenChange={setUpdate}>
         <DialogContent className="max-w-[48rem]">
           <DialogHeader>

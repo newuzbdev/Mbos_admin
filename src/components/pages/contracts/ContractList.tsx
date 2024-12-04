@@ -30,7 +30,7 @@ const makeColumns = (
         className="underline cursor-pointer text-primary"
         onClick={() => navigate(`/contract/${row.original.id}`)}
       >
-        {row.original.user.F_I_O}
+        {row.original.user && row.original.user.F_I_O ? row.original.user.F_I_O : "N/A"}
       </div>
     ),
   },
@@ -129,7 +129,7 @@ const ContractList = () => {
 
   useEffect(() => {
     refetch();
-  }, [page, limit, search, filter]);
+  }, [page, limit, search, filter, refetch]);
 
   if (isLoading) return <div>Loading...</div>;
 

@@ -27,8 +27,6 @@ export const completeContract = async (id: string) => {
   });
 };
 
-
-
 export const getContractById = async (contractId: string) => {
   return await axiosPrivate.get(`/shartnoma/${contractId}`);
 };

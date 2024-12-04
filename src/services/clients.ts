@@ -8,7 +8,7 @@ export const addClients = async (data: Clients) => {
 
 export const getClients = async ({
   page = 1,
-  limit = 10,
+  limit = 10, 
   search = "",
 }: IParams) => {
   return await axiosPrivate.get(

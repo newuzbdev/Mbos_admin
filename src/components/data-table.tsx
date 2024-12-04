@@ -86,6 +86,7 @@ export default function DataTable<TData, TValue>({
             </Button>
           )}
         </div>
+        
         <div className="border rounded-lg ">
           <Table>
             <TableHeader>
@@ -166,20 +167,18 @@ export default function DataTable<TData, TValue>({
           </Table>
         </div>
         {defaultPagination ? (
-          <div className="flex items-center justify-end py-4 space-x-2">
+          <div className="flex items-center justify-between py-4 space-x-2 text-white ">
             <Button
-              variant="outline"
-              size="sm"
+              className="bg-primary"
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
             >
               <ArrowLeft />
             </Button>
             <Button
-              variant="outline"
-              size="sm"
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
+              className="bg-primary"
             >
               <ArrowRight />
             </Button>

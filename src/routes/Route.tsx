@@ -23,7 +23,8 @@ import ContractPaid from "@/pages/ContractPaid";
 import ContractUnpaid from "@/pages/ContractUnpaid";
 import IncomeProfit from "@/pages/IncomeProfit";
 import MoneySpend from "@/pages/MoneySpend";
-import ServerData from "@/pages/ServerData";
+import ServerData from "@/pages/Server";
+import ServerDetails from "@/components/pages/server/ServerDetails";
 export function useLogin() {
   return useMutation({
     mutationFn: (data: LoginData) => login(data),
@@ -109,9 +110,13 @@ export const router = createBrowserRouter([
         element: <MoneySpend />,
       },
       {
-        path: "/serverdata",
+        path: "/server",
         element: <ServerData/>,
-      }
+      },
+      {
+        path: "/server/:serverId",
+        element: <ServerDetails />,
+      },
     ],
   },
 ]);

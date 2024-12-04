@@ -25,7 +25,6 @@ export function UpdateItem({ clients }: { clients: Clients }) {
   });
 
   const handleSubmit = (item: Clients) => {
-    // Format phone number to remove non-numeric characters
     const phoneNumber =
       typeof item.phone === "string"
         ? (item.phone as string).replace(/\D/g, "")

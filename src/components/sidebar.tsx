@@ -194,7 +194,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
             </Link>
           </li>
           <li>
-            <Link to="/serverdata" className={getLinkClassName("/serverdata")}>
+            <Link to="/server" className={getLinkClassName("/server")}>
               <Database className="w-10 h-5" />
               {!isMinimized && <span className="text-lg">Server Ma'lumotlari</span>}
             </Link>
