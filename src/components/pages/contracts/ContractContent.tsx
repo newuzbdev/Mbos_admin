@@ -23,7 +23,6 @@ export default function ContractContent() {
     { name: "one_bay", value: "Birmartalik to'lov" },
     { name: "subscription_fee", value: "Oylik to'lov" },
   ];
-  // console.log(contract);
 
   const totalAmount =
     contract?.shartnoma_turi === "subscription_fee"
