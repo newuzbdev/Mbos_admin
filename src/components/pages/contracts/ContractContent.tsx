@@ -9,28 +9,37 @@ import DetailSection from "./ContractDetailSection";
 import { formatNumber } from "@/components/formNumber";
 import { CardContent } from "@/components/ui/card";
 import { useGetGetAdmin } from "@/hooks/useAdmin";
-import { useParams } from "react-router-dom"; 
-import { useGetContract } from "@/hooks/useContract"; 
+import { useParams } from "react-router-dom";
+import { useGetContract } from "@/hooks/useContract";
 
 export default function ContractContent() {
-  const { contractId } = useParams(); 
-  const { data: contractDetails } = useGetContract(contractId); 
-  const contract = contractDetails?.data?.data; 
-  const { data: createdAdmin } = useGetGetAdmin(Number(contract?.whoCreated)); 
-  const { data: updatedAdmin } = useGetGetAdmin(Number(contract?.whoUpdated)); 
+  const { contractId } = useParams();
+  const { data: contractDetails } = useGetContract(contractId);
+  const contract = contractDetails?.data?.data;
+  const { data: createdAdmin } = useGetGetAdmin(Number(contract?.whoCreated));
+  const { data: updatedAdmin } = useGetGetAdmin(Number(contract?.whoUpdated));
 
   const shartnoma_turi = [
     { name: "one_bay", value: "Birmartalik to'lov" },
     { name: "subscription_fee", value: "Oylik to'lov" },
   ];
+  // console.log(contract);
 
-  const totalAmount = contract?.shartnoma_turi === "subscription_fee"
-    ? contract?.monthlyFee?.reduce((sum: number, fee: { amount: unknown; }) => sum + Number(fee.amount), 0) || 0
-    : Number(contract?.service?.price * contract?.count) || 0;
+  const totalAmount =
+    contract?.shartnoma_turi === "subscription_fee"
+      ? contract?.monthlyFee?.reduce(
+          (sum: number, fee: { amount: unknown }) => sum + Number(fee.amount),
+          0
+        ) || 0
+      : Number(contract?.service?.price * contract?.count) || 0;
 
-  const totalPaid = contract?.shartnoma_turi === "subscription_fee"
-    ? contract?.monthlyFee?.reduce((sum: number, fee: { paid: unknown; }) => sum + Number(fee.paid), 0) || 0
-    : Number(contract?.advancePayment) || 0;
+  const totalPaid =
+    contract?.shartnoma_turi === "subscription_fee"
+      ? contract?.monthlyFee?.reduce(
+          (sum: number, fee: { paid: unknown }) => sum + Number(fee.paid),
+          0
+        ) || 0
+      : Number(contract?.advancePayment) || 0;
 
   return (
     <CardContent className="p-6">
