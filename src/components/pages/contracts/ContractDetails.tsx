@@ -60,7 +60,6 @@ export default function ContractDetails({
   const [selectedFeeId, setSelectedFeeId] = useState<number | null>(null);
   const [isEditing, setIsEditing] = useState(false);
 
-  // const { data: updatedAdmin } = useGetGetAdmin(Number(contract?.whoUpdated));
   const { mutate: updateMonthlyFee } = useMonthlyUpdate();
   const [selectedFee, setSelectedFee] = useState<MonthlyFee | null>(null);
   const [showBalanceHistory, setShowBalanceHistory] = useState(false);
