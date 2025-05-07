@@ -158,9 +158,13 @@ export default function ContractDetails({
     }
 
     if (selectedFeeId) {
+      const monthlyPaid = monthlyFees.filter((el) => el.id === selectedFeeId);
+
       const dataToSend = {
         id: selectedFeeId,
-        paid: isEditing ? undefined : paymentAmount,
+        paid: isEditing
+          ? undefined
+          : paymentAmount + Number(monthlyPaid[0].paid),
         update_date: isEditing ? undefined : data.update_date,
         amount: isEditing ? updatedAmount : undefined,
         commit: isEditing ? data.commit : undefined,
@@ -304,6 +308,10 @@ export default function ContractDetails({
           ) : Number(row.original?.amount) > Number(row.original?.paid) ? (
             <span className="p-1 text-white bg-red-500 rounded-md">
               To'lanmagan
+            </span>
+          ) : Number(row.original?.amount) < Number(row.original?.paid) ? (
+            <span className="p-1 text-white bg-yellow-600 rounded-md">
+              kop tolangan
             </span>
           ) : (
             "N/A"

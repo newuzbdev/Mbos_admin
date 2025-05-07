@@ -8,7 +8,6 @@ import DetailItem from "./ContractDetailItem";
 import DetailSection from "./ContractDetailSection";
 import { formatNumber } from "@/components/formNumber";
 import { CardContent } from "@/components/ui/card";
-import { useGetGetAdmin } from "@/hooks/useAdmin";
 import { useParams } from "react-router-dom";
 import { useGetContract } from "@/hooks/useContract";
 
@@ -16,8 +15,6 @@ export default function ContractContent() {
   const { contractId } = useParams();
   const { data: contractDetails } = useGetContract(contractId);
   const contract = contractDetails?.data?.data;
-  const { data: createdAdmin } = useGetGetAdmin(Number(contract?.whoCreated));
-  const { data: updatedAdmin } = useGetGetAdmin(Number(contract?.whoUpdated));
 
   const shartnoma_turi = [
     { name: "one_bay", value: "Birmartalik to'lov" },
@@ -68,11 +65,11 @@ export default function ContractContent() {
           />
           <DetailItem
             label="Kim yaratdi"
-            value={createdAdmin?.data?.data?.user_name || "N/A"}
+            value={contract?.admin?.user_name || "N/A"}
           />
           <DetailItem
             label="Kim o'zgartirdi"
-            value={updatedAdmin?.data?.data?.user_name || "N/A"}
+            value={contract?.admin?.user_name || "N/A"}
           />
           <DetailItem
             label="Balance"
