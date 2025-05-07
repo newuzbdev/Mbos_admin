@@ -12,7 +12,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { PencilIcon, Plus } from "lucide-react";
+import { Delete, PencilIcon, Plus, Trash2 } from "lucide-react";
 import { formatNumber } from "@/components/formNumber";
 import { DeleteItem } from "./functions/delete";
 import { UpdateItem } from "./functions/update";
@@ -22,7 +22,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import DataTableWithOutSearching from "@/components/data-table-without-searching";
 import { Button } from "@/components/ui/button";
 import { Key, useState } from "react";
-import { useMonthlyUpdate } from "@/hooks/useMonthlyFee";
+import { useMonthlyRemove, useMonthlyUpdate } from "@/hooks/useMonthlyFee";
 import { toast } from "@/hooks/use-toast";
 import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
@@ -59,7 +59,7 @@ export default function ContractDetails({
   const [isOpen, setIsOpen] = useState(false);
   const [selectedFeeId, setSelectedFeeId] = useState<number | null>(null);
   const [isEditing, setIsEditing] = useState(false);
-
+  const { mutate: removeMonth } = useMonthlyRemove();
   const { mutate: updateMonthlyFee } = useMonthlyUpdate();
   const [selectedFee, setSelectedFee] = useState<MonthlyFee | null>(null);
   const [showBalanceHistory, setShowBalanceHistory] = useState(false);
@@ -99,6 +99,7 @@ export default function ContractDetails({
 
   const form = useForm({
     defaultValues: {
+      purchase_status: undefined,
       paid: "",
       update_date: "",
       amount: "",
@@ -135,6 +136,7 @@ export default function ContractDetails({
     update_date: string;
     amount: string;
     commit: string | null;
+    purchase_status?: string;
   }) => {
     const paymentAmount = Number(data.paid);
     const updatedAmount = Number(data.amount);
@@ -168,6 +170,7 @@ export default function ContractDetails({
         update_date: isEditing ? undefined : data.update_date,
         amount: isEditing ? updatedAmount : undefined,
         commit: isEditing ? data.commit : undefined,
+        purchase_status: data.purchase_status,
       };
 
       const {
@@ -223,6 +226,18 @@ export default function ContractDetails({
       });
     }
   };
+
+  function deleteMonth(id: number) {
+    removeMonth(id, {
+      onSuccess: () => {
+        toast({
+          title: "muvaffaqiyatli olib tashlandi",
+          variant: "destructive",
+        });
+        refetchMonthlyFee();
+      },
+    });
+  }
 
   if (isLoading) return <div>Yuklanmoqda...</div>;
 
@@ -301,17 +316,13 @@ export default function ContractDetails({
       header: "Tolash holati",
       cell: ({ row }) => (
         <div>
-          {Number(row.original?.amount) === Number(row.original?.paid) ? (
+          {row.original?.purchase_status === "paid" ? (
             <span className="p-1 text-white rounded-md bg-primary">
               To'langan
             </span>
-          ) : Number(row.original?.amount) > Number(row.original?.paid) ? (
+          ) : row.original?.purchase_status === "no_paid" ? (
             <span className="p-1 text-white bg-red-500 rounded-md">
               To'lanmagan
-            </span>
-          ) : Number(row.original?.amount) < Number(row.original?.paid) ? (
-            <span className="p-1 text-white bg-yellow-600 rounded-md">
-              kop tolangan
             </span>
           ) : (
             "N/A"
@@ -453,7 +464,6 @@ export default function ContractDetails({
                         />
                       </Label>
                     </div>
-
                     <div>
                       <Label>
                         O'zgartish sababi
@@ -464,6 +474,27 @@ export default function ContractDetails({
                         />
                       </Label>
                     </div>
+
+                    <div>
+                      <Label>
+                        Holati
+                        <select
+                          {...form.register("purchase_status")}
+                          className="text-white border-white placeholder:text-white bg-transparent border-[1px] rounded-md block w-full h-9"
+                        >
+                          <option value="paid" className="bg-[rgb(31,41,55)]">
+                            To'langan
+                          </option>
+                          <option
+                            value="no_paid"
+                            className="bg-[rgb(31,41,55)]"
+                          >
+                            To'lanmagan
+                          </option>
+                        </select>
+                      </Label>
+                    </div>
+
                     <div className="flex justify-end">
                       <Button type="submit" className="text-white">
                         O'zgarishlarni saqlash
@@ -474,6 +505,9 @@ export default function ContractDetails({
               </div>
             </div>
           )}
+          <Button className="bg-red-500 text-white hover:bg-red-300">
+            <Trash2 onClick={() => deleteMonth(row.original?.id)} />
+          </Button>
         </>
       ),
     },
