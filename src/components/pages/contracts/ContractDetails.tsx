@@ -12,7 +12,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Delete, PencilIcon, Plus, Trash2 } from "lucide-react";
+import { PencilIcon, Plus, Trash2 } from "lucide-react";
 import { formatNumber } from "@/components/formNumber";
 import { DeleteItem } from "./functions/delete";
 import { UpdateItem } from "./functions/update";
