@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 const Home = () => {
@@ -28,6 +28,162 @@ const Home = () => {
   const [selectedYear, setSelectedYear] = useState<number>(
     new Date().getFullYear()
   );
+
+  const statisticsData = useMemo(() => {
+    return [
+      {
+        date: "01",
+        tushum: 0,
+        chikim: 0,
+        duty: 0,
+      },
+      {
+        date: "02",
+        tushum: 0,
+        chikim: 0,
+        duty: 0,
+      },
+      {
+        date: "03",
+        tushum: 0,
+        chikim: 0,
+        duty: 0,
+      },
+      {
+        date: "04",
+        tushum: 0,
+        chikim: 0,
+        duty: 0,
+      },
+      {
+        date: "05",
+        tushum: 0,
+        chikim: 0,
+        duty: 0,
+      },
+      {
+        date: "06",
+        tushum: 0,
+        chikim: 0,
+        duty: 0,
+      },
+      {
+        date: "07",
+        tushum: 0,
+        chikim: 0,
+        duty: 0,
+      },
+      {
+        date: "08",
+        tushum: 0,
+        chikim: 0,
+        duty: 0,
+      },
+      {
+        date: "09",
+        tushum: 0,
+        chikim: 0,
+        duty: 0,
+      },
+      {
+        date: "10",
+        tushum: 0,
+        chikim: 0,
+        duty: 0,
+      },
+      {
+        date: "11",
+        tushum: 0,
+        chikim: 0,
+        duty: 0,
+      },
+      {
+        date: "12",
+        tushum: 0,
+        chikim: 0,
+        duty: 0,
+      },
+    ].map((item) =>
+      statistics?.data.data.find(
+        (stat: { date: string }) => stat.date.split("-")[1] === item.date
+      )
+        ? statistics?.data.data.find(
+            (stat: { date: string }) => stat.date.split("-")[1] === item.date
+          )
+        : item
+    );
+  }, [statistics]);
+
+  const lastIncomeMonth = useMemo(() => {
+    return statisticsIncome?.data.data.at(-1);
+  }, [statisticsIncome]);
+
+  const statisticsIncomeData = useMemo(() => {
+    return [
+      {
+        date: "01",
+        duty: 0,
+      },
+      {
+        date: "02",
+        duty: 0,
+      },
+      {
+        date: "03",
+        duty: 0,
+      },
+      {
+        date: "04",
+        duty: 0,
+      },
+      {
+        date: "05",
+        duty: 0,
+      },
+      {
+        date: "06",
+        duty: 0,
+      },
+      {
+        date: "07",
+        duty: 0,
+      },
+      {
+        date: "08",
+        duty: 0,
+      },
+      {
+        date: "09",
+        duty: 0,
+      },
+      {
+        date: "10",
+        duty: 0,
+      },
+      {
+        date: "11",
+        duty: 0,
+      },
+      {
+        date: "12",
+        duty: 0,
+      },
+    ]
+      .map((item) =>
+        statisticsIncome?.data.data.find(
+          (stat: { date: string }) => stat.date === item.date
+        )
+          ? statisticsIncome?.data.data.find(
+              (stat: { date: string }) => stat.date === item.date
+            )
+          : item
+      )
+      .map((item) =>
+        +item.date > +lastIncomeMonth?.date
+          ? { ...item, duty: lastIncomeMonth?.duty }
+          : item
+      );
+  }, [statisticsIncome, lastIncomeMonth]);
 
   useEffect(() => {
     searchParams.set("year", selectedYear.toString());
@@ -81,7 +237,7 @@ const Home = () => {
         <BarChart
           width={1400}
           height={500}
-          data={statistics?.data.data.map(
+          data={statisticsData.map(
             (item: {
               date: string;
               tushum: number;
@@ -126,7 +282,7 @@ const Home = () => {
         <LineChart
           width={1400}
           height={500}
-          data={statisticsIncome?.data.data.map(
+          data={statisticsIncomeData.map(
             (item: { date: string; duty: number }) => ({
               name: item.date,
               "Kutilayotgan tushum": item.duty,
@@ -134,7 +290,7 @@ const Home = () => {
           )}
         >
           <XAxis dataKey="name" />
-          {statisticsIncome?.data.data.length > 0 && (
+          {statisticsIncomeData.length > 0 && (
             <Tooltip formatter={(value) => `${value.toLocaleString()} so'm`} />
           )}
           <Legend />
