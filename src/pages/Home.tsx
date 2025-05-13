@@ -1,4 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useGetStatistik, useGetStatistikIncome } from "@/hooks/dashboard";
 import { DashboardCards } from "@/components/dashboard-cards";
 import {
   Bar,
@@ -10,7 +11,6 @@ import {
   Tooltip,
   XAxis,
 } from "recharts";
-import { useState } from "react";
 import {
   Select,
   SelectContent,
@@ -18,53 +18,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-const data = [
-  {
-    name: "Page A",
-    uv: 4000,
-    pv: 2400,
-    amt: 2400,
-  },
-  {
-    name: "Page B",
-    uv: 3000,
-    pv: 1398,
-    amt: 2210,
-  },
-  {
-    name: "Page C",
-    uv: 2000,
-    pv: 9800,
-    amt: 2290,
-  },
-  {
-    name: "Page D",
-    uv: 2780,
-    pv: 3908,
-    amt: 2000,
-  },
-  {
-    name: "Page E",
-    uv: 1890,
-    pv: 4800,
-    amt: 2181,
-  },
-  {
-    name: "Page F",
-    uv: 2390,
-    pv: 3800,
-    amt: 2500,
-  },
-  {
-    name: "Page G",
-    uv: 3490,
-    pv: 4300,
-    amt: 2100,
-  },
-];
+import { useState } from "react";
 
 const Home = () => {
+  const { data: statistics } = useGetStatistik();
+  const { data: statisticsIncome } = useGetStatistikIncome();
   const [selectedYear, setSelectedYear] = useState<number>(
     new Date().getFullYear()
   );
@@ -81,7 +39,7 @@ const Home = () => {
       <div className="flex items-center justify-between space-y-2">
         <h2 className="text-2xl font-bold tracking-tight">Statistika</h2>
         <div className="flex items-center gap-4">
-          <span className="text-sm font-medium">Yil:</span>
+          <span className="text-lg font-medium">Yil:</span>
           <Select
             value={selectedYear.toString()}
             onValueChange={(value) => setSelectedYear(Number(value))}
@@ -107,36 +65,59 @@ const Home = () => {
           <DashboardCards year={selectedYear} />
         </TabsContent>
       </Tabs>
-      <div className="flex items-center justify-center mt-4">
-        <BarChart width={1400} height={500} data={data}>
+      <div className="mt-4 flex items-center justify-center">
+        <BarChart
+          width={1400}
+          height={500}
+          data={statistics?.data.data.map(
+            (item: {
+              date: string;
+              tushum: number;
+              chikim: number;
+              duty: number;
+            }) => ({
+              name: item.date,
+              ...item,
+            })
+          )}
+        >
           <XAxis dataKey="name" />
           <Tooltip />
           <Legend />
           <Bar
-            dataKey="pv"
+            dataKey="tushum"
             fill="green"
             activeBar={<Rectangle fill="green" stroke="green" />}
           />
           <Bar
-            dataKey="uv"
+            dataKey="chikim"
+            fill="orange"
+            activeBar={<Rectangle fill="orange" stroke="orange" />}
+          />
+          <Bar
+            dataKey="duty"
             fill="red"
             activeBar={<Rectangle fill="red" stroke="red" />}
           />
-          <Bar
-            dataKey="uv"
-            fill="yellow"
-            activeBar={<Rectangle fill="yellow" stroke="yellow" />}
-          />
         </BarChart>
       </div>
-      <div className="flex items-center justify-center mt-4">
-        <LineChart width={1400} height={500} data={data}>
+      <div className="mt-4 flex items-center justify-center">
+        <LineChart
+          width={1400}
+          height={500}
+          data={statisticsIncome?.data.data.map(
+            (item: { date: string; duty: number }) => ({
+              name: item.date,
+              ...item,
+            })
+          )}
+        >
           <XAxis dataKey="name" />
-          <Tooltip />
+          <Tooltip formatter={(value) => `${value.toLocaleString()} so'm`} />
           <Legend />
           <Line
             type="linear"
-            dataKey="pv"
+            dataKey="duty"
             stroke="#8884d8"
             activeDot={{ r: 8 }}
           />
