@@ -6,11 +6,13 @@ export const getStatistic = async (year?: number) => {
 export const useIncomeDash = async () => {
   return await axiosPrivate.get("/dashboard/income");
 };
-export const useIncomeStatistik = async () => {
-  return await axiosPrivate.get("/dashboard/statstik");
+export const useIncomeStatistik = async (year: string) => {
+  return await axiosPrivate.get("/dashboard/statstik", { params: { year } });
 };
-export const useIncomeStatistikIncome = async () => {
-  return await axiosPrivate.get("/dashboard/statstik-income");
+export const useIncomeStatistikIncome = async (year: string) => {
+  return await axiosPrivate.get("/dashboard/statstik-income", {
+    params: { year },
+  });
 };
 
 export const getServiceDash = async (id: string) => {

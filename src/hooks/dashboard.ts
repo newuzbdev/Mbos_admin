@@ -5,6 +5,7 @@ import {
   useIncomeStatistikIncome,
 } from "@/services/statistic";
 import { useQuery } from "@tanstack/react-query";
+import { useSearchParams } from "react-router-dom";
 
 export const useGetStatistic = (year?: number) => {
   return useQuery({
@@ -21,15 +22,23 @@ export const useGetIncomeDash = () => {
 };
 
 export const useGetStatistik = () => {
+  const [searchParams] = useSearchParams();
+
+  const year = searchParams.get("year");
+
   return useQuery({
-    queryKey: ["statistik"],
-    queryFn: () => useIncomeStatistik(),
+    queryKey: ["statistik", year],
+    queryFn: () => useIncomeStatistik(year),
   });
 };
 
 export const useGetStatistikIncome = () => {
+  const [searchParams] = useSearchParams();
+
+  const year = searchParams.get("year");
+
   return useQuery({
-    queryKey: ["statistik"],
-    queryFn: () => useIncomeStatistikIncome(),
+    queryKey: ["statistik-income", year],
+    queryFn: () => useIncomeStatistikIncome(year),
   });
 };
