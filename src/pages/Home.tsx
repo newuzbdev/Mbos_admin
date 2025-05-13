@@ -96,7 +96,9 @@ const Home = () => {
           )}
         >
           <XAxis dataKey="name" />
-          <Tooltip formatter={(value) => `${value.toLocaleString()} so'm`} />
+          {statistics?.data.data.length > 0 && (
+            <Tooltip formatter={(value) => `${value.toLocaleString()} so'm`} />
+          )}
           <Legend />
           <Bar
             dataKey="tushum"
@@ -132,7 +134,9 @@ const Home = () => {
           )}
         >
           <XAxis dataKey="name" />
-          <Tooltip formatter={(value) => `${value.toLocaleString()} so'm`} />
+          {statisticsIncome?.data.data.length > 0 && (
+            <Tooltip formatter={(value) => `${value.toLocaleString()} so'm`} />
+          )}
           <Legend />
           <Line
             type="linear"
