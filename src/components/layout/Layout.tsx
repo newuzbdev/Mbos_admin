@@ -10,7 +10,7 @@ export const Layout = () => {
       <div className="flex flex-col flex-grow">
         <Navbar />
         <div className="flex-grow p-4">
-        <BreadcrumbComponent />
+          <BreadcrumbComponent />
           <Outlet />
         </div>
       </div>

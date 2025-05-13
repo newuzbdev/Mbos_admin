@@ -12,7 +12,13 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { PencilIcon, Plus, Trash2 } from "lucide-react";
+import {
+  ChevronsDown,
+  ChevronsUp,
+  PencilIcon,
+  Plus,
+  Trash2,
+} from "lucide-react";
 import { formatNumber } from "@/components/formNumber";
 import { DeleteItem } from "./functions/delete";
 import { UpdateItem } from "./functions/update";
@@ -48,11 +54,14 @@ export default function ContractDetails({
   closeDialog,
 }: ContractDetailsInputProps) {
   const { contractId } = useParams();
+  const [sortOrder, setSortOrder] = useState<"ASC" | "DESC">("ASC");
+
   const {
     data: contractDetails,
     isLoading,
     refetch: refetchMonthlyFee,
-  } = useGetContract(contractId);
+  } = useGetContract(contractId, sortOrder);
+
   const { mutate: updateClient } = useClientsUpdate();
   const contract = contractDetails?.data?.data;
   const { data: craetedAdmin } = useGetGetAdmin(Number(contract?.whoCreated));
@@ -131,6 +140,10 @@ export default function ContractDetails({
   if (isLoading || !contract) {
     return <div>Yuklanmoqda...</div>;
   }
+
+  const toggleSortOrder = () => {
+    setSortOrder((prevOrder) => (prevOrder === "ASC" ? "DESC" : "ASC"));
+  };
   const handleSubmit = (data: {
     paid: string;
     update_date: string;
@@ -505,7 +518,7 @@ export default function ContractDetails({
               </div>
             </div>
           )}
-          <Button className="bg-red-500 text-white hover:bg-red-300">
+          <Button className="text-white bg-red-500 hover:bg-red-300">
             <Trash2 onClick={() => deleteMonth(row.original?.id)} />
           </Button>
         </>
@@ -577,13 +590,32 @@ export default function ContractDetails({
         <ContractContent />
       </Card>
       <div className="my-8">
-        <Button onClick={toggleFilter} className="mb-4 text-white">
-          {showPaidOnly === "all"
-            ? "Hammasi"
-            : showPaidOnly === "paid"
-            ? "To'langanlar"
-            : "To'lanmaganlar"}
-        </Button>
+        <div className="flex justify-between mb-4">
+          <Button onClick={toggleFilter} className="text-white">
+            {showPaidOnly === "all"
+              ? "Hammasi"
+              : showPaidOnly === "paid"
+              ? "To'langanlar"
+              : "To'lanmaganlar"}
+          </Button>
+          {contract.shartnoma_turi === "subscription_fee" && (
+            <Button
+              onClick={toggleSortOrder}
+              variant="outline"
+              className="text-center text-white border-white"
+            >
+              {sortOrder === "ASC" ? (
+                <>
+                  <ChevronsUp className="w-4 h-4 mr-2" /> Filter
+                </>
+              ) : (
+                <>
+                  <ChevronsDown className="w-4 h-4 mr-2" /> Filter
+                </>
+              )}
+            </Button>
+          )}
+        </div>
         {contract.shartnoma_turi === "subscription_fee" && (
           <DataTableWithOutSearching
             columns={makeMonthlyFeeColumns()}

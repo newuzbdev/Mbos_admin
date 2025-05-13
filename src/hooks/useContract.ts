@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   addContract,
   deleteContract,
@@ -19,13 +20,14 @@ export const useGetContracts = (params: IParams) => {
     queryFn: () => getContract(params),
   });
 };
-export const useGetContract = (contractId?: string) => {
+
+export const useGetContract = (
+  contractId?: string,
+  orderForMonth: "ASC" | "DESC" = "ASC"
+) => {
   return useQuery({
-    queryKey: ["contract", contractId],
-    queryFn: () => {
-      if (!contractId) throw new Error("Contract ID is required");
-      return getContractById(contractId);
-    },
+    queryKey: ["contract", contractId, orderForMonth],
+    queryFn: () => getContractById(contractId || "", orderForMonth),
     enabled: !!contractId,
   });
 };

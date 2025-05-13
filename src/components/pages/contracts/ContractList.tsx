@@ -30,7 +30,9 @@ const makeColumns = (
         className="underline cursor-pointer text-primary"
         onClick={() => navigate(`/contract/${row.original.id}`)}
       >
-        {row.original.user && row.original.user.F_I_O ? row.original.user.F_I_O : "N/A"}
+        {row.original.user && row.original.user.F_I_O
+          ? row.original.user.F_I_O
+          : "N/A"}
       </div>
     ),
   },
@@ -138,7 +140,7 @@ const ContractList = () => {
       <div className="p-4 border rounded-md">
         <DataTable
           filter
-          title="Mijoz inni raqami bo'yicha izlang"
+          title="Mijoz INN raqami bo'yicha izlang"
           columns={makeColumns(navigate)}
           data={contract?.data || []}
         />

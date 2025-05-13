@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useGetStatistic } from "@/hooks/dashboard";
- import { Contract } from "@/types/contract";
+import { Contract } from "@/types/contract";
 import { Banknote } from "lucide-react";
 
 export function RecentSales() {
@@ -24,8 +24,11 @@ export function RecentSales() {
                 Sanasi: {contract.sana}
               </p>
               <p className="text-sm">
-                Mijoz ismi: <span className="text-base">{contract.user.F_I_O.charAt(0).toUpperCase() +
-                  contract.user.F_I_O.slice(1)}</span>
+                Mijoz ismi:{" "}
+                <span className="text-base">
+                  {contract.user.F_I_O.charAt(0).toUpperCase() +
+                    contract.user.F_I_O.slice(1)}
+                </span>
               </p>
             </div>
             <div className="flex gap-2 ml-auto font-medium">
