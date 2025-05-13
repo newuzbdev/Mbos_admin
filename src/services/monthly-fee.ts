@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axiosPrivate from "@/config/api";
 
 export const addMonthlyFee = async (data: any) => {

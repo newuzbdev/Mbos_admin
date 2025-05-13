@@ -139,7 +139,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
               <CreditCard className="w-10 h-5 text-primary" />
               {!isMinimized && (
                 <div className="flex items-center justify-between flex-1">
-                  <span className="text-lg text-primary">Daromat</span>
+                  <span className="text-lg text-primary">Daromad</span>
                   {isIncomeOpen ? (
                     <ChevronUp className="w-6 h-6 text-primary" />
                   ) : (
@@ -196,7 +196,9 @@ const Sidebar: React.FC<SidebarProps> = () => {
           <li>
             <Link to="/server" className={getLinkClassName("/server")}>
               <Database className="w-10 h-5" />
-              {!isMinimized && <span className="text-lg">Server Ma'lumotlari</span>}
+              {!isMinimized && (
+                <span className="text-lg">Server Ma'lumotlari</span>
+              )}
             </Link>
           </li>
         </ul>
@@ -208,7 +210,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
     <>
       <aside
         className={cn(
-          `relative hidden h-screen flex-none border-r transition-all duration-500 ease-in-out md:block`,
+          `relative hidden min-h-screen flex-none border-r transition-all duration-500 ease-in-out md:block`,
           !isMinimized ? "w-72" : "w-[70px]"
         )}
       >

@@ -224,7 +224,7 @@ export default function ClientsDetails() {
               <DetailItem label="Mijozning to'liq ismi" value={clients.F_I_O} />
               <DetailItem label="Telefon raqami" value={clients.phone} />
               <DetailItem label="Manzil" value={clients.adress} />
-              <DetailItem label="Inni raqami" value={clients.INN_number} />
+              <DetailItem label="INN raqami" value={clients.INN_number} />
               <DetailItem
                 label="Kim yaratdi"
                 value={createAdmin?.data.data.user_name}
@@ -247,7 +247,7 @@ export default function ClientsDetails() {
                 <p className="flex items-center gap-2 text-lg font-semibold mb-1.5">
                   <ContactRoundIcon className="flex text-primary" />
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800">
-                    daromat haqida ma'lumot
+                    daromad haqida ma'lumot
                   </span>
                 </p>
                 <IncomeCreate />

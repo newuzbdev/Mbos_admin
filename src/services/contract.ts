@@ -17,18 +17,25 @@ export const getContract = async ({
   filter = "ASC",
 }: IParams) => {
   return await axiosPrivate.get(
-    `/shartnoma?page=${page}&limit=${limit}&search=${search}&isPaid=${isPaid}&filter=${filter || "ASC"}`
+    `/shartnoma?page=${page}&limit=${limit}&search=${search}&isPaid=${isPaid}&filter=${
+      filter || "ASC"
+    }`
   );
 };
 
 export const completeContract = async (id: string) => {
   return await axiosPrivate.patch(`/shartnoma/${id}`, {
-    enabled: 1
+    enabled: 1,
   });
 };
 
-export const getContractById = async (contractId: string) => {
-  return await axiosPrivate.get(`/shartnoma/${contractId}`);
+export const getContractById = async (
+  contractId: string,
+  orderForMonth: "ASC" | "DESC" = "ASC"
+) => {
+  return await axiosPrivate.get(
+    `/shartnoma/${contractId}?orderForMonth=${orderForMonth}`
+  );
 };
 export const deleteContract = async (id: string) => {
   return await axiosPrivate.delete(`/shartnoma/${id}`);

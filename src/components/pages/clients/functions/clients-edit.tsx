@@ -78,9 +78,14 @@ export function UpdateItem({ clients }: { clients: Clients }) {
             >
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <ItemForm title="Ismi" form={form} name="F_I_O" type="text" />
-                <ItemForm title="Balance" form={form} name="balance" type="number" />
                 <ItemForm
-                  title="Inni raqami"
+                  title="Balance"
+                  form={form}
+                  name="balance"
+                  type="number"
+                />
+                <ItemForm
+                  title="INN raqami"
                   form={form}
                   name="INN_number"
                   type="text"

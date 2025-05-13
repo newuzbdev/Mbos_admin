@@ -1,7 +1,7 @@
 import axiosPrivate from "@/config/api";
 
-export const getStatistic = async () => {
-  return await axiosPrivate.get("/dashboard");
+export const getStatistic = async (year?: number) => {
+  return await axiosPrivate.get(`/dashboard${year ? `?year=${year}` : ""}`);
 };
 export const useIncomeDash = async () => {
   return await axiosPrivate.get("/dashboard/income");

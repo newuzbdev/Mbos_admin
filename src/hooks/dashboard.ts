@@ -5,10 +5,10 @@ import {
 } from "@/services/statistic";
 import { useQuery } from "@tanstack/react-query";
 
-export const useGetStatistic = () => {
+export const useGetStatistic = (year?: number) => {
   return useQuery({
-    queryKey: ["statistiks"],
-    queryFn: () => getStatistic(),
+    queryKey: ["statistiks", year],
+    queryFn: () => getStatistic(year),
   });
 };
 

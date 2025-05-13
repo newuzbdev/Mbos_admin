@@ -32,7 +32,8 @@ const makeColumns = (
       >
         {row.original.user?.F_I_O || "N/A"}
       </div>
-    ),  },
+    ),
+  },
   {
     accessorKey: "service",
     header: "Xizmat / Product",
@@ -138,7 +139,7 @@ const ContractUnPaidList = () => {
       <div className="p-4 border rounded-md">
         <DataTable
           filter
-          title="Mijoz inni raqami bo'yicha izlang"
+          title="Mijoz INN raqami bo'yicha izlang"
           columns={makeColumns(navigate)}
           data={contract?.data || []}
         />
