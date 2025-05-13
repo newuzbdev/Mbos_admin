@@ -9,6 +9,9 @@ export const useIncomeDash = async () => {
 export const useIncomeStatistik = async () => {
   return await axiosPrivate.get("/dashboard/statstik");
 };
+export const useIncomeStatistikIncome = async () => {
+  return await axiosPrivate.get("/dashboard/statstik-income");
+};
 
 export const getServiceDash = async (id: string) => {
   return await axiosPrivate.get(`/dashboard/serviceDash/${id}`);

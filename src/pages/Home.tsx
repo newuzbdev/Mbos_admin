@@ -2,7 +2,11 @@ import { ChartList } from "@/components/chart";
 import { RecentSales } from "@/components/recent-sales";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useGetStatistic } from "@/hooks/dashboard";
+import {
+  useGetStatistic,
+  useGetStatistik,
+  useGetStatistikIncome,
+} from "@/hooks/dashboard";
 import { TrendingDown, TrendingUp, Users } from "lucide-react";
 import {
   Bar,
@@ -15,53 +19,10 @@ import {
   XAxis,
 } from "recharts";
 
-const data = [
-  {
-    name: "Page A",
-    uv: 4000,
-    pv: 2400,
-    amt: 2400,
-  },
-  {
-    name: "Page B",
-    uv: 3000,
-    pv: 1398,
-    amt: 2210,
-  },
-  {
-    name: "Page C",
-    uv: 2000,
-    pv: 9800,
-    amt: 2290,
-  },
-  {
-    name: "Page D",
-    uv: 2780,
-    pv: 3908,
-    amt: 2000,
-  },
-  {
-    name: "Page E",
-    uv: 1890,
-    pv: 4800,
-    amt: 2181,
-  },
-  {
-    name: "Page F",
-    uv: 2390,
-    pv: 3800,
-    amt: 2500,
-  },
-  {
-    name: "Page G",
-    uv: 3490,
-    pv: 4300,
-    amt: 2100,
-  },
-];
-
 const Home = () => {
   const { data: homeStats } = useGetStatistic();
+  const { data: statistics } = useGetStatistik();
+  const { data: statisticsIncome } = useGetStatistikIncome();
 
   const formatNumber = (num: number) => {
     return num?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
@@ -139,35 +100,58 @@ const Home = () => {
         </TabsContent>
       </Tabs>
       <div className="mt-4 flex items-center justify-center">
-        <BarChart width={1400} height={500} data={data}>
+        <BarChart
+          width={1400}
+          height={500}
+          data={statistics?.data.data.map(
+            (item: {
+              date: string;
+              tushum: number;
+              chikim: number;
+              duty: number;
+            }) => ({
+              name: item.date,
+              ...item,
+            })
+          )}
+        >
           <XAxis dataKey="name" />
           <Tooltip />
           <Legend />
           <Bar
-            dataKey="pv"
+            dataKey="tushum"
             fill="green"
             activeBar={<Rectangle fill="green" stroke="green" />}
           />
           <Bar
-            dataKey="uv"
-            fill="red"
-            activeBar={<Rectangle fill="red" stroke="red" />}
+            dataKey="chikim"
+            fill="orange"
+            activeBar={<Rectangle fill="orange" stroke="orange" />}
           />
           <Bar
-            dataKey="uv"
-            fill="yellow"
-            activeBar={<Rectangle fill="yellow" stroke="yellow" />}
+            dataKey="duty"
+            fill="red"
+            activeBar={<Rectangle fill="red" stroke="red" />}
           />
         </BarChart>
       </div>
       <div className="mt-4 flex items-center justify-center">
-        <LineChart width={1400} height={500} data={data}>
+        <LineChart
+          width={1400}
+          height={500}
+          data={statisticsIncome?.data.data.map(
+            (item: { date: string; duty: number }) => ({
+              name: item.date,
+              ...item,
+            })
+          )}
+        >
           <XAxis dataKey="name" />
-          <Tooltip />
+          <Tooltip formatter={(value) => `${value.toLocaleString()} so'm`} />
           <Legend />
           <Line
             type="linear"
-            dataKey="pv"
+            dataKey="duty"
             stroke="#8884d8"
             activeDot={{ r: 8 }}
           />
