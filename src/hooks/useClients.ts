@@ -15,7 +15,11 @@ export const useAddClients = () => {
   });
 };
 
-export const useGetClients = (params: IParams) => {
+export const useGetClients = (params: {
+  page: string | null;
+  limit: string | null;
+  search: string | null;
+}) => {
   return useQuery({
     queryKey: ["clients"],
     queryFn: () => getClients(params),

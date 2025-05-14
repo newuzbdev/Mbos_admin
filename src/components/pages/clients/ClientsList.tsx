@@ -50,8 +50,8 @@ const makeColumns = (
 
 const ClientsList = () => {
   const [searchParams] = useSearchParams();
-  const page = Number(searchParams.get("page"));
-  const limit = Number(searchParams.get("limit"));
+  const page = searchParams.get("page");
+  const limit = searchParams.get("limit");
   const search = searchParams.get("search") || "";
   const navigate = useNavigate();
 
@@ -63,7 +63,7 @@ const ClientsList = () => {
 
   useEffect(() => {
     refetch();
-  }, [page, limit, search, refetch]);
+  }, [page, limit, search]);
 
   if (isLoading) return <div>Yuklanmoqda...</div>;
 
