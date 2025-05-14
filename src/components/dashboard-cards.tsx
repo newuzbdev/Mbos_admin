@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useGetStatistic } from "@/hooks/dashboard";
-import { FileText, TrendingDown, TrendingUp, Users } from "lucide-react";
+import { useGetStatistic, useGetStatistikIncomeYears } from "@/hooks/dashboard";
+import { Coins, FileText, TrendingDown, TrendingUp, Users } from "lucide-react";
 
 interface DashboardCardsProps {
   year?: number;
@@ -8,6 +8,7 @@ interface DashboardCardsProps {
 
 export const DashboardCards = ({ year }: DashboardCardsProps) => {
   const { data: homeStats } = useGetStatistic(year);
+  const { data: statisticsIncomeYears } = useGetStatistikIncomeYears();
 
   const formatNumber = (num: number) => {
     return num?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
@@ -108,6 +109,24 @@ export const DashboardCards = ({ year }: DashboardCardsProps) => {
             <CardTitle className="text-lg font-medium">
               {currentMonth}dagi chiqimlar
             </CardTitle>
+          </CardContent>
+        </Card>
+        <Card className="text-white bg-purple-500">
+          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+            <h1 className="font-bold text-2xl">Daromadlar</h1>
+            <Coins className="items-center w-12 h-12 p-2 text-white rounded-lg bg-purple-400/10" />
+          </CardHeader>
+          <CardContent>
+            <ul className="text-xl font-bold flex flex-col gap-y-2">
+              {statisticsIncomeYears?.data.map(
+                (item: { year: number; tushum: number }) => (
+                  <li>
+                    <span>{item.year} - yil: </span>
+                    <span>{item.tushum.toLocaleString()} so'm</span>
+                  </li>
+                )
+              )}
+            </ul>
           </CardContent>
         </Card>
       </div>

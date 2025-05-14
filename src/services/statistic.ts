@@ -15,6 +15,10 @@ export const useIncomeStatistikIncome = async (year: string) => {
   });
 };
 
+export const useIncomeStatistikIncomeYears = async () => {
+  return await axiosPrivate.get("/dashboard/statstik-years");
+};
+
 export const getServiceDash = async (id: string) => {
   return await axiosPrivate.get(`/dashboard/serviceDash/${id}`);
 };

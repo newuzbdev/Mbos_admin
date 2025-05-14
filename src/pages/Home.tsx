@@ -20,10 +20,12 @@ import {
 } from "@/components/ui/select";
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 const Home = () => {
   const { data: statistics } = useGetStatistik();
   const { data: statisticsIncome } = useGetStatistikIncome();
+  const [isActive, setIsActive] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [selectedYear, setSelectedYear] = useState<number>(
     new Date().getFullYear()
@@ -186,6 +188,7 @@ const Home = () => {
   }, [statisticsIncome, lastIncomeMonth]);
 
   useEffect(() => {
+    console.log(selectedYear);
     searchParams.set("year", selectedYear.toString());
     setSearchParams(searchParams);
   }, [selectedYear]);
@@ -236,22 +239,16 @@ const Home = () => {
         )}
         <BarChart
           width={1400}
-          height={500}
+          height={300}
           data={statisticsData.map(
-            (item: {
-              date: string;
-              tushum: number;
-              chikim: number;
-              duty: number;
-            }) => ({
-              name: item.date,
+            (item: { chikim: string; duty: string }) => ({
+              ...item,
               chiqim: item.chikim,
-              tushum: item.tushum,
               qarzdorlik: item.duty,
             })
           )}
         >
-          <XAxis dataKey="name" />
+          <XAxis dataKey="date" />
           {statistics?.data.data.length > 0 && (
             <Tooltip formatter={(value) => `${value.toLocaleString()} so'm`} />
           )}
@@ -273,15 +270,50 @@ const Home = () => {
           />
         </BarChart>
       </div>
+      {isActive && (
+        <Button onClick={() => setIsActive(false)}>Yillik statistika</Button>
+      )}
       <div className="relative mt-4 flex items-center justify-center">
         {statisticsIncome?.data.data.length === 0 && (
           <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
             <h2>Ma&apos;lumot topilmadi</h2>
           </div>
         )}
+
+        {/* {!isActive ? (
+          <LineChart
+            width={1400}
+            height={300}
+            data={statisticsIncomeYears?.data}
+            onMouseDown={(e) => {
+              setIsActive(true);
+              if (e.activeLabel) setSelectedYear(Number(e.activeLabel));
+            }}
+          >
+            <XAxis dataKey="year" />
+            {statisticsIncomeData.length > 0 && (
+              <Tooltip
+                formatter={(value) => `${value.toLocaleString()} so'm`}
+              />
+            )}
+            <Legend />
+            <Line
+              type="linear"
+              dataKey="tushum"
+              stroke="blue"
+              activeDot={{ r: 8 }}
+            />
+            <Line
+              type="linear"
+              dataKey="chikim"
+              stroke="red"
+              activeDot={{ r: 8 }}
+            />
+          </LineChart>
+        ) : ( */}
         <LineChart
           width={1400}
-          height={500}
+          height={300}
           data={statisticsIncomeData.map(
             (item: { date: string; duty: number }) => ({
               name: item.date,
@@ -297,10 +329,11 @@ const Home = () => {
           <Line
             type="linear"
             dataKey="Kutilayotgan tushum"
-            stroke="#8884d8"
+            stroke="blue"
             activeDot={{ r: 8 }}
           />
         </LineChart>
+        {/* )} */}
       </div>
     </div>
   );

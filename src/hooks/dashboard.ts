@@ -3,6 +3,7 @@ import {
   useIncomeDash,
   useIncomeStatistik,
   useIncomeStatistikIncome,
+  useIncomeStatistikIncomeYears,
 } from "@/services/statistic";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
@@ -40,5 +41,12 @@ export const useGetStatistikIncome = () => {
   return useQuery({
     queryKey: ["statistik-income", year],
     queryFn: () => useIncomeStatistikIncome(year),
+  });
+};
+
+export const useGetStatistikIncomeYears = () => {
+  return useQuery({
+    queryKey: ["statistik-years"],
+    queryFn: () => useIncomeStatistikIncomeYears(),
   });
 };
