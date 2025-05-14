@@ -29,7 +29,7 @@ export const useGetStatistik = () => {
 
   return useQuery({
     queryKey: ["statistik", year],
-    queryFn: () => useIncomeStatistik(year),
+    queryFn: () => useIncomeStatistik(year!),
   });
 };
 
@@ -40,7 +40,7 @@ export const useGetStatistikIncome = () => {
 
   return useQuery({
     queryKey: ["statistik-income", year],
-    queryFn: () => useIncomeStatistikIncome(year),
+    queryFn: () => useIncomeStatistikIncome(year!),
   });
 };
 

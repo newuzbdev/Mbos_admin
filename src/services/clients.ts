@@ -10,9 +10,9 @@ export const getClients = async ({
   limit = "10",
   search = "",
 }: {
-  page: string | null;
-  limit: string | null;
-  search: string | null;
+  page?: string | null;
+  limit?: string | null;
+  search?: string | null;
 }) => {
   return await axiosPrivate.get(`/user`, { params: { page, limit, search } });
 };

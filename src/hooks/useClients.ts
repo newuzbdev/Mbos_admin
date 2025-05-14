@@ -6,7 +6,6 @@ import {
   updateClients,
 } from "@/services/clients";
 import { Clients } from "@/types/clients";
-import { IParams } from "@/types/income";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const useAddClients = () => {
@@ -16,9 +15,9 @@ export const useAddClients = () => {
 };
 
 export const useGetClients = (params: {
-  page: string | null;
-  limit: string | null;
-  search: string | null;
+  page?: string | null;
+  limit?: string | null;
+  search?: string | null;
 }) => {
   return useQuery({
     queryKey: ["clients"],

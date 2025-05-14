@@ -22,7 +22,7 @@ interface ContractsCreateInputProps {
 const ContractCreateInput = ({ closeDialog }: ContractsCreateInputProps) => {
   const [loading, setLoading] = useState(false);
   const { mutate: addContract } = useAddContract();
-  const { data: user } = useGetClients({ limit: 999 });
+  const { data: user } = useGetClients({ limit: "999" });
   const { clientsId } = useParams<{ clientsId: string }>();
   const { refetch: refetchClients } = useGetClient(clientsId || "");
   const { data: service } = useGetServices({

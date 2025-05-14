@@ -1,5 +1,4 @@
-
-import  { useState } from "react";
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -21,7 +20,7 @@ interface IncomeCreateInputProps {
 const IncomeCreateInput = ({ closeDialog }: IncomeCreateInputProps) => {
   const [loading, setLoading] = useState(false);
   const { mutate: addIncome } = useAddIncome();
-  const { data: user } = useGetClients({ limit: 999 });
+  const { data: user } = useGetClients({ limit: "999" });
   const location = useLocation();
   const { clientsId } = useParams<{ clientsId: string }>();
 
@@ -33,7 +32,7 @@ const IncomeCreateInput = ({ closeDialog }: IncomeCreateInputProps) => {
   });
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    setLoading(true); 
+    setLoading(true);
     const incomeData = {
       ...data,
       amount: +data.amount,
@@ -59,7 +58,7 @@ const IncomeCreateInput = ({ closeDialog }: IncomeCreateInputProps) => {
         });
       },
       onSettled: () => {
-        setLoading(false); 
+        setLoading(false);
       },
     });
   };
@@ -135,7 +134,7 @@ const IncomeCreateInput = ({ closeDialog }: IncomeCreateInputProps) => {
         </div>
         <Button
           type="submit"
-          disabled={loading} 
+          disabled={loading}
           className={`px-6 py-2 text-white transition duration-200 rounded-md ${
             loading ? "bg-gray-400 cursor-not-allowed" : "bg-primary"
           }`}

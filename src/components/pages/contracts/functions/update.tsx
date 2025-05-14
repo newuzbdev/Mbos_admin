@@ -37,7 +37,7 @@ import { IService } from "@/types/service";
 
 export function UpdateItem({ contract }: { contract: Contract }) {
   const { mutate } = useContractUpdate();
-  const { data: user } = useGetClients({ limit: 999 });
+  const { data: user } = useGetClients({ limit: "999" });
   const { data: service } = useGetServices({ limit: 999 });
   const { refetch } = useGetContract(contract?.id?.toString());
   const [search, setSearch] = useState("");
